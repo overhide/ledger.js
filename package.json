@@ -2,7 +2,7 @@
   "name": "ledgers.js",
   "version": "1.0.0",
   "description": "Overhide remuneration API JavaScript library :: abstracting different ledgers to be used in an application's authentication and authorization workflows.",
-  "main": "oh$.js",
+  "main": "ledgers.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
