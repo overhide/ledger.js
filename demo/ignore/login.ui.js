@@ -1,7 +1,7 @@
 /**
  * Function related to data binding and UI manipulation in the demo login.html code.
  * 
- * Anything that's not related to demoing oh-ledger.js but is instead of related to supporting the UX.
+ * Anything that's not related to demoing oh-ledgers.js but is instead of related to supporting the UX.
  */
 
 // callbacks

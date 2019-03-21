@@ -1,7 +1,7 @@
-//     oh$.js 
-//     http://ohledger.io
-//     (c) 2019 Jakub Ner, overhide
-//     oh$ may be freely distributed under the MIT license.
+//     ledgers.js 
+//     https://ohledger.com
+//     (c) 2019 Overhide Inc.
+//     ledgers.js may be freely distributed under the MIT license.
 
 /**
  * @namespace oh$
@@ -9,9 +9,9 @@
  * 
  * #### REFERENCES
  * 
- * Library code: https://github.com/overhide/overhide-remuneration-demo/blob/master/oh$.js.
+ * Library code: https://github.com/overhide/ledgers.js/blob/master/ledgers.js.
  *
- * Repository for this library is https://github.com/overhide/overhide-remuneration-demo.
+ * Repository for this library is https://github.com/overhide/ledgers.js.
  * 
  * The repository contains a demo app of this library working in conjunction with the *overhide* Ethereum remuneration
  * provider (Rinkeby testnet -- https://rinkeby.ethereum.overhide.io) and the *overhide-ledger* (test environment -- https://test.ohledger.com)
@@ -31,7 +31,7 @@
  * `window` object:
  * 
  * ```
- * <script src="oh$.js"></script>
+ * <script src="ledgers.js"></script>
  * <script>
  *   oh$.onWalletChange = ...
  * </script>

@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "Overhide remuneration API JavaScript library :: abstracting different ledgers to be used in an application's authentication and authorization workflows.",
   "main": "ledgers.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/overhide/ledgers.js.git"
@@ -22,5 +19,14 @@
   "bugs": {
     "url": "https://github.com/overhide/ledgers.js/issues"
   },
-  "homepage": "https://github.com/overhide/ledgers.js#readme"
+  "homepage": "https://github.com/overhide/ledgers.js#readme",
+  "dependencies": {
+    "documentation": "9.3.1",
+    "copyfiles": "2.1.0"
+  },
+  "scripts": {
+    "docs": "documentation build ledgers.js --project-name \"ledgers.js :: overhide remuneration library for browser use\" --project-version \"$npm_package_version\" --project-homepage \"https://www.npmjs.com/package/ledgers.js\" --shallow true --format html --output docs/ledgers.js-rendered-docs",
+    "copy:demo": "copyfiles demo/** docs",
+    "all": "npm run docs & npm run copy:demo"
+  }
 }

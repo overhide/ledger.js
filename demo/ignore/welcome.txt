@@ -49,6 +49,6 @@
   you the code.  
 
   This way you will see how the demo app uses
-  oh$.js on the LOGIN PAGE and how it 
+  ledgers.js on the LOGIN PAGE and how it 
   leverages the overhide remuneration APIs on
   the SERVICE PAGE.

@@ -1,9 +1,9 @@
  ______________
-||      _ [] X|| 
-||            || 
-|| L O G I N  ||                                        .-~~~-.
+||      _ [] X||       +--------------+
+||            || <=====| YOU ARE HERE |
+|| L O G I N  ||       +--------------+                 .-~~~-.
 ||            ||                                .- ~ ~-( APIs  )_ _
-||____________||  <=====================>     /                     ~ -.
+||____________||  <========================>  /                     ~ -.
 |______________|                             |      overhide-ledger      \
  \\############\\                             \     overhide-ethereum   .'
   \\############\\                             ~- . _____________ . -~
@@ -20,12 +20,7 @@
      |__________|  (______(/                      +-------------------------+
           backend  code
 
-                /\
-                ||       +--------------+
-                \\=======| YOU ARE HERE |
-                         +--------------+
 
-                         
         --------------------------
         || overhide-ledger demo ||
         --------------------------
@@ -54,6 +49,6 @@
   you the code.  
 
   This way you will see how the demo app uses
-  oh$.js on the LOGIN PAGE and how it 
+  ledgers.js on the LOGIN PAGE and how it 
   leverages the overhide remuneration APIs on
   the SERVICE PAGE.

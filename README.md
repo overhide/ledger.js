@@ -1,10 +1,12 @@
-# *oh$.js* + Demo :: Accessing *overhide* Remuneration APIs and leveraging [*oh$.js*](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html)
+# *ledgers.js* + Demo :: Accessing *overhide* Remuneration APIs and leveraging [*ledgers.js*](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html)
+
+[![npm version](https://badge.fury.io/js/ledgers.js.svg)](https://badge.fury.io/js/ledgers.js)
 
 This repository is two things:
 
 1. a [tutorial/demo/example login page](login.html) (red circle in figure below) for the [ledger-based authorization
 workflow](why/why.html).
-2. [distribution](NPM_TBD) of the [oh$.js](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) library (red arrow in figure below) for supporting your take on the login page
+2. [distribution](NPM_TBD) of the [ledgers.js](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) library (red arrow in figure below) for supporting your take on the login page
 
 Together these constitute a suite of tools to make the [authorization workflows](why/why.html) part of your application.
 
@@ -19,7 +21,7 @@ To make sense of the [demo](login.html); do read through the introductory materi
 
 ## [2] Purpose
 
-The main purpose of this repository is to make available the [oh$.js](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) library.
+The main purpose of this repository is to make available the [ledgers.js](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) library.
 
 Make it available for [download](NPM_TBD).
 
@@ -27,16 +29,16 @@ But also make it available in terms of how it's used: hence the demo with emphas
 
 ## [3] Ecosystem
 
-[oh$.js](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) is part of a larger envisioned ecosystem called [overhide](https://overhide.io).  It works in tandem with the *overhide* Remuneration API.
+[ledgers.js](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) is part of a larger envisioned ecosystem called [overhide](https://overhide.io).  It works in tandem with the *overhide* Remuneration API.
 
 The *overhide* remuneration API is meant to [enable "ledger-based authorization" with fiat currencies and cryptos](why/why.html).
 
-The [oh$.js](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) library is an integral partner to the *overhide* Remuneration API, providing utilities and abstractions for for the browser-centric authentication and payment portions; to enable ledger-based authorization later in the *service-code* or *backend*.
+The [ledgers.js](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) library is an integral partner to the *overhide* Remuneration API, providing utilities and abstractions for for the browser-centric authentication and payment portions; to enable ledger-based authorization later in the *service-code* or *backend*.
 
-The figure shows the *overhide* Remuneration API landscape and highlights [oh$.js](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) helping a Web app orchestrate a login from within a browser--the red outgoing arrows--as it interacts with the *service code* and *APIs* in the *cloud*.
+The figure shows the *overhide* Remuneration API landscape and highlights [ledgers.js](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) helping a Web app orchestrate a login from within a browser--the red outgoing arrows--as it interacts with the *service code* and *APIs* in the *cloud*.
 
 ![](ignore/overview-demo.png)
-*Figure 2: Shows where oh$.js fits within the overhide Remuneration API landscape and the pieces this demo highlights.*
+*Figure 2: Shows where ledgers.js fits within the overhide Remuneration API landscape and the pieces this demo highlights.*
 
 ### [3.1] Remuneration API
 
@@ -71,19 +73,19 @@ For *production instances* of both APIs see:
 
 #### [3.1.3] Additional Notes on APIs
 
-The [*overhide-ledger*](https://test.ohledger.com/swagger.html) Swagger documentation discusses some additional *HTML*/*js* getter endpoints particular to [*overhide-ledger*](https://test.ohledger.com/swagger.html) and not part of the generic remuneration API.  The [oh$.js](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html)  leverages these additional endpoints when it calls on [*overhide-ledger*](https://test.ohledger.com/swagger.html) functionality.  This is simlar to how [oh$.js](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) leverages the [web3.js](https://github.com/ethereum/web3.js/) library when working with ether.
+The [*overhide-ledger*](https://test.ohledger.com/swagger.html) Swagger documentation discusses some additional *HTML*/*js* getter endpoints particular to [*overhide-ledger*](https://test.ohledger.com/swagger.html) and not part of the generic remuneration API.  The [ledgers.js](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html)  leverages these additional endpoints when it calls on [*overhide-ledger*](https://test.ohledger.com/swagger.html) functionality.  This is simlar to how [ledgers.js](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) leverages the [web3.js](https://github.com/ethereum/web3.js/) library when working with ether.
 
 
-### [3.2] [oh$.js](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html)
+### [3.2] [ledgers.js](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html)
 
-[oh$.js](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) complements blockchain wallets in the browser hence enables authorization via all supported ledgers in the [*Service Code*](service.html):
+[ledgers.js](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) complements blockchain wallets in the browser hence enables authorization via all supported ledgers in the [*Service Code*](service.html):
 
 * provides transaction and signing functionality for [*overhide-ledger*](https://test.ohledger.com)
 * abstracts [web3](https://github.com/ethereum/web3.js/) wallets' transaction and signing functionality for [ethers](https://rinkeby.ethereum.overhide.io/swagger.html)
 
-This library abstracts wallets in the [*login*](login.html) page; streamlining work for the UX developer.  To try this, run the [demo app](login.html) connected to a [web3.js](https://github.com/ethereum/web3.js/) wallet such as [MetaMask](https://metamask.io/).  Keep in mind that at no point in [login.html](TODO_SRC) do we talk to [web3.js](https://github.com/ethereum/web3.js/) directly.  All interaction is abstracted by [oh$.js](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html).  __This is the intent of the [oh$.js library](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html), to abstract interactions with wallets supporting ledgers that have *overhide* remuneration providers__.
+This library abstracts wallets in the [*login*](login.html) page; streamlining work for the UX developer.  To try this, run the [demo app](login.html) connected to a [web3.js](https://github.com/ethereum/web3.js/) wallet such as [MetaMask](https://metamask.io/).  Keep in mind that at no point in [login.html](TODO_SRC) do we talk to [web3.js](https://github.com/ethereum/web3.js/) directly.  All interaction is abstracted by [ledgers.js](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html).  __This is the intent of the [ledgers.js library](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html), to abstract interactions with wallets supporting ledgers that have *overhide* remuneration providers__.
 
-The [*overhide-ledger*](https://test.ohledger.com) does not have a wallet, but it can use any [web3.js](https://github.com/ethereum/web3.js/) wallet for key management and signing--[*overhide-ledger*](https://test.ohledger.com) works with Ethereum public-key infrastructure.  Although Ethereum wallets can be used for [*overhide-ledger's*](https://test.ohledger.com) credential management, no Ethereum wallet can transact with [*overhide-ledger*](https://test.ohledger.com)--[*overhide-ledger*](https://test.ohledger.com) is not an Ethereum node.  To make [*overhide-ledger*](https://test.ohledger.com) transactions more seamless, [oh$.js](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) provides [*overhide-ledger*](https://test.ohledger.com) specific tooling to assist the *login* page UX developer.  Again, see the [demo](login.html).
+The [*overhide-ledger*](https://test.ohledger.com) does not have a wallet, but it can use any [web3.js](https://github.com/ethereum/web3.js/) wallet for key management and signing--[*overhide-ledger*](https://test.ohledger.com) works with Ethereum public-key infrastructure.  Although Ethereum wallets can be used for [*overhide-ledger's*](https://test.ohledger.com) credential management, no Ethereum wallet can transact with [*overhide-ledger*](https://test.ohledger.com)--[*overhide-ledger*](https://test.ohledger.com) is not an Ethereum node.  To make [*overhide-ledger*](https://test.ohledger.com) transactions more seamless, [ledgers.js](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) provides [*overhide-ledger*](https://test.ohledger.com) specific tooling to assist the *login* page UX developer.  Again, see the [demo](login.html).
 
 ## [4] Play-By-Play Run-Through of a [Demo](login.html) Session
 
@@ -208,7 +210,7 @@ o
 │   config.js                     -- payment schedule configuration we already talked about above 
 │   README.md                     -- this file
 │   login.html                    -- the "login" page of the demo
-│   oh$.js                        -- the library
+│   ledgers.js                        -- the library
 │   service.html                  -- the service page of the demo
 │
 ├───ignore                        -- supporting files
@@ -232,7 +234,7 @@ o
 
 Notice that the *address* and *secret key* fields got populated.  
 
-These input fields were populated by the [*oh$.js*](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html)'s "ohledger" imparter--see "IMPARTERS" section in [*oh$.js*](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) library documentation.
+These input fields were populated by the [*ledgers.js*](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html)'s "ohledger" imparter--see "IMPARTERS" section in [*ledgers.js*](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) library documentation.
 
 We'll go through what just happened in the next few steps.
 
@@ -240,15 +242,15 @@ We'll go through what just happened in the next few steps.
 
 Our clicking of the "Generate" button caused the `ui.onGenerate` callback to run and log this line.
 
-The logging pane shows the UI's *onGenerate* function where our first interaction with the [*oh$.js*](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) occurs.
+The logging pane shows the UI's *onGenerate* function where our first interaction with the [*ledgers.js*](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) occurs.
 
 We see `ui.onGenerate` call [oh$.generateCredentials](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html#generatecredentials), passing in the "ohledger" imparter tag, indicating the [ledger](https://test.ohledger.com/swagger.html) we're working with.
 
 **( o_o) Notice the `[...] (login.html) :: OH >> onCredentialsUpdate :: wallet callback called--address updated : {..}` log.**
 
-Although we already saw logs from several UI callbacks originating from [ignore/login.ui.js](TODO_SRC_LOGIN_UI_JS), this is our first callback from [*oh$.js*](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html).  
+Although we already saw logs from several UI callbacks originating from [ignore/login.ui.js](TODO_SRC_LOGIN_UI_JS), this is our first callback from [*ledgers.js*](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html).  
 
-Notice the `OH >>` prefix on this log: signals the log's origin as an [*oh$.js*](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) callback.
+Notice the `OH >>` prefix on this log: signals the log's origin as an [*ledgers.js*](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) callback.
 
 The callback was triggered by the above [oh$.generateCredentials](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html#generatecredentials) call into the library.  It furnished credentials for our UI.
 
@@ -262,9 +264,9 @@ This callback ensures UI state is set and modified in response.
 
 Following along--in the code pane--we see that the [oh$.onCredentialsUpdate callback](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html#oncredentialsupdate) calls the `gatherData()` function which in turn calls the *getBalanceDue()* function.
 
-The `gatherData()` function call (at the end of the [callback](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html#oncredentialsupdate)) triggers [*oh$.js*](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) getters to update payment amounts via the "ohledger" imparter--the currently selected ledger--and compare it to the pre-configured payment schedule ([config.js](TODO_SRC_CONFIG_JS)).
+The `gatherData()` function call (at the end of the [callback](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html#oncredentialsupdate)) triggers [*ledgers.js*](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) getters to update payment amounts via the "ohledger" imparter--the currently selected ledger--and compare it to the pre-configured payment schedule ([config.js](TODO_SRC_CONFIG_JS)).
 
-This stack of functions make several calls to the [ledger](https://test.ohledger.com/swagger.html) abstracted via [*oh$.js*](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html):
+This stack of functions make several calls to the [ledger](https://test.ohledger.com/swagger.html) abstracted via [*ledgers.js*](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html):
 
 * [oh$.getTally](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html#gettally)
 * [oh$.getTransactions](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html#gettransactions)
@@ -276,13 +278,13 @@ With our new address generated we decide to play the game for free.
 
 Clicking the "Go Free" button we are presented with a modal.
 
-This modal is furnished by [*oh$.js*](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) and is [*overhide-ledger*](https://test.ohledger.com) specific.
+This modal is furnished by [*ledgers.js*](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) and is [*overhide-ledger*](https://test.ohledger.com) specific.
 
 For the time being don't follow through with the modal.  
 
 Don't confirm you're not a robot.  
 
-To see [*oh$.js*'](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) involvement **exit out of the modal by clicking the "x"** in the top-right corner.
+To see [*ledgers.js*'](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) involvement **exit out of the modal by clicking the "x"** in the top-right corner.
 
 **( o_o) Notice the `[...](login.html) :: UI >> onGoCommon` log.**
 
@@ -294,7 +296,7 @@ Now that we see the panes, we also see the `[...](login.html) :: UI >> onGoCommo
 
 The code pane shows the `ui.onGoCommon` callback.  
 
-Notice how it first signs a made up message (containing a timestamp) using [oh$.sign](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html#sign).  This signature verifies the gamer's ownership of their provided *address*.  Depending on imparter being used, [*oh$.js*](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) might sign without any interaction with the gamer, or cause a wallet to popup some UX flow.  The signature is provided to [oh$.createTransaction](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html#createtransaction) as well as sent to the service code:  `window.location.href = 'service.html#...` in the code.
+Notice how it first signs a made up message (containing a timestamp) using [oh$.sign](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html#sign).  This signature verifies the gamer's ownership of their provided *address*.  Depending on imparter being used, [*ledgers.js*](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) might sign without any interaction with the gamer, or cause a wallet to popup some UX flow.  The signature is provided to [oh$.createTransaction](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html#createtransaction) as well as sent to the service code:  `window.location.href = 'service.html#...` in the code.
 
 The "Go Free" workflow calls [oh$.createTransaction](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html#createtransaction) if no transaction for the current user's address has been detected on the ledger.  Note that the `data.isOnLedger` value was previously filled via a [oh$.isOnLedger](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html#isonledger) call in  `gatherData()`.
 
@@ -324,7 +326,7 @@ Whereby [login.html](TODO_SRC) needs the *payment schedule* to aid the user in p
 
 **(¬-_-)¬ Click the `[...] (service.html) :: remunaration API >> isValidOnLedger call` log.**
 
-Take note that the *service* no longer uses [*oh$.js*](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) API.
+Take note that the *service* no longer uses [*ledgers.js*](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html) API.
 
 In order to check with the selected ledger the remuneration API is accessed with basic HTTP calls:
 

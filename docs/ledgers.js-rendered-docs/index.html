@@ -2,19 +2,20 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>oh$.js :: overhide remuneration library for browser use 1 | Documentation</title>
+  <title>ledgers.js :: overhide remuneration library for browser use $npm_package_version | Documentation</title>
+  <meta name='description' content='Overhide remuneration API JavaScript library :: abstracting different ledgers to be used in an application&#39;s authentication and authorization workflows.'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
-  <link href='assets/bass.css' type='text/css' rel='stylesheet' />
-  <link href='assets/style.css' type='text/css' rel='stylesheet' />
-  <link href='assets/github.css' type='text/css' rel='stylesheet' />
-  <link href='assets/split.css' type='text/css' rel='stylesheet' />
+  <link href='assets/bass.css' rel='stylesheet' />
+  <link href='assets/style.css' rel='stylesheet' />
+  <link href='assets/github.css' rel='stylesheet' />
+  <link href='assets/split.css' rel='stylesheet' />
 </head>
 <body class='documentation m0'>
     <div class='flex'>
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
-          <h3 class='mb0 no-anchor'>oh$.js :: overhide remuneration library for browser use</h3>
-          <div class='mb1'><code>1</code></div>
+          <h3 class='mb0 no-anchor'>ledgers.js :: overhide remuneration library for browser use</h3>
+          <div class='mb1'><code>$npm_package_version</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -196,14 +197,14 @@
             </ul>
           </div>
           <div class='mt1 h6 quiet'>
-            <a href='http://documentation.js.org/reading-documentation.html'>Need help reading this?</a>
+            <a href='https://documentation.js.org/reading-documentation.html'>Need help reading this?</a>
           </div>
         </div>
       </div>
       <div id='split-right' class='relative overflow-auto height-viewport-100'>
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -217,8 +218,8 @@
   
 
   <h4>REFERENCES</h4>
-<p>Library code: <a href="https://github.com/overhide/overhide-remuneration-demo/blob/master/oh$.js">https://github.com/overhide/overhide-remuneration-demo/blob/master/oh$.js</a>.</p>
-<p>Repository for this library is <a href="https://github.com/overhide/overhide-remuneration-demo">https://github.com/overhide/overhide-remuneration-demo</a>.</p>
+<p>Library code: <a href="https://github.com/overhide/ledgers.js/blob/master/ledgers.js">https://github.com/overhide/ledgers.js/blob/master/ledgers.js</a>.</p>
+<p>Repository for this library is <a href="https://github.com/overhide/ledgers.js">https://github.com/overhide/ledgers.js</a>.</p>
 <p>The repository contains a demo app of this library working in conjunction with the <em>overhide</em> Ethereum remuneration
 provider (Rinkeby testnet -- <a href="https://rinkeby.ethereum.overhide.io">https://rinkeby.ethereum.overhide.io</a>) and the <em>overhide-ledger</em> (test environment -- <a href="https://test.ohledger.com">https://test.ohledger.com</a>)</p>
 <h4>ABOUT</h4>
@@ -230,7 +231,7 @@ authentication (I am who I say) and authorization (paid access tiers).</p>
 (without wallets) where it cannot.</p>
 <p>The library is usually used by loading straight into your HTML and accessing the <code>oh$</code> property from the browser's
 <code>window</code> object:</p>
-<pre><code>&#x3C;script src="oh$.js">&#x3C;/script>
+<pre><code>&#x3C;script src="ledgers.js">&#x3C;/script>
 &#x3C;script>
   oh$.onWalletChange = ...
 &#x3C;/script>
@@ -278,8 +279,7 @@ and will be suffixed on the <em>web3</em> walleted version:</p>
 other than USD come online, we'll revisit this.</p>
 <p>An 'ohledger' mode is on of 'prod' or 'test'</p>
 
-
-  <div class='pre p1 fill-light mt0'>oh$</div>
+    <div class='pre p1 fill-light mt0'>oh$</div>
   
   
 
@@ -288,6 +288,8 @@ other than USD come online, we'll revisit this.</p>
   
   
   
+  
+
   
 
   
@@ -310,7 +312,7 @@ other than USD come online, we'll revisit this.</p>
           
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -330,8 +332,7 @@ or 'false.</p>
 <pre><code>oh$.onWalletChange = (imparterTag, isPresent) => console.log(`wallet for ${imparterTag} is available:${isPresent}`);
 </code></pre>
 
-
-  <div class='pre p1 fill-light mt0'>onWalletChange</div>
+    <div class='pre p1 fill-light mt0'>onWalletChange</div>
   
   
 
@@ -368,12 +369,14 @@ or 'false.</p>
   
 
   
+
+  
 </section>
 
           
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -418,8 +421,7 @@ or 'false.</p>
 }
 </code></pre>
 
-
-  <div class='pre p1 fill-light mt0'>onCredentialsUpdate</div>
+    <div class='pre p1 fill-light mt0'>onCredentialsUpdate</div>
   
   
 
@@ -456,12 +458,14 @@ or 'false.</p>
   
 
   
+
+  
 </section>
 
           
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -507,8 +511,7 @@ or 'false.</p>
 }
 </code></pre>
 
-
-  <div class='pre p1 fill-light mt0'>onNetworkChange</div>
+    <div class='pre p1 fill-light mt0'>onNetworkChange</div>
   
   
 
@@ -545,12 +548,14 @@ or 'false.</p>
   
 
   
+
+  
 </section>
 
           
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -565,8 +570,7 @@ or 'false.</p>
 
   <p>Retrieves all imparter tags injected by wallets and statically available from the library.</p>
 
-
-  <div class='pre p1 fill-light mt0'>getImparterTags(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></div>
+    <div class='pre p1 fill-light mt0'>getImparterTags(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></div>
   
   
 
@@ -600,12 +604,14 @@ or 'false.</p>
   
 
   
+
+  
 </section>
 
           
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -625,8 +631,7 @@ exclusively.</p>
 <li>ohledger</li>
 </ul>
 
-
-  <div class='pre p1 fill-light mt0'>canSetCredentials(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
+    <div class='pre p1 fill-light mt0'>canSetCredentials(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
   
   
 
@@ -673,12 +678,14 @@ exclusively.</p>
   
 
   
+
+  
 </section>
 
           
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -698,8 +705,7 @@ exclusively.</p>
 <li>ohledger</li>
 </ul>
 
-
-  <div class='pre p1 fill-light mt0'>canGenerateCredentials(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
+    <div class='pre p1 fill-light mt0'>canGenerateCredentials(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
   
   
 
@@ -746,12 +752,14 @@ exclusively.</p>
   
 
   
+
+  
 </section>
 
           
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -772,8 +780,7 @@ exclusively.</p>
 <li>ohledger-web3</li>
 </ul>
 
-
-  <div class='pre p1 fill-light mt0'>canChangeNetwork(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
+    <div class='pre p1 fill-light mt0'>canChangeNetwork(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
   
   
 
@@ -820,12 +827,14 @@ exclusively.</p>
   
 
   
+
+  
 </section>
 
           
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -841,8 +850,7 @@ exclusively.</p>
   <p>For imparters that can have credentials generated, generates them.  </p>
 <p>  This setter calls <code>oh$.onCredentialsUpdate</code> when successful.</p>
 
-
-  <div class='pre p1 fill-light mt0'>generateCredentials(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+    <div class='pre p1 fill-light mt0'>generateCredentials(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
@@ -923,12 +931,14 @@ exclusively.</p>
   
 
   
+
+  
 </section>
 
           
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -944,8 +954,7 @@ exclusively.</p>
   <p>For imparters that can have credentials set, sets them.  </p>
 <p>  This setter calls <code>oh$.onCredentialsUpdate</code> when successful.</p>
 
-
-  <div class='pre p1 fill-light mt0'>setCredentials(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, credentials: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+    <div class='pre p1 fill-light mt0'>setCredentials(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, credentials: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
@@ -1026,12 +1035,14 @@ exclusively.</p>
   
 
   
+
+  
 </section>
 
           
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -1047,8 +1058,7 @@ exclusively.</p>
   <p>For imparters that can have networks changed via oh$, changes it.  </p>
 <p>  This setter calls <code>oh$.onNetworkChange</code> when successful.</p>
 
-
-  <div class='pre p1 fill-light mt0'>setNetwork(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, details: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+    <div class='pre p1 fill-light mt0'>setNetwork(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, details: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
@@ -1129,12 +1139,14 @@ exclusively.</p>
   
 
   
+
+  
 </section>
 
           
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -1149,8 +1161,7 @@ exclusively.</p>
 
   <p>Based on current network set returns the <em>overhide</em> remuneration API URI configured in the library.</p>
 
-
-  <div class='pre p1 fill-light mt0'>getOverhideRemunerationAPIUri(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></div>
+    <div class='pre p1 fill-light mt0'>getOverhideRemunerationAPIUri(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></div>
   
   
 
@@ -1197,12 +1208,14 @@ exclusively.</p>
   
 
   
+
+  
 </section>
 
           
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -1217,8 +1230,7 @@ exclusively.</p>
 
   <p>Retrieve a tally of all transactions on the imparter's ledger--perhaps within a date range.</p>
 
-
-  <div class='pre p1 fill-light mt0'>getTally(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, since: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date">Date</a>, recepient: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+    <div class='pre p1 fill-light mt0'>getTally(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, since: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date">Date</a>, recepient: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
@@ -1306,12 +1318,14 @@ exclusively.</p>
   
 
   
+
+  
 </section>
 
           
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -1327,8 +1341,7 @@ exclusively.</p>
   <p>Retrieve transactions on the imparter's ledger, perhaps within a date range, from credentials set against
 imparter to a recipient</p>
 
-
-  <div class='pre p1 fill-light mt0'>getTransactions(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, since: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date">Date</a>, recepient: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+    <div class='pre p1 fill-light mt0'>getTransactions(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, since: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date">Date</a>, recepient: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
@@ -1417,12 +1430,14 @@ imparter to a recipient</p>
   
 
   
+
+  
 </section>
 
           
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -1438,8 +1453,7 @@ imparter to a recipient</p>
   <p>Determine if current credentials have some transaction on the imparter's ledger: transaction can be to anyone.</p>
 <p>  Intent is to validate beyond just a valid address.  To validate the address has been used.</p>
 
-
-  <div class='pre p1 fill-light mt0'>isOnLedger(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+    <div class='pre p1 fill-light mt0'>isOnLedger(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
@@ -1486,12 +1500,14 @@ imparter to a recipient</p>
   
 
   
+
+  
 </section>
 
           
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -1507,8 +1523,7 @@ imparter to a recipient</p>
   <p>Sign using the provided message using the credentials set against the specific imparter.</p>
 <p>  Note: wallet might pop up a dialog upon this call, consider that in your UX flow.</p>
 
-
-  <div class='pre p1 fill-light mt0'>sign(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, message: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+    <div class='pre p1 fill-light mt0'>sign(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, message: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
@@ -1564,12 +1579,14 @@ imparter to a recipient</p>
   
 
   
+
+  
 </section>
 
           
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -1585,8 +1602,7 @@ imparter to a recipient</p>
   <p>Create a transaction on the imparter's ledger.</p>
 <p>  Note: wallet might pop up a dialog upon this call, consider that in your UX flow.</p>
 
-
-  <div class='pre p1 fill-light mt0'>createTransaction(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, amount: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, to: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+    <div class='pre p1 fill-light mt0'>createTransaction(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, amount: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, to: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
@@ -1672,6 +1688,8 @@ imparter to a recipient</p>
 
       
     
+  
+
   
 
   
