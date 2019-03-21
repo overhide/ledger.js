@@ -1,23 +1,26 @@
 {
-  "name": "ledger.js",
+  "name": "ledgers.js",
   "version": "1.0.0",
   "description": "Overhide remuneration API JavaScript library :: abstracting different ledgers to be used in an application's authentication and authorization workflows.",
-  "main": "ledger.js",
+  "main": "oh$.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/overhide/ledger.js.git"
+    "url": "git+https://github.com/overhide/ledgers.js.git"
   },
   "keywords": [
     "overhide",
-    "ledger"
+    "ledgers.js",
+    "ledger",
+    "ledgers",
+    "remuneration"
   ],
   "author": "overhide",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/overhide/ledger.js/issues"
+    "url": "https://github.com/overhide/ledgers.js/issues"
   },
-  "homepage": "https://github.com/overhide/ledger.js#readme"
+  "homepage": "https://github.com/overhide/ledgers.js#readme"
 }
