@@ -21,6 +21,48 @@ The *library* makes *ledger* transaction tallies available to the *login page* f
 
 The *business logic* does not leverage *ledgers.js*--the *library* is intended for *login pages* not service code.  The *business logic* code interacts directly with *remuenration APIs*--discussed below.
 
+## Getting Started
+
+The *ledgers.js* library [source](https://github.com/overhide/ledgers.js/blob/master/ledgers.js) file is the distributable artifact.  You can simply copy it ([or the minfied variant](https://github.com/overhide/ledgers.js/blob/master/ledgers.min.js)).
+
+If you're using *npm* simply:  `npm install ledgers.js --save-prod`.
+
+Keep in mind *ledgers.js* is meant to run with a DOM present--in a browser.
+
+### Quick and Dirty
+
+In your console, in a new temporary folder:
+
+(¬-_-)¬ `npm install`
+
+(¬-_-)¬ `npm install ledgers.js --save-prod`
+
+(¬-_-)¬ `npm install browserify -g`
+
+(¬-_-)¬ create an *index.js* file with the following contents:
+
+```
+require('ledgers.js');
+```
+
+(¬-_-)¬ `browserify index.js > bundle.js`
+
+(¬-_-)¬ create an *index.html* file with the following contents:
+
+```
+ <script src="bundle.js"></script>
+ 
+ <script>
+  alert(JSON.stringify(oh$.getImparterTags(),null,2));
+ </script>
+```
+
+(¬-_-)¬ open the *index.html* file in your browser
+
+( o_o) notice the alert popup with a list of [imparters](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html), this shows we're using `oh$`, the *ledgers.js* global object
+
+# Demo and Details
+
 ## [1] Before You Run the Demo App
 
 When you start the [demo](https://overhide.github.io/ledgers.js/demo/login.html) ([source](https://github.com/overhide/ledgers.js/blob/master/demo/login.html)) take note of the BOTTOM-RIGHT pane which displays some information on the UI.
