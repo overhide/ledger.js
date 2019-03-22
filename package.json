@@ -27,6 +27,7 @@
   "scripts": {
     "docs": "documentation build ledgers.js --project-name \"ledgers.js :: overhide remuneration library for browser use\" --project-version \"$npm_package_version\" --project-homepage \"https://www.npmjs.com/package/ledgers.js\" --shallow true --format html --output docs/ledgers.js-rendered-docs",
     "copy:demo": "copyfiles demo/** docs",
-    "all": "npm run docs & npm run copy:demo"
+    "copy:ledgers.js": "copyfiles ledgers.js docs/demo",
+    "all": "npm run docs & npm run copy:demo & npm run copy:ledgers.js"
   }
 }
