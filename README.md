@@ -23,7 +23,7 @@ The *business logic* does not leverage *ledgers.js*--the *library* is intended f
 
 ## Getting Started
 
-The *ledgers.js* library [source](https://github.com/overhide/ledgers.js/blob/master/ledgers.js) file is the distributable artifact.  You can simply copy it ([or the minfied variant](https://github.com/overhide/ledgers.js/blob/master/ledgers.min.js)).
+The *ledgers.js* library [source file](https://github.com/overhide/ledgers.js/blob/master/ledgers.js) is the distributable artifact.  You can simply copy it ([or the minfied variant](https://github.com/overhide/ledgers.js/blob/master/ledgers.min.js)).
 
 If you're using *npm* simply:  `npm install ledgers.js --save-prod`.
 
