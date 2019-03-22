@@ -36,7 +36,7 @@ You can include *ledgers.js* via CDN:
 * `https://cdn.jsdelivr.net/npm/ledgers.js/ledgers.js`
 * `https://cdn.jsdelivr.net/npm/ledgers.js/ledgers.min.js`
 
-For a specific version, e.g. version *1.0.4*: `https://cdn.jsdelivr.net/npm/ledgers.js@1.0.4/ledgers.min.js`
+For a specific version, e.g. version *1.0.5*: `https://cdn.jsdelivr.net/npm/ledgers.js@1.0.5/ledgers.min.js`
 
 **(¬-_-)¬** create an *index.html* file with the following contents:
 
