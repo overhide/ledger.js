@@ -4,11 +4,11 @@
 
 This repository is two things:
 
-2. [distribution](https://www.npmjs.com/package/ledgers.js) of the *ledgers.js* library ([source](https://github.com/overhide/ledgers.js/blob/master/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)) in support of [ledger-based](https://github.com/overhide/ledgers.js/blob/master/static/why/why.md) login pages.
+1. [distribution](https://www.npmjs.com/package/ledgers.js) of the *ledgers.js* library ([source](https://github.com/overhide/ledgers.js/blob/master/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)) in support of [ledger-based](https://github.com/overhide/ledgers.js/blob/master/static/why/why.md) login pages.
 1. a [tutorial/demo/example login page](https://overhide.github.io/ledgers.js/demo/login.html) ([source](https://github.com/overhide/ledgers.js/blob/master/demo/login.html)) for the [ledger-based authorization
-workflow](https://github.com/overhide/ledgers.js/blob/master/why/why.md).
+workflow](https://github.com/overhide/ledgers.js/blob/master/static/why/why.md).
 
-Together these constitute a suite of tools to make the [authorization workflows](https://github.com/overhide/ledgers.js/blob/master/why/why.md) part of your application.
+Together these constitute a suite of tools to make the [authorization workflows](https://github.com/overhide/ledgers.js/blob/master/static/why/why.md) part of your application.
 
 ![](static/ledgers.svg)
 *Figure 1: Where ledgers.js fits in.*
