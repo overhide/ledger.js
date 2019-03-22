@@ -10,7 +10,7 @@ workflow](https://github.com/overhide/ledgers.js/blob/master/static/why/why.md).
 
 Together these constitute a suite of tools to make the [authorization workflows](https://github.com/overhide/ledgers.js/blob/master/static/why/why.md) part of your application.
 
-![](static/ledgers.svg)
+![](static/ledgers.png)
 *Figure 1: Where ledgers.js fits in.*
 
 The *ledgers.js* library sits between the *login page* and the *ledgers* it abstracts.
