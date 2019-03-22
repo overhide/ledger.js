@@ -29,6 +29,12 @@ If you're using *npm* simply:  `npm install ledgers.js --save-prod`.
 
 Keep in mind *ledgers.js* is meant to run with a DOM present--in a browser.
 
+You can include *ledgers.js* via CDN `https://cdn.jsdelivr.net/npm/ledgers.js/ledgers.min.js`:
+
+```
+ <script src="https://cdn.jsdelivr.net/npm/ledgers.js/ledgers.min.js"></script>
+```
+
 ### Quick and Dirty
 
 In your console, in a new temporary folder:
