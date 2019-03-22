@@ -1,3 +1,5 @@
+<p align="center"><a href="https://github.com/overhide"><img src="./.github/logo.png" width="200px"/></a></p>
+
 # ledgers.js
 
 [![npm version](https://badge.fury.io/js/ledgers.js.svg)](https://badge.fury.io/js/ledgers.js)
