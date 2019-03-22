@@ -29,13 +29,30 @@ If you're using *npm* simply:  `npm install ledgers.js --save-prod`.
 
 Keep in mind *ledgers.js* is meant to run with a DOM present--in a browser.
 
-You can include *ledgers.js* via CDN `https://cdn.jsdelivr.net/npm/ledgers.js/ledgers.min.js`:
+### Quick and Dirty :: CDN Distribution
+
+You can include *ledgers.js* via CDN:
+
+* `https://cdn.jsdelivr.net/npm/ledgers.js/ledgers.js`
+* `https://cdn.jsdelivr.net/npm/ledgers.js/ledgers.min.js`
+
+For a specific version, e.g. version *1.0.4*: `https://cdn.jsdelivr.net/npm/ledgers.js@1.0.4/ledgers.min.js`
+
+**(¬-_-)¬** create an *index.html* file with the following contents:
 
 ```
  <script src="https://cdn.jsdelivr.net/npm/ledgers.js/ledgers.min.js"></script>
+ 
+ <script>
+  alert(JSON.stringify(oh$.getImparterTags(),null,2));
+ </script>
 ```
 
-### Quick and Dirty
+**(¬-_-)¬** open the *index.html* file in your browser
+
+**( o_o)** notice the alert popup with a list of [imparters](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html), this shows we're using `oh$`, the *ledgers.js* global object
+
+### Quick and Dirty :: Non-CDN Build
 
 In your console, in a new temporary folder:
 
