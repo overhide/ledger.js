@@ -33,21 +33,21 @@ Keep in mind *ledgers.js* is meant to run with a DOM present--in a browser.
 
 In your console, in a new temporary folder:
 
-(¬-_-)¬ `npm install`
+**(¬-_-)¬** `npm install`
 
-(¬-_-)¬ `npm install ledgers.js --save-prod`
+**(¬-_-)¬** `npm install ledgers.js --save-prod`
 
-(¬-_-)¬ `npm install browserify -g`
+**(¬-_-)¬** `npm install browserify -g`
 
-(¬-_-)¬ create an *index.js* file with the following contents:
+**(¬-_-)¬** create an *index.js* file with the following contents:
 
 ```
 require('ledgers.js');
 ```
 
-(¬-_-)¬ `browserify index.js > bundle.js`
+**(¬-_-)¬** `browserify index.js > bundle.js`
 
-(¬-_-)¬ create an *index.html* file with the following contents:
+**(¬-_-)¬** create an *index.html* file with the following contents:
 
 ```
  <script src="bundle.js"></script>
@@ -57,9 +57,9 @@ require('ledgers.js');
  </script>
 ```
 
-(¬-_-)¬ open the *index.html* file in your browser
+**(¬-_-)¬** open the *index.html* file in your browser
 
-( o_o) notice the alert popup with a list of [imparters](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html), this shows we're using `oh$`, the *ledgers.js* global object
+**( o_o)** notice the alert popup with a list of [imparters](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html), this shows we're using `oh$`, the *ledgers.js* global object
 
 # Demo and Details
 
