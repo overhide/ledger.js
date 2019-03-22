@@ -27,10 +27,12 @@
 
                          
         --------------------------
-        || overhide-ledger demo ||
+        ||    ledgers.js demo   ||
         --------------------------
 
-  Welcome to the overhide-ledger demo app.
+  Welcome to the ledgers.js demo app.
+
+  Source: https://github.com/overhide/ledgers.js
 
   The pane on the LEFT is the actual rendered 
   demo application for you to interact with.

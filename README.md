@@ -4,13 +4,13 @@
 
 This repository is two things:
 
-1. [distribution](https://www.npmjs.com/package/ledgers.js) of the *ledgers.js* library ([source](https://github.com/overhide/ledgers.js/blob/master/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)) in support of [ledger-based](https://github.com/overhide/ledgers.js/blob/master/static/why/why.md) login pages.
+1. [distribution](https://www.npmjs.com/package/ledgers.js) of the *ledgers.js* library ([source](https://github.com/overhide/ledgers.js/blob/master/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)) in support of [ledger-based](https://github.com/overhide/ledgers.js/blob/master/why/why.md) login pages.
 1. a [tutorial/demo/example login page](https://overhide.github.io/ledgers.js/demo/login.html) ([source](https://github.com/overhide/ledgers.js/blob/master/demo/login.html)) for the [ledger-based authorization
-workflow](https://github.com/overhide/ledgers.js/blob/master/static/why/why.md).
+workflow](https://github.com/overhide/ledgers.js/blob/master/why/why.md).
 
-Together these constitute a suite of tools to make the [authorization workflows](https://github.com/overhide/ledgers.js/blob/master/static/why/why.md) part of your application.
+Together these constitute a suite of tools to make the [authorization workflows](https://github.com/overhide/ledgers.js/blob/master/why/why.md) part of your application.
 
-![](static/ledgers.png)
+![](.github/ledgers.png)
 *Figure 1: Where ledgers.js fits in.*
 
 The *ledgers.js* library sits between the *login page* and the *ledgers* it abstracts.
@@ -104,24 +104,24 @@ But also make it available in terms of how it's used: hence the demo with emphas
 
 *ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)) is part of a larger envisioned ecosystem called [overhide](https://overhide.io).  It works in tandem with the *overhide* Remuneration API.
 
-The *overhide* remuneration API is meant to [enable "ledger-based authorization" with fiat currencies and cryptos](https://github.com/overhide/ledgers.js/blob/master/static/why/why.md).
+The *overhide* remuneration API is meant to [enable "ledger-based authorization" with fiat currencies and cryptos](https://github.com/overhide/ledgers.js/blob/master/why/why.md).
 
 The *ledgers.js* library ([source](https://github.com/overhide/ledgers.js/blob/master/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)) is an integral partner to the *overhide* Remuneration API, providing utilities and abstractions for for the browser-centric authentication and payment portions; to enable ledger-based authorization later in the *service-code* or *backend*.
 
 The figure shows the *overhide* Remuneration API landscape and highlights *ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)) helping a Web app orchestrate a login from within a browser--the red outgoing arrows--as it interacts with the *service code* and *APIs* in the *cloud*.
 
-![](static/overview-demo.png)
+![](.github/overview-demo.png)
 *Figure 2: Shows where ledgers.js fits within the overhide Remuneration API landscape and the pieces this demo highlights.*
 
 ### [3.1] Remuneration API
 
 The *overhide* remuneration API is an API of a handful of HTTP methods exposed by various ledgers:  blockchain and otherwise.
 
-These API methods are used in the *Service Code* ([source](https://github.com/overhide/ledgers.js/blob/master/demo/service.html)) as part of ledger-based authorization: read more about this authorization flow in the [why/justification](https://github.com/overhide/ledgers.js/blob/master/static/why/why.md) piece.
+These API methods are used in the *Service Code* ([source](https://github.com/overhide/ledgers.js/blob/master/demo/service.html)) as part of ledger-based authorization: read more about this authorization flow in the [why/justification](https://github.com/overhide/ledgers.js/blob/master/why/why.md) piece.
 
 At this moment we have the following *overhide* remuneration providers exposing the API:
 
-* ether:  [*overhide* Remuneration API for Ethereum](https://rinkeby.ethereum.overhide.io/swagger.html)
+* ether:  [*overhide* Remuneration API for Ethereum](https://rinkeby.ethereum.overhide.io/swagger.html) [source]()
 * dollars:  [*overhide-ledger*--the renmuneration provider for US dollars](https://test.ohledger.com/swagger.html)
 
 The API interface for both is identical, the methods are:
@@ -377,7 +377,7 @@ Notice how it first signs a made up message (containing a timestamp) using [oh$.
 
 The "Go Free" workflow calls [oh$.createTransaction](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html#createtransaction) if no transaction for the current user's address has been detected on the ledger.  Note that the `data.isOnLedger` value was previously filled via a [oh$.isOnLedger](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html#isonledger) call in  `gatherData()`.
 
-A core concept of the [ledger-based authorization](https://github.com/overhide/ledgers.js/blob/master/static/why/why.md)--which we're going through--is that all tiers of authorization require a transaction on the selected ledger: any thransaction, even if it's a transaction to yourself or someone other than the service provider you're signing into.  Hence free transactions still go through [oh$.createTransaction](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html#createtransaction) should they fail the [oh$.isOnLedger](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html#isonledger) check.
+A core concept of the [ledger-based authorization](https://github.com/overhide/ledgers.js/blob/master/why/why.md)--which we're going through--is that all tiers of authorization require a transaction on the selected ledger: any thransaction, even if it's a transaction to yourself or someone other than the service provider you're signing into.  Hence free transactions still go through [oh$.createTransaction](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html#createtransaction) should they fail the [oh$.isOnLedger](https://test.ohledger.com/demo/ignore/oh$-rendered-docs/index.html#isonledger) check.
 
 Existence of a transaction will once again be verified in the *Service Code* ([source](https://github.com/overhide/ledgers.js/blob/master/demo/service.html)) with a call to the selected ledger's *remuneration API*'s `/is-signature-valid`.
 
