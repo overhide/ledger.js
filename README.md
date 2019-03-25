@@ -21,7 +21,7 @@ The *library* interacts with in-browser *wallets* for signing (authentication)--
 
 The *library* makes *ledger* transaction tallies available to the *login page* for authorization checks and balances.  Upgrading auth tiers through payments requires transacting with ledgers which is done via linked Web sites and available in-browser *wallets*.
 
-The *business logic* does not leverage *ledgers.js*--the *library* is intended for *login pages* not service code.  The *business logic* code interacts directly with *remuenration APIs*--discussed below.
+The *business logic* does not leverage *ledgers.js*--the *library* is intended for *login pages* not service code.  The *business logic* code interacts directly with *remuneration APIs*--discussed below.
 
 ## Getting Started
 
@@ -379,7 +379,7 @@ Notice how it first signs a made up message (containing a timestamp) using [oh$.
 
 The "Go Free" workflow calls [oh$.createTransaction](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html#createtransaction) if no transaction for the current user's address has been detected on the ledger.  Note that the `data.isOnLedger` value was previously filled via a [oh$.isOnLedger](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html#isonledger) call in  `gatherData()`.
 
-A core concept of the [ledger-based authorization](https://github.com/overhide/ledgers.js/blob/master/why/why.md)--which we're going through--is that all tiers of authorization require a transaction on the selected ledger: any thransaction, even if it's a transaction to yourself or someone other than the service provider you're signing into.  Hence free transactions still go through [oh$.createTransaction](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html#createtransaction) should they fail the [oh$.isOnLedger](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html#isonledger) check.
+A core concept of the [ledger-based authorization](https://github.com/overhide/ledgers.js/blob/master/why/why.md)--which we're going through--is that all tiers of authorization require a transaction on the selected ledger: any transaction, even if it's a transaction to yourself or someone other than the service provider you're signing into.  Hence free transactions still go through [oh$.createTransaction](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html#createtransaction) should they fail the [oh$.isOnLedger](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html#isonledger) check.
 
 Existence of a transaction will once again be verified in the *Service Code* ([source](https://github.com/overhide/ledgers.js/blob/master/demo/service.html)) with a call to the selected ledger's *remuneration API*'s `/is-signature-valid`.
 
