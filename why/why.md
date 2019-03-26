@@ -71,6 +71,7 @@ And regarding fiat currencies? The *overhide* remuneration API is covered in det
 To contrast the preferred authorization flow in the previous section, we model a typical Web 2.0 auth flow below.
 
 ![](web2.0-login.png)
+
 *Figure 2: Web 2.0 authorization flow*
 
 We again start at the top.  This time the login client uses some form of social login:  Twitter, Facebook, LinkedIn, Google.
@@ -91,6 +92,7 @@ As seen in a previous section the ledger-based authorization flow is attractive 
 The model below shows where the *overhide* remuneration API sits in reference to ledgers, wallets used by login, and the service code.
 
 ![](overview$.png)
+
 *Figure 3: Currencies abstracted by overhide remuneration API*
 
 As the note on the *service code* suggests, only availability of HTTP is necessary to provide our preferred authorization flow for the service. 
@@ -144,6 +146,7 @@ Go check the demo out at [https://github.com/overhide/ledgers.js](https://github
 We've motivated the ledger-based authorization flow and mentioned that [*overhide-ledger](https://ohledger.com) enables it for dollars.
 
 ![](overview-ledger-why.png)
+
 *Figure 4: Overhide-ledger for fiat dollar transactions*
 
 The ledger sits in the cloud as indicated by the bold arrows.  
@@ -162,6 +165,7 @@ We have covered enough about the why, let's get into the how--[*overhide-ledger*
 To understand what [*overhide-ledger*](https://ohledger.com) does let's compare how transactions are added using a dollar payment-gateway versus a decentralized ledger like Ethereum.  The [*overhide-ledger*](https://ohledger.com) approach borrows from both.
 
 ![](payment-gateway-tx.png)
+
 *Figure 5: Payment-gateway transaction in dollars*
 
 Figure 5 shows two related flows.  The top flow is a service provider registering to receive payments.  Since we're dealing with a payment-gateway such as PayPal or Stripe, the service provider goes through several layers of forms and verifications.  At the end of this process the service provider has an accounts with the payment-gateway that can receive funds using any number of methods such as credit cards.
@@ -176,6 +180,7 @@ All the steps in figure 5 are abstracted by [*overhide-ledger*](https://ohledger
 The values in green--*account ID* and *amount*--are retrieved from the payment-gateway workflow and used with additional cryptographic bits from a blockchain-like transaction workflow to comprise a complete overhide-ledger entry.
 
 ![](ledger-tx.png)
+
 *Figure 6: Transaction in on a decentralized ledger like Etehreum*
 
 Before we get to deep into this workflow, consider that the *account ID* and *amount* from figure 5 are shown being injected from the upper right corner.
