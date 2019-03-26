@@ -42,6 +42,7 @@ Authorization very much requires a ledger as authorization dictates access level
 Without any further preamble, below is our preferred workflow.
 
 ![](oh-login.png)
+
 *Figure 1: Ledger-based authorization workflow.*
 
 The workflow starts at the top in the *login client* where a user logs in with their ledger address.  This is where authentication happens without any need to actually contact the ledger.  Usually this authentication happens with the help of an in-browser wallet:  the wallet helps furnish signatures for the address.
