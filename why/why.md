@@ -12,7 +12,7 @@ The question of why such a ledger is useful needs to be considered in the contex
 
 Before we get into discussing this "ledger-based authorization workflow" and contrast it with current Web 2.0 approaches; we need to understand some concepts from the decentralized Web.  For this discussion we need to understand the simple concepts of a ledger and it's respective public key infrastructure.  
 
-### Crypto Ledger Primer
+### Some Basics from Crypto Ledgers
 
 For our purposes a ledger is as simple as a table with payers, payees, amounts, and timestamps.
 
