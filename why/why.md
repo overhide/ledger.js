@@ -53,7 +53,7 @@ Although it's not strictly necessary to contact the ledger at this point, it's w
 
 Exiting the *login client* we pass the user's *address*, a signed *message*, and *signature*, to the *service* proper.  The service prudently verifies the address against the signature and message.  To prevent replay attacks it'd be additionally prudent for the *service* to issue the *message* in the first place--to be signed and returned--but we don't show such enhancements for simplicity.
 
-Subsequently the service authorizes the passed in *address* for some access tier.  It contacts the ledger to retrieve a tally of transaction from the *address* to the service provider.  The tally can take many forms; perhaps it's all payments in the last week.  We could have different fee schedules for different tiers.  It's simple and flexible.
+Subsequently the service authorizes the passed in *address* for some access tier.  It contacts the ledger to retrieve a tally of transactions from the *address* to the service provider.  The tally can take many forms; perhaps it's all payments in the last week.  We could have different fee schedules for different tiers.  It's simple and flexible.
 
 There are several benefits to this flow.
 
