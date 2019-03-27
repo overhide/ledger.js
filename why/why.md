@@ -30,7 +30,7 @@ For the needs of ledger-based authorization we'll replace all the names with pub
 
 Fred from the first ledger is replaced in the second ledger by his pseudonymous Ehtereum address, the 42 character hexadecimal string: 0xD32317b5651d9f9D636032aaD100D9d30F74481d.  This is Fred's public address in the ledger.  It is an Ethereum compliant address, but the fact that it's generated with Ethereum libraries is immaterial.  It's not limited to the Ethereum blockchain, we can use this address in other ledgers following Ethereum public key conventions--and we do, [*overhide-ledger*](https://ohledger.com) uses Ethereum public key infrastructure.
 
-Fred can proove he owns that address by having its corresponding secret key: e398cc1f41b6e00c88b7c625b81858aa89f6e1dea753203186ffa4c886497ee9.  This is a 60 character hexadecimal string that is cryptographically tied to Fred's address.  Fred never discloses this secret key.  Fred only uses this secret key to prove he owns his address and therefore that it is him who made the $10 payment to whomever is 0x41340dF846177A02D5a16995E2Faf4917251d0dc (we know it's Acme Co.).  To make this proof, Fred would use cryptography to "sign" some message--for example today's date--into a "signature" with his secret key.  Through cleverness of cryptography, anyone with whom Fred shares his address, this signature, and the original message--today's date--can verify the signature's validity for the address; hence Fred's posession of the secret key, hence Fred's ownership of the ledger address.
+Fred can prove he owns that address by having its corresponding secret key: e398cc1f41b6e00c88b7c625b81858aa89f6e1dea753203186ffa4c886497ee9.  This is a 60 character hexadecimal string that is cryptographically tied to Fred's address.  Fred never discloses this secret key.  Fred only uses this secret key to prove he owns his address and therefore that it is him who made the $10 payment to whomever is 0x41340dF846177A02D5a16995E2Faf4917251d0dc (we know it's Acme Co.).  To make this proof, Fred would use cryptography to "sign" some message--for example today's date--into a "signature" with his secret key.  Through cleverness of cryptography, anyone with whom Fred shares his address, this signature, and the original message--today's date--can verify the signature's validity for the address; hence Fred's posession of the secret key, hence Fred's ownership of the ledger address.
 
 > The significant takeaway regarding Ethereum public-key infrastructure--or that of any public blockchain ledger--is that public addresses have corresponding private secret keys for signing some message into signatures; that equate possession of the secret key to ownership of the address.
 
@@ -228,8 +228,8 @@ So in the end who knows what in [*overhide-ledger*](https://ohledger.com)?
 
 * Stripe knows both parties intimately
 * [*overhide-ledger*](https://ohledger.com) knows *of* both parties
-* payer can proove ownership of her public address
-* payee can proove ownership of her private address
+* payer can prove ownership of her public address
+* payee can prove ownership of her private address
 * everyone knows the pseudonymous payment was made for all time
 
 
