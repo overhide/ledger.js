@@ -2,9 +2,9 @@
 
 I'd like to introduce [*overhide-ledger*](https://ohledger.com): a centralized Web 2.0 ledger of dollar transactions exposed through a minimal API.
 
-The [*overhide-ledger*](https://ohledger.com) interface and APIs allow payees and payers to log their credit card transactions on a publicly visible ledger.  The payees and payers appear on the ledger as Ethereum addresses: 42 character hexadecimal strings.  These obscure identifiers are conjoined with dollar amounts and timestamps to complete respective entries.
-
 The intent of the ledger is to enable a simple authorization workflow that's useful today for dollars and tomorrow for cryptos.
+
+The [*overhide-ledger*](https://ohledger.com) interface and APIs allow payees and payers to log their credit card transactions on a publicly visible ledger.  The payees and payers appear on the ledger as Ethereum addresses: 42 character hexadecimal strings.  These obscure identifiers are conjoined with dollar amounts and timestamps to complete respective entries.
 
 ## Workflows
 
