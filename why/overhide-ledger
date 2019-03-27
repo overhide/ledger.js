@@ -157,7 +157,7 @@ The [ledgers.js library](https://www.npmjs.com/package/ledgers.js) sits in the b
 
 [ledgers.js](https://www.npmjs.com/package/ledgers.js) and [*overhide-ledger*](https://ohledger.com) comprise a tool-set to aid developers in leveraging ledgers for authorization; while providing a "lubricant" to app users' transition from paying for services in dollars to paying in cryptos:  showcasing the benefits of cryptos such as pseudonimity and lower transaction cost.
 
-Using [ledgers.js](https://www.npmjs.com/package/ledgers.js) and [*overhide-ledger*](https://ohledger.com) developers future-proof their code.
+By using [ledgers.js](https://www.npmjs.com/package/ledgers.js) and [*overhide-ledger*](https://ohledger.com); developers future-proof their code.
 
 
 ### What Does [*overhide-ledger*](https://ohledger.com) Do?
