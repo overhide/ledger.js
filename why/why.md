@@ -1,4 +1,4 @@
-# Introduction to [*overhide-ledger*](https://ohledger.com) and Motivation For Why It's Useful.
+# Introduction to [*overhide-ledger*](https://ohledger.com) and Motivation for Why it's Useful.
 
 I'd like to introduce [*overhide-ledger*](https://ohledger.com): a centralized Web 2.0 ledger of dollar transactions exposed through a minimal API.
 
