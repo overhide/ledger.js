@@ -139,7 +139,7 @@ With reference to figure 3 above, note that:
 
 Before diving any deeper into describing [*overhide-ledger*](https://ohledger.com), the concepts just described may become more tangible through a [demo](https://github.com/overhide/ledgers.js) meant to help developers see the approach in a "real" application.
 
-We have a functioning [demo "game"](https://github.com/overhide/ledgers.js) with a sample login page.  The login page allows either a free account login or value-add pay-for tiers.  Payments in this game can be made using either Ethereum or dollars.
+We have a functioning [demo "game"](https://github.com/overhide/ledgers.js) with a sample login page.  The login page allows either a free account login or value-add pay-for tiers.  Payments in this game can be made using either ether or dollars.
 
 Go check the demo out at [https://github.com/overhide/ledgers.js](https://github.com/overhide/ledgers.js).
 
