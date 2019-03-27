@@ -110,7 +110,7 @@ The APIs for Ethereum are made available by the [*overhide-ethereum* remuneratio
 
 The APIs for dollars are made available by the [*overhide-ledger* remuneration provider](https://ohledger.com/swagger.html).
 
-Bitcoin, IOTA, EOS, and others are yet to be implemented, hopefully more with community help: these APIs can be implemented for any cryptocurrency.
+Bitcoin, tether, EOS, and others are yet to be implemented, hopefully more with community help: these APIs can be implemented for any cryptocurrency.
 
 Similarly, [*overhide-ledger*](https://ohledger.com) could be stood up for other fiat currencies other than dollars.
 
