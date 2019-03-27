@@ -12,6 +12,8 @@ The question of why such a ledger is useful needs to be considered in the contex
 
 Before we get into discussing this "ledger-based authorization workflow" and contrast it with current Web 2.0 approaches; we need to understand some concepts from the decentralized Web.  For this discussion we need to understand the simple concepts of a ledger and it's respective public key infrastructure.  
 
+# Crypto Ledger Primer
+
 For our purposes a ledger is as simple as a table with payers, payees, amounts, and timestamps.
 
 | payer | payee | amount | timestamp |
@@ -33,7 +35,7 @@ Fred can proove he owns that address by having its corresponding secret key: e39
 > The significant takeaway regarding Ethereum public-key infrastructure--or that of any public blockchain ledger--is that public addresses have corresponding private secret keys for signing some message into signatures; that equate possession of the secret key to ownership of the address.
 
 
-### ledger based authorization
+### Ledger Based Authorization
 
 Above we introduced that ledgers and public-key infrastructure together support a certain authorization workflow.  In truth the public-key infrastructure is the authentication portion and is nicely decoupled from authorization, which requires a ledger.  This authentication is rooted solely in cryptographic algorithms and doesn't require a ledger--just appropriate software libraries.
 
