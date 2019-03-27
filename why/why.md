@@ -235,12 +235,18 @@ So in the end who knows what in [*overhide-ledger*](https://ohledger.com)?
 
 ## Community needed
 
-At this point we have an open sourced implementation of the *overhide* remuneration API for Ethereum, we also have the API itself.
+At this point as app and service developers we have:
 
-The [*overhide-ledger*](https://ohledger.com) is closed-source, but the [*ledgers.js*](https://www.npmjs.com/package/ledgers.js) library tying it all together for developers is open.
+* [the API](https://github.com/overhide/overhide/blob/master/docs/remuneration-api.md) itself
+* an open source implementation of the [*overhide* remuneration API for Ethereum](https://ethereum.overhide.io/swagger.html) ([or Rinkeby testnet](https://rinkeby.ethereum.overhide.io/swagger.html))
+* [wallets](https://metamask.io/) and [browsers](https://www.opera.com) to work with ether 
+* a closed source implementation of the [*overhide* remuneration API for dollars](https://ohledger.com/swagger.html) ([or test cluster](https://test.ohledger.com/swagger.html))
+* an [*overhide* ledger Web app](https://ohledger.com/) ([or test cluster](https://test.ohledger.com/))
+* an open source [ledgers.js](https://www.npmjs.com/package/ledgers.js) library to help suport login pages
+* an open source [demo application](https://overhide.github.io/ledgers.js/demo/login.html) showing everything integrated ([repo](https://github.com/overhide/ledgers.js)) ([walkthrough](https://github.com/overhide/ledgers.js#getting-started))
 
-We'd want the ecosystem to grow and for that we need to implement more remuneration providers: more implementations of the *overhide* remuneration API.
+We'd want the ecosystem to grow and for that we need to implement more remuneration providers: more implementations of the [*overhide* remuneration API](https://ethereum.overhide.io/swagger.html).
 
-Lastly, it's worth mentioning that all of this was written because it's needed for remuneration in another product we specced out to write together with the open source community:  [overhide.io](https://overhide.io).
+Lastly, it's worth mentioning, that all of this is written because it's needed for authorization in a *data-broker* I [specced out](https://github.com/overhide/overhide#broker-api) to write together with the open source community:  [https://overhide.io](https://overhide.io).
 
-The release to open source is imminent, we just need to finsih a minimally-viable product to make the concepts more concrete.
+All the documentation ([GitHub](https://github.com/overhide/overhide)) ([intro slides](https://overhide.io/)) for the *data-broker*   are released.  Currently working towards a minimally-viable product before putting the broker reference implementation on GitHub.
