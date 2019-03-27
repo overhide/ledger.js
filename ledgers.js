@@ -119,6 +119,21 @@
     onWalletChange: null,
 
   /**
+   * @property {function(string,boolean)} onWalletPopup
+   * @description
+   *   Handler registered by user; called when wallet is expected to popup.  Useful in case user wants to react to popup in UI.
+   * 
+   *   The library passes in the imparter tag causing the popup.
+   * 
+   *   In user code:
+   * 
+   *   ```
+   *   oh$.onWalletPopup = (imparterTag) => console.log(`wallet for ${imparterTag} popped`);
+   *   ```
+   */
+    onWalletPopup: null,
+
+  /**
    * @property {function(string,Object)} onCredentialsUpdate
    * @description
    *   Handler registered by user; called when an credentials change for one of the tracked imparters.
@@ -357,8 +372,10 @@
      *   Determine if current credentials have some transaction on the imparter's ledger: transaction can be to anyone.
      * 
      *   Intent is to validate beyond just a valid address.  To validate the address has been used.
+     * 
+     *   Call may trigger `oh$.onWalletPopup`.
      * @param {string} imparterTag
-     * @returns {Promise} with 'true' or 'false'
+     * @returns {Promise} with 'true' or 'false'; may call `oh$.onWalletPopup`
      */
     isOnLedger: isOnLedger,
 
@@ -369,9 +386,11 @@
      *   Sign using the provided message using the credentials set against the specific imparter.
      * 
      *   Note: wallet might pop up a dialog upon this call, consider that in your UX flow.
+     * 
+     *   Call may trigger `oh$.onWalletPopup`.
      * @param {string} imparterTag
      * @param {string} message - to sign
-     * @returns {Promise} with the signature
+     * @returns {Promise} with the signature; may call `oh$.onWalletPopup`
      */
     sign: sign,
 
@@ -381,7 +400,7 @@
      * @description
      *   Create a transaction on the imparter's ledger.
      * 
-     *   Note: wallet might pop up a dialog upon this call, consider that in your UX flow.
+     *   Call may trigger `oh$.onWalletPopup`; wallet might pop up a dialog upon this call, consider that in your UX flow.
      * @param {string} imparterTag
      * @param {number} amount
      * @param {string} to - address of recipient
@@ -397,7 +416,7 @@
      * 
      *   If *message* and *signature* are provided they are used instead of oh$ asking for wallet to resign message.
      *
-     * @returns {Promise} of a 'true' for success or an Error
+     * @returns {Promise} of a 'true' for success or an Error; may call `oh$.onWalletPopup`
      */
     createTransaction: createTransaction    
   };
@@ -721,9 +740,11 @@
         return web3.eth.accounts.sign(message, data.OHLEDGER_IMPARTER_TAG.secret).signature;
       case OHLEDGER_WEB3_IMPARTER_TAG:
         if (!data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress) throw new Error(`imparter ${OHLEDGER_WEB3_IMPARTER_TAG} not active`);
+        if (root.oh$.onWalletPopup) root.oh$.onWalletPopup(OHLEDGER_WEB3_IMPARTER_TAG);
         return (await window.web3.eth.personal.sign(message, data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress));
       case ETH_WEB3_IMPARTER_TAG:
         if (!data.ETH_WEB3_IMPARTER_TAG.walletAddress) throw new Error(`imparter ${ETH_WEB3_IMPARTER_TAG} not active`);
+        if (root.oh$.onWalletPopup) root.oh$.onWalletPopup(ETH_WEB3_IMPARTER_TAG);
         return (await window.web3.eth.personal.sign(message, data.ETH_WEB3_IMPARTER_TAG.walletAddress));
       default:
         return null;
@@ -774,6 +795,7 @@
         }
         break;
       case ETH_WEB3_IMPARTER_TAG:
+        if (root.oh$.onWalletPopup) root.oh$.onWalletPopup(ETH_WEB3_IMPARTER_TAG);
         await web3.eth.sendTransaction({from:from, to:to, value: amount});
         break;
       default:

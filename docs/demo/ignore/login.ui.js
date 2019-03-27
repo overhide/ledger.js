@@ -58,7 +58,12 @@ ui = {
   /**
    * Popup to inform on using a test VISA
    */
-  popupTestVisaInfo: popupTestVisaInfo
+  popupTestVisaInfo: popupTestVisaInfo,
+
+  /**
+   * Signal wallet popup
+   */
+  signalWalletPopup: signalWalletPopup
 };
 
 var address = null;
@@ -66,6 +71,9 @@ var secret = null;
 
 // setup screen at start
 function setupUi() { 
+
+  // wallet popup
+  $('#wallet-popup').fadeOut(0);
 
   // change currency
   $('#ethereum').on('click', function () {
@@ -283,4 +291,8 @@ async function popupTestVisaInfo() {
   });
   await popupTestVisaInfoPromise;
   return;
+}
+
+function signalWalletPopup() {
+  $('#wallet-popup').fadeIn().delay(2500).fadeOut();
 }

@@ -82,6 +82,11 @@
     ui.update(data);
   };
 
+  oh$.onWalletPopup = function (imparterTag) {
+    log("OH >> onWalletPopup :: popped", { imparterTag: imparterTag });
+    ui.signalWalletPopup();
+  }
+
   // listen for change in network
   oh$.onNetworkChange = function (imparterTag, network) {
     log("OH >> onNetworkChange :: network change callback called--network updated", { imparterTag: imparterTag, network: network })
@@ -262,7 +267,14 @@
     let imparter = getImparter();
     let to = paymentSchedule[imparter].appAddress;
     let message = `verify ownership of address by signing on ${new Date().toLocaleString()}`;
-    let signature = await oh$.sign(imparter, message);
+    try {
+      var signature = await oh$.sign(imparter, message);
+    } catch (err) {
+      log('UI >> onGoEpic sig ERROR', { error: String(err) });
+      data.isGathering = false;
+      ui.update(data);
+      throw err
+    }
     if (data.balanceDueForEpic === 'paid') {
       window.location.href = `service.html#${imparter}/${data.address}/${btoa(message)}/${signature}/${oh$.getOverhideRemunerationAPIUri(imparter)}`;
       return;
@@ -294,7 +306,14 @@
     let imparter = getImparter();
     let to = paymentSchedule[imparter].appAddress;
     let message = `verify ownership of address by signing on ${new Date().toLocaleString()}`;
-    let signature = await oh$.sign(imparter, message);
+    try {
+      var signature = await oh$.sign(imparter, message);
+    } catch (err) {
+      log('UI >> onGoLegendary sig ERROR', { error: String(err) });
+      data.isGathering = false;
+      ui.update(data);
+      throw err
+    }
     if (data.balanceDueForLegendary === 'paid') {
       window.location.href = `service.html#${imparter}/${data.address}/${btoa(message)}/${signature}/${oh$.getOverhideRemunerationAPIUri(imparter)}`;
       return;

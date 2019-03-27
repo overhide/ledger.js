@@ -46,6 +46,16 @@
               
                 
                 <li><a
+                  href='#onwalletpopup'
+                  class="">
+                  onWalletPopup
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#oncredentialsupdate'
                   class="">
                   onCredentialsUpdate
@@ -351,6 +361,69 @@ or 'false.</p>
       
         <div class='space-bottom0'>
           <span class='code bold'>onWalletChange</span> <code class='quiet'>(function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>))</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='onwalletpopup'>
+      onWalletPopup
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Handler registered by user; called when wallet is expected to popup.  Useful in case user wants to react to popup in UI.</p>
+<p>  The library passes in the imparter tag causing the popup.</p>
+<p>  In user code:</p>
+<pre><code>oh$.onWalletPopup = (imparterTag) => console.log(`wallet for ${imparterTag} popped`);
+</code></pre>
+
+    <div class='pre p1 fill-light mt0'>onWalletPopup</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>onWalletPopup</span> <code class='quiet'>(function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>))</code>
           
           
         </div>
@@ -1452,6 +1525,7 @@ imparter to a recipient</p>
 
   <p>Determine if current credentials have some transaction on the imparter's ledger: transaction can be to anyone.</p>
 <p>  Intent is to validate beyond just a valid address.  To validate the address has been used.</p>
+<p>  Call may trigger <code>oh$.onWalletPopup</code>.</p>
 
     <div class='pre p1 fill-light mt0'>isOnLedger(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
@@ -1485,7 +1559,8 @@ imparter to a recipient</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
-        with 'true' or 'false'
+        with 'true' or 'false'; may call 
+<code>oh$.onWalletPopup</code>
 
       
     
@@ -1522,6 +1597,7 @@ imparter to a recipient</p>
 
   <p>Sign using the provided message using the credentials set against the specific imparter.</p>
 <p>  Note: wallet might pop up a dialog upon this call, consider that in your UX flow.</p>
+<p>  Call may trigger <code>oh$.onWalletPopup</code>.</p>
 
     <div class='pre p1 fill-light mt0'>sign(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, message: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
@@ -1564,7 +1640,8 @@ imparter to a recipient</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
-        with the signature
+        with the signature; may call 
+<code>oh$.onWalletPopup</code>
 
       
     
@@ -1600,7 +1677,7 @@ imparter to a recipient</p>
   
 
   <p>Create a transaction on the imparter's ledger.</p>
-<p>  Note: wallet might pop up a dialog upon this call, consider that in your UX flow.</p>
+<p>  Call may trigger <code>oh$.onWalletPopup</code>; wallet might pop up a dialog upon this call, consider that in your UX flow.</p>
 
     <div class='pre p1 fill-light mt0'>createTransaction(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, amount: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, to: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
@@ -1684,7 +1761,8 @@ imparter to a recipient</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
-        of a 'true' for success or an Error
+        of a 'true' for success or an Error; may call 
+<code>oh$.onWalletPopup</code>
 
       
     
