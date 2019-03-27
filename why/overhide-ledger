@@ -208,6 +208,7 @@ The ledger does necessarily store the payment-gateway *account ID* of the servic
 
 There is no anonymity or decentralization here, but we've enabled ledger-based authorization with dollars.
 
+> Please be aware that the [*overhide-ledger*](https://ohledger.com) functionality discussed above in this section is closed source and has a pending US PTO application (No. 62817820) "PSEUDONYMOUS FIAT CURRENCY TRANSACTION LOGGER SYSTEM AND METHOD FOR PAYMENT GATEWAYS".
 
 ### Differences From Blockchain
 
