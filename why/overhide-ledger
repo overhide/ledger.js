@@ -174,7 +174,7 @@ Figure 5 shows two related flows.  The top flow is a service provider registerin
 
 The bottom flow in figure 5 is a user making a payment.  The payment process uses the service provider's *account ID* to receive a requested *amount*.  The payment-gateway is a black-box taking care of a lot of the heavy lifting with card issuers and banks.  After a little data entry on the user's side, the service provider receives their fee and the user gets a confirmation.
 
-All the steps in figure 5 are abstracted by [*overhide-ledger*](https://ohledger.com) and furnished by [*oh.js*](https://www.npmjs.com/package/ledgers.js) so that the developer doesn't need to implement them.  The [*overhide-ledger*](https://ohledger.com) necessarily handles these bits as it needs to inject itself into the process so as to capture the values in green:
+All the steps in figure 5 are abstracted by [*overhide-ledger*](https://ohledger.com) and furnished by [*ledgers.js*](https://www.npmjs.com/package/ledgers.js) so that the developer doesn't need to implement them.  The [*overhide-ledger*](https://ohledger.com) necessarily handles these bits as it needs to inject itself into the process so as to capture the values in green:
 
 * *account ID* 
 * *amount* 
