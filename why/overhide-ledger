@@ -170,7 +170,7 @@ To understand what [*overhide-ledger*](https://ohledger.com) does let's compare 
 
 *Figure 5: Payment-gateway transaction in dollars*
 
-Figure 5 shows two related flows.  The top flow is a service provider registering to receive payments.  Since we're dealing with a payment-gateway such as PayPal or Stripe, the service provider goes through several layers of forms and verification.  At the end of this process the service provider has an accounts with the payment-gateway that can receive funds using any number of methods such as credit cards.
+Figure 5 shows two related flows.  The top flow is a service provider registering to receive payments.  Since we're dealing with a payment-gateway such as PayPal or Stripe, the service provider goes through several layers of forms and verification.  At the end of this process the service provider has an account with the payment-gateway that can receive funds using any number of methods such as credit cards.
 
 The bottom flow in figure 5 is a user making a payment.  The payment process uses the service provider's *account ID* to receive a requested *amount*.  The payment-gateway is a black-box taking care of a lot of the heavy lifting with card issuers and banks.  After a little data entry on the user's side, the service provider receives their fee and the user gets a confirmation.
 
