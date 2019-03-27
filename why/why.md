@@ -226,7 +226,7 @@ While we're at it--since we already removed quite a few value-adds of blockchain
 
 So in the end who knows what in [*overhide-ledger*](https://ohledger.com)?
 
-* Stripe knows both parties intimatelly
+* Stripe knows both parties intimately
 * [*overhide-ledger*](https://ohledger.com) knows *of* both parties
 * payer can proove ownership of her public address
 * payee can proove ownership of her private address
