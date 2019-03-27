@@ -162,7 +162,7 @@ By using [ledgers.js](https://www.npmjs.com/package/ledgers.js) and [*overhide-l
 
 ### What Does [*overhide-ledger*](https://ohledger.com) Do?
 
-We have covered enough about the why, let's get into the how--[*overhide-ledger*](https://ohledger.com) creates its ledger.
+We have covered enough about the why, let's get into the how--how [*overhide-ledger*](https://ohledger.com) creates its ledger.
 
 To understand what [*overhide-ledger*](https://ohledger.com) does let's compare how transactions are added using a dollar payment-gateway versus a decentralized ledger like Ethereum.  The [*overhide-ledger*](https://ohledger.com) approach borrows from both.
 
