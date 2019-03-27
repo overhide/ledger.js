@@ -99,7 +99,7 @@ The model below shows where the *overhide* remuneration API sits in reference to
 
 As the note on the *service code* suggests, only availability of HTTP is necessary to provide our preferred authorization flow for the service. 
 
-Each ledger--Bitcoin, Ethereum, or [*overhide-ledger*](https://ohledger.com) for dollars--expose their own identical API: they have a proxy implementing the same identical interface.  The login page need merely indicate the user's address from one of the supported ledgers and the corresponding API URL.  The service code need necessairly lookup a different fees schedule for each currency supported, but other than that, these are the only variables in an otherwise common flow.
+Each ledger--Bitcoin, Ethereum, or [*overhide-ledger*](https://ohledger.com) for dollars--expose their own identical API: they have a proxy implementing the same identical interface.  The login page need merely indicate the user's address from one of the supported ledgers and the corresponding API URL.  The service code need necessarily lookup a different fees schedule for each currency supported, but other than that, these are the only variables in an otherwise common flow.
 
 There are only two methods in this API:
 
