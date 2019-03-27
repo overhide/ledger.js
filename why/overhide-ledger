@@ -114,10 +114,10 @@ Bitcoin, tether, EOS, and others are yet to be implemented, hopefully more with 
 
 Similarly, [*overhide-ledger*](https://ohledger.com) could be stood up for other fiat currencies other than dollars.
 
-Making this API abstraction available for fiat currencies and enabling ledger-based authorization with either type of currency is the whole purpose of *overhide-ledger*.
+Making this API abstraction available for fiat currencies and enabling ledger-based authorization with either type of currency is the whole purpose of [*overhide-ledger*](https://ohledger.com).
 
 >
-> Making this API abstraction available for fiat currencies and enabling ledger-based authorization with either type of currency is the whole purpose of *overhide-ledger*.
+> Making this API abstraction available for fiat currencies and enabling ledger-based authorization with either type of currency is the whole purpose of [*overhide-ledger*](https://ohledger.com).
 >
 
 ### From Login client to Service Business End
@@ -143,7 +143,7 @@ We have a functioning [demo "game"](https://github.com/overhide/ledgers.js) with
 
 Go check the demo out at [https://github.com/overhide/ledgers.js](https://github.com/overhide/ledgers.js).
 
-## overhide-ledger
+## [*overhide-ledger*](https://ohledger.com)
 
 We've motivated the ledger-based authorization flow and mentioned that [*overhide-ledger](https://ohledger.com) enables it for dollars.
 
@@ -160,7 +160,7 @@ The [ledgers.js library](https://www.npmjs.com/package/ledgers.js) sits in the b
 Using [ledgers.js](https://www.npmjs.com/package/ledgers.js) and [*overhide-ledger*](https://ohledger.com) developers future-proof their code.
 
 
-### What Does overhide-ledger Do?
+### What Does [*overhide-ledger*](https://ohledger.com) Do?
 
 We have covered enough about the why, let's get into the how--[*overhide-ledger*](https://ohledger.com) creates its ledger.
 
@@ -179,7 +179,7 @@ All the steps in figure 5 are abstracted by [*overhide-ledger*](https://ohledger
 * *account ID* 
 * *amount* 
 
-The values in green--*account ID* and *amount*--are retrieved from the payment-gateway workflow and used with additional cryptographic bits from a blockchain-like transaction workflow to comprise a complete overhide-ledger entry.
+The values in green--*account ID* and *amount*--are retrieved from the payment-gateway workflow and used with additional cryptographic bits from a blockchain-like transaction workflow to comprise a complete [*overhide-ledger*](https://ohledger.com) entry.
 
 ![](ledger-tx.png)
 
@@ -226,7 +226,7 @@ While we're at it--since we already removed quite a few value-adds of blockchain
 So in the end who knows what in [*overhide-ledger*](https://ohledger.com)?
 
 * Stripe knows both parties intimatelly
-* overhide-ledger knows *of* both parties
+* [*overhide-ledger*](https://ohledger.com) knows *of* both parties
 * payer can proove ownership of her public address
 * payee can proove ownership of her private address
 * everyone knows the pseudonymous payment was made for all time
