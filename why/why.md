@@ -82,7 +82,7 @@ The social login provider vets your authentication credentials on behalf of the 
 
 But the social login provider doesn't deal with authorizations.  If the service is to support authorization tiers based on monies received, it necessarily needs to hold and be privy to personal information of its users.  
 
-The service provider has to get into the business of collecting information about its users if it desires remuneration.  This, whether it needs the infromation for the service's value-add or not.
+The service provider has to get into the business of collecting information about its users if it desires remuneration.  This, whether it needs the information for the service's value-add or not.
 
 We do recognize that this collection of information is in-fact desirable to many service providers.  We operate in a milieu where hoarding information about users is a boon.  But increasingly, month to month, it's a burden.  The software developer has to decide where they want to derive value and how much responsibility they want to shoulder.
 
