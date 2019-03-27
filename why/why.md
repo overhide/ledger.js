@@ -218,7 +218,7 @@ First, there is no pseudonimity between the payee and the payer: they know more 
 
 Although pseudonimity is reduced for the parties involved in a transaction; the public at large still just sees a ledger with hashes.
 
-It might have been more appealing to have [*overhide-ledger*](https://ohledger.com) be an abstraction between the payee and the payer, have each deal solely with [*overhide-ledger*](https://ohledger.com) segregated from each-other.  Although with that approach the ledger would know more about the entities, the entities would be more pseudonymous to each-other.  Unfortunately--since we're not dealing with cryptos where a transaction is the final word--this would open the ledger to the risk of chargebacks, returns, and other problems. 
+It might have been more appealing to have [*overhide-ledger*](https://ohledger.com) be an abstraction between the payee and the payer, have each deal solely with [*overhide-ledger*](https://ohledger.com) segregated from each-other.  Although with that approach the ledger would know more about the entities, the entities would be more pseudonymous to each-other.  Unfortunately--since we're not dealing with cryptos where a transaction is the final word--this would open the ledger to risks of chargebacks, returns, and other problems. 
 
 Further, because of the possibility of chargebacks and refunds, the service provider necessarily needs the ability to mark transactions "marked as void by provider":  flagging a transaction on the ledger as no longer valid.  The transaction is not removed from the history, but it is flagged as void.
 
