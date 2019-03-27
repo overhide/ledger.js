@@ -237,9 +237,9 @@ So in the end who knows what in [*overhide-ledger*](https://ohledger.com)?
 
 At this point as app and service developers we have:
 
-* [the API](https://github.com/overhide/overhide/blob/master/docs/remuneration-api.md) itself
+* [the remuneration API](https://github.com/overhide/overhide/blob/master/docs/remuneration-api.md) itself
 * an open source implementation of the [*overhide* remuneration API for Ethereum](https://ethereum.overhide.io/swagger.html) ([or Rinkeby testnet](https://rinkeby.ethereum.overhide.io/swagger.html))
-* [wallets](https://metamask.io/) and [browsers](https://www.opera.com) to work with ether 
+* [wallets](https://metamask.io/) and [browsers](https://www.opera.com) to work with addresses and secrets 
 * a closed source implementation of the [*overhide* remuneration API for dollars](https://ohledger.com/swagger.html) ([or test cluster](https://test.ohledger.com/swagger.html))
 * an [*overhide* ledger Web app](https://ohledger.com/) ([or test cluster](https://test.ohledger.com/))
 * an open source [ledgers.js](https://www.npmjs.com/package/ledgers.js) library to help suport login pages
