@@ -249,4 +249,4 @@ We'd want the ecosystem to grow and for that we need to implement more remunerat
 
 Lastly, it's worth mentioning, that all of this is written because it's needed for authorization in a *data-broker* I [specced out](https://github.com/overhide/overhide#broker-api) to write together with the open source community:  [https://overhide.io](https://overhide.io).
 
-All the documentation ([GitHub](https://github.com/overhide/overhide)) ([intro slides](https://overhide.io/)) for the *data-broker*   are released.  Currently working towards a minimally-viable product before putting the broker reference implementation on GitHub.
+All the documentation ([GitHub](https://github.com/overhide/overhide)) ([intro slides](https://overhide.io/)) for the *data-broker*   are released.  Currently working towards a [minimally-viable product](https://github.com/overhide/overhide/blob/master/docs/mvp.md) before putting the broker reference implementation on GitHub.
