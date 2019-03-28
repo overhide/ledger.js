@@ -1,3 +1,5 @@
+> This is also published on [Medium.com](https://medium.com/@jakub.ner/introduction-to-overhide-ledger-and-motivation-for-why-its-useful-f9c987f2205f?source=friends_link&sk=18f6e8a90efbbc4ac28df50ab50833de)
+
 # Introduction to [*overhide-ledger*](https://ohledger.com) and Motivation for Why it's Useful.
 
 I'd like to introduce [*overhide-ledger*](https://ohledger.com): a centralized Web 2.0 ledger of dollar transactions exposed through a minimal API.
