@@ -80,7 +80,7 @@ To contrast the preferred authorization flow in the previous section, we model a
 
 We again start at the top.  This time the login client uses some form of social login:  Twitter, Facebook, LinkedIn, Google.
 
-The social login provider vets user authentication credentials on behalf of the service they're trying to use.  Not only does this mean the social login provider gets to learn a lot about the users logging in, this login provider is now also very much in the critical-path of users' access to the unrelated services they're trying to use.  The users expect the login provider to outlive the service.
+The social login provider vets user authentication credentials on behalf of the service they're trying to use. Not only does this mean the social login provider gets to learn a lot about the users logging in, but this login provider is now very much in the critical-path of users' access to the unrelated service they're trying to use. The users expect the login provider to outlive the service's usefulness to them.
 
 Beyond login ownership, the login provider doesn't deal with authorizations.  If the service is to support authorization tiers based on monies received, it necessarily needs to hold and be privy to personal information of its users.  
 
