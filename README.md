@@ -117,23 +117,21 @@ The figure shows the *overhide* Remuneration API landscape and highlights *ledge
 
 ### [3.1] Remuneration API
 
-The *overhide* remuneration API is an API of a handful of HTTP methods exposed by various ledgers:  blockchain and otherwise.
-
-These API methods are used in the *Service Code* ([source](https://github.com/overhide/ledgers.js/blob/master/demo/service.html)) as part of ledger-based authorization: read more about this authorization flow in the [why/justification](https://github.com/overhide/ledgers.js/blob/master/why/why.md) piece.
-
-At this moment we have the following *overhide* remuneration providers exposing the API:
-
-* ether:  [*overhide* Remuneration API for Ethereum](https://rinkeby.ethereum.overhide.io/swagger.html) [source]()
-* dollars:  [*overhide-ledger*--the renmuneration provider for US dollars](https://test.ohledger.com/swagger.html)
-
-The API interface for both is identical, the methods are:
+The *overhide* remuneration API is an API of a handful of HTTP methods exposed by various ledgers (blockchain and otherwise):
 
 * `/get-transactions/{from-address}/{to-address}`
 * `/is-signature-valid`
 
+These API methods are used by the *ledgers.js* library and explicitly called in the demo's *Service Code* ([source](https://github.com/overhide/ledgers.js/blob/master/demo/service.html)) as part of its *ledger-based authorization* ([write-up](https://github.com/overhide/ledgers.js/blob/master/why/why.md)).
+
 #### [3.1.1] Test Environment APIs
 
 This [demo](https://overhide.github.io/ledgers.js/demo/login.html) ([source](https://github.com/overhide/ledgers.js/blob/master/demo/login.html)) interacts with the *Rinkeby* *Ethereum* testnet and the [overhide-ledger test environment](https://test.ohledger.com).  This demo is for demonstration purposes.  
+
+The respective API instances used by the [demo](https://overhide.github.io/ledgers.js/demo/login.html) are the following test network nodes:
+
+* ether:  [*overhide* Remuneration API for Ethereum](https://rinkeby.ethereum.overhide.io/swagger.html) 
+* dollars:  [*overhide-ledger*--the renmuneration provider for US dollars](https://test.ohledger.com/swagger.html)
 
 Use a [Rinkeby](https://faucet.rinkeby.io/) faucet to get "test" Ether for playing around with Ethereum in the [demo](https://overhide.github.io/ledgers.js/demo/login.html) ([source](https://github.com/overhide/ledgers.js/blob/master/demo/login.html)).
 
@@ -141,10 +139,14 @@ Use [Stripe's "test" credit cards](https://stripe.com/docs/testing#cards) to pla
 
 #### [3.1.2] Production Environment APIs
 
+To interact with the Ethereum *mainnet*, user your wallet.
+
+To interact with the production *overhide-ledger*, visit https://ohledger.com.
+
 For *production instances* of both APIs see:
 
 * [*mainnet* *Ethereum* APIs](https://ethereum.overhide.io/swagger.html)
-* [*Production* *overhide-ledger*](https://ohledger.com) with corresponding [APIs](https://ohledger.com/swagger.html)
+* [*Production* *overhide-ledger*](https://ohledger.com/swagger.html)
 
 #### [3.1.3] Additional Notes on APIs
 
