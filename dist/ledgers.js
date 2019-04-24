@@ -91,12 +91,10 @@ var oh$ =
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function(global) {/* harmony import */ var web3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/* harmony import */ var web3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var web3__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(web3__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var web3_eth_accounts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(357);
 /* harmony import */ var web3_eth_accounts__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(web3_eth_accounts__WEBPACK_IMPORTED_MODULE_1__);
-function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof2 = function _typeof2(obj) { return typeof obj; }; } else { _typeof2 = function _typeof2(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof2(obj); }
-
 function _objectSpread(target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i] != null ? arguments[i] : {};
@@ -165,20 +163,6 @@ function _asyncToGenerator(fn) {
       _next(undefined);
     });
   };
-}
-
-function _typeof(obj) {
-  if (typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol") {
-    _typeof = function _typeof(obj) {
-      return _typeof2(obj);
-    };
-  } else {
-    _typeof = function _typeof(obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof2(obj);
-    };
-  }
-
-  return _typeof(obj);
 }
 
 
@@ -286,1510 +270,1481 @@ function _typeof(obj) {
  * 
  */
 
-/* harmony default export */ __webpack_exports__["default"] = ((function () {
-  var root = (typeof self === "undefined" ? "undefined" : _typeof(self)) == 'object' && self.self === self && self || (typeof global === "undefined" ? "undefined" : _typeof(global)) == 'object' && global.global === global && global || this || {};
-  root.oh$ = {
-    /**
-     * @property {function(string,boolean)} onWalletChange 
-     * @description
-     *   Handler registered by user; called when wallets' state changes.
-     * 
-     *   The library passes in the imparter tag undergoing change and a boolean indicating 'true' if wallet available
-     *   or 'false.
-     * 
-     *   In user code:
-     * 
-     *   ```
-     *   oh$.onWalletChange = (imparterTag, isPresent) => console.log(`wallet for ${imparterTag} is available:${isPresent}`);
-     *   ```
-     */
-    onWalletChange: null,
-
-    /**
-     * @property {function(string,boolean)} onWalletPopup
-     * @description
-     *   Handler registered by user; called when wallet is expected to popup.  Useful in case user wants to react to popup in UI.
-     * 
-     *   The library passes in the imparter tag causing the popup.
-     * 
-     *   In user code:
-     * 
-     *   ```
-     *   oh$.onWalletPopup = (imparterTag) => console.log(`wallet for ${imparterTag} popped`);
-     *   ```
-     */
-    onWalletPopup: null,
-
-    /**
-     * @property {function(string,Object)} onCredentialsUpdate
-     * @description
-     *   Handler registered by user; called when an credentials change for one of the tracked imparters.
-     * 
-     *   Only called when credentials are valid as per imparter: ready to be used for signing, transacting.
-     *
-     *   First string is the imparter tag, second object are the new credentials: imparter currency specific.
-     * 
-     *   The new credentials object will conform to the following:
-     * 
-     *   | imparter tag | credentials object |
-     *   | --- | --- |
-     *   | eth-web3 | `{address:..}` |
-     *   | ohledger | `{address:..,secret:..}` |
-     *   | ohledger-web3 | `{address:..}` |
-     *
-     *   In user code:
-     *
-     *   ```
-     *   oh$.onAddressUpdate = (imparterTag, creds) => {
-     *     if (imparterTag === 'eth-web3') console.log(`new address for ${imparterTag} is:${creds.address}`);
-     *   }
-     *   ```
-     */
-    onCredentialsUpdate: null,
-
-    /**
-     * @property {function(string,Object)} onNetworkChange
-     * @description
-     *   Handler registered by user; called when the network changes for a particular imparter tag.
-     * 
-     *   For example for "eth0" the network could changed from "main" to "rinkeby".  
-     * 
-     *   The first string is the imparter tag, second object is the new network details: imparter currency specific.
-     *
-     *   The new credentials object will conform to the following:
-     *
-     *   | imparter tag | credentials object |
-     *   | --- | --- |
-     *   | eth-web3 | `{name:('main'|'rinkeby'|'kovan').., uri:..}` |
-     *   | ohledger | `{currency:'USD',mode:('prod'|'test'), uri:..}` |
-     *   | ohledger-web3 | `{currency:'USD',mode:('prod'|'test'), uri:..}` |
-     *
-     *   In user code:
-     *
-     *   ```
-     *   oh$.onNetworkChange = (imparterTag, details) => {
-     *     if (imparterTag === 'eth-web3') console.log(`new network selected for ${imparterTag} is:${details.name}`);
-     *     if (imparterTag === /ohledger/.test(imparterTag)) console.log(`working in currency: ${details.currency}`);
-     *   }
-     *   ```
-     */
-    onNetworkChange: null,
-
-    /**
-     * @namespace oh$
-     * @function getImparterTags
-     * @description
-     *   Retrieves all imparter tags injected by wallets and statically available from the library.
-     * @returns {Array} of strings: the imparter tags available
-     */
-    getImparterTags: getImparterTags,
-
-    /**
-     * @namespace oh$
-     * @function canSetCredentials
-     * @description
-     *   Interrogate whether the imparter tag can have credentials set by the user: or does the wallet control it
-     *   exclusively.
-     * 
-     *   Only the following imparter(s) will return 'true':
-     * 
-     *   - ohledger
-     * 
-     * @param {string} imparterTag
-     * @returns {boolean} 'true' if particular imparter tag can have credentials set.
-     */
-    canSetCredentials: canSetCredentials,
-
-    /**
-     * @namespace oh$
-     * @function canGenerateCredentials
-     * @description
-     *   Interrogate whether the imparter tag can have credentials generated by the user: or does the wallet control it
-     *   exclusively.
-     *
-     *   Only the following imparter(s) will return 'true':
-     *
-     *   - ohledger
-     *
-     * @param {string} imparterTag
-     * @returns {boolean} 'true' if particular imparter tag can have credentials generated.
-     */
-    canGenerateCredentials: canGenerateCredentials,
-
-    /**
-     * @namespace oh$
-     * @function canChangeNetwork
-     * @description
-     *   Interrogate whether the imparter tag can have network changed by the user via oh$: or does the wallet control it
-     *   exclusively.
-     *
-     *   Only the following imparter(s) will return 'true':
-     *
-     *   - ohledger
-     *   - ohledger-web3
-     *
-     * @param {string} imparterTag
-     * @returns {boolean} 'true' if particular imparter tag can have networks changed via oh$.
-     */
-    canChangeNetwork: canChangeNetwork,
-
-    /**
-     * @namespace oh$
-     * @function generateCredentials
-     * @description
-     *   For imparters that can have credentials generated, generates them.  
-     * 
-     *   This setter calls `oh$.onCredentialsUpdate` when successful.
-     * @param {string} imparterTag
-     * @param {Object} options - imparter specific generation options, if any.
-     * 
-     *   The options objects are as follows:
-     * 
-     *   | imparter tag | credentials object |
-     *   | --- | --- |
-     *   | eth-web3 | N/A |
-     *   | ohledger | null |
-     *   | ohledger-web3 | N/A |
-     *
-     * @returns {Promise} representing a 'true' if success else 'false'; also calls `oh$.onCredentialsUpdate` on success
-     */
-    generateCredentials: generateCredentials,
-
-    /**
-     * @namespace oh$
-     * @function setCredentials
-     * @description
-     *   For imparters that can have credentials set, sets them.  
-     * 
-     *   This setter calls `oh$.onCredentialsUpdate` when successful.
-     * @param {string} imparterTag
-     * @param {Object} credentials - credentials object of imparter specific parameters to set.
-     * 
-     *   The credentials objects are as follows:
-     * 
-     *   | imparter tag | credentials object |
-     *   | --- | --- |
-     *   | eth-web3 | N/A |
-     *   | ohledger | `{address:..,secret:..}` |
-     *   | ohledger-web3 | N/A |
-     *
-     * @returns {Promise} representing a 'true' if success else 'false'; also calls `oh$.onCredentialsUpdate` on success
-     */
-    setCredentials: setCredentials,
-
-    /**
-     * @namespace oh$
-     * @function setNetwork
-     * @description
-     *   For imparters that can have networks changed via oh$, changes it.  
-     * 
-     *   This setter calls `oh$.onNetworkChange` when successful.
-     * @param {string} imparterTag
-     * @param {Object} details - network details object of imparter specific parameters to set.
-     * 
-     *   The network details objects are as follows:
-     * 
-     *   | imparter tag | credentials object |
-     *   | --- | --- |
-     *   | eth-web3 | N/A |
-     *   | ohledger | `{currency:'USD', mode:'prod'|'test'}` |
-     *   | ohledger-web3 | `{currency:'USD', mode:'prod'|'test'}` |
-     *
-     * @returns {Promise} representing a 'true' if success else 'false'; also calls `oh$.onNetworkChange` on success
-     */
-    setNetwork: setNetwork,
-
-    /**
-     * @namespace oh$
-     * @function getOverhideRemunerationAPIUri
-     * @description
-     *   Based on current network set returns the *overhide* remuneration API URI configured in the library.
-     * @param {string} imparterTag
-     * @returns {string} the URI.
-     */
-    getOverhideRemunerationAPIUri: getOverhideRemunerationAPIUri,
-
-    /**
-     * @namespace oh$
-     * @function getTally
-     * @description
-     *   Retrieve a tally of all transactions on the imparter's ledger--perhaps within a date range.
-     * @param {string} imparterTag
-     * @param {Date} since - date to start tally since: date of oldest transaction to include.  No restriction if 'null'.
-     * @param {Object} recepient - imparter specific object describing recipient of transactions to tally for.
-     *
-     *   Recipient objects are as per:
-     *
-     *   | imparter tag | recipient object |
-     *   | --- | --- |
-     *   | eth-web3 | `{address:..}` |
-     *   | ohledger | `{address:..}` |
-     *   | ohledger-web3 | `{address:..}` |
-     *
-     * @returns {Promise} with the tally value in imparter specific currency
-     */
-    getTally: getTally,
-
-    /**
-     * @namespace oh$
-     * @function getTransactions
-     * @description
-     *   Retrieve transactions on the imparter's ledger, perhaps within a date range, from credentials set against 
-     *   imparter to a recipient
-     * @param {string} imparterTag
-     * @param {Date} since - date to start tally since: date of oldest transaction to include.  No restriction if 'null'.
-     * @param {Object} recepient - imparter specific object describing recipient of transactions to tally for.
-     *
-     *   Recipient objects are as per:
-     *
-     *   | imparter tag | recipient object |
-     *   | --- | --- |
-     *   | eth-web3 | `{address:..}` |
-     *   | ohledger | `{address:..}` |
-     *   | ohledger-web3 | `{address:..}` |
-     *
-     * @returns {Promise} with the transactions: `[{"transaction-value":..,"transaction-date":..},..]`
-     */
-    getTransactions: getTransactions,
-
-    /**
-     * @namespace oh$
-     * @function isOnLedger
-     * @description
-     *   Determine if current credentials have some transaction on the imparter's ledger: transaction can be to anyone.
-     * 
-     *   Intent is to validate beyond just a valid address.  To validate the address has been used.
-     * 
-     *   Call may trigger `oh$.onWalletPopup`.
-     * @param {string} imparterTag
-     * @returns {Promise} with 'true' or 'false'; may call `oh$.onWalletPopup`
-     */
-    isOnLedger: isOnLedger,
-
-    /**
-     * @namespace oh$
-     * @function sign
-     * @description
-     *   Sign using the provided message using the credentials set against the specific imparter.
-     * 
-     *   Note: wallet might pop up a dialog upon this call, consider that in your UX flow.
-     * 
-     *   Call may trigger `oh$.onWalletPopup`.
-     * @param {string} imparterTag
-     * @param {string} message - to sign
-     * @returns {Promise} with the signature; may call `oh$.onWalletPopup`
-     */
-    sign: sign,
-
-    /**
-     * @namespace oh$
-     * @function createTransaction
-     * @description
-     *   Create a transaction on the imparter's ledger.
-     * 
-     *   Call may trigger `oh$.onWalletPopup`; wallet might pop up a dialog upon this call, consider that in your UX flow.
-     * @param {string} imparterTag
-     * @param {number} amount
-     * @param {string} to - address of recipient
-     * @param {Object} options - other options required for the specific imparter.
-     * 
-     *   The options objects are as follows:
-     *
-     *   | imparter tag | credentials object |
-     *   | --- | --- |
-     *   | eth-web3 | null |
-     *   | ohledger | {message:.., signature:..} |
-     *   | ohledger-web3 | {message:.., signature:..} |
-     * 
-     *   If *message* and *signature* are provided they are used instead of oh$ asking for wallet to resign message.
-     *
-     * @returns {Promise} of a 'true' for success or an Error; may call `oh$.onWalletPopup`
-     */
-    createTransaction: createTransaction
-  };
-  var WALLET_CHECK_INTERVAL_MS = 500;
-  var ETH_WEB3_IMPARTER_TAG = 'eth-web3';
-  var OHLEDGER_IMPARTER_TAG = 'ohledger';
-  var OHLEDGER_WEB3_IMPARTER_TAG = 'ohledger-web3';
-  var imparterTags = [OHLEDGER_IMPARTER_TAG];
-  var data = {
-    ETH_WEB3_IMPARTER_TAG: {
-      walletAddress: null,
-      network: null,
-      remuneration_uri: {
-        'main': 'https://ethereum.overhide.io',
-        'rinkeby': 'https://rinkeby.ethereum.overhide.io'
-      }
-    },
-    OHLEDGER_IMPARTER_TAG: {
-      oh_ledger_transact_fn: {
-        'prod': null,
-        'test': null
-      },
-      address: null,
-      secret: null,
-      mode: 'test',
-      remuneration_uri: {
-        'prod': 'https://ohledger.com/v1',
-        'test': 'https://test.ohledger.com/v1'
-      }
-    },
-    OHLEDGER_WEB3_IMPARTER_TAG: {
-      oh_ledger_transact_fn: {
-        'prod': null,
-        'test': null
-      },
-      walletAddress: null,
-      mode: 'test',
-      remuneration_uri: {
-        'prod': 'https://ohledger.com/v1',
-        'test': 'https://test.ohledger.com/v1'
-      }
-    }
-  };
-  var eth_accounts = new web3_eth_accounts__WEBPACK_IMPORTED_MODULE_1__["Accounts"]('http://localhost:8545');
-  createPopup();
-  detectWeb3Wallet();
+/* harmony default export */ __webpack_exports__["default"] = ({
   /**
-   * Setup window.web3 to be the wallet's if available or offline if not (just for signing).
+   * @property {function(string,boolean)} onWalletChange 
+   * @description
+   *   Handler registered by user; called when wallets' state changes.
    * 
-   * Sets up a timer to check for wallet being logged in and address changes.
+   *   The library passes in the imparter tag undergoing change and a boolean indicating 'true' if wallet available
+   *   or 'false.
    * 
-   * @ignore
+   *   In user code:
+   * 
+   *   ```
+   *   oh$.onWalletChange = (imparterTag, isPresent) => console.log(`wallet for ${imparterTag} is available:${isPresent}`);
+   *   ```
    */
+  onWalletChange: null,
 
-  function detectWeb3Wallet() {
-    if (!window.ethereum) return; // Modern dapp browsers...
+  /**
+   * @property {function(string,boolean)} onWalletPopup
+   * @description
+   *   Handler registered by user; called when wallet is expected to popup.  Useful in case user wants to react to popup in UI.
+   * 
+   *   The library passes in the imparter tag causing the popup.
+   * 
+   *   In user code:
+   * 
+   *   ```
+   *   oh$.onWalletPopup = (imparterTag) => console.log(`wallet for ${imparterTag} popped`);
+   *   ```
+   */
+  onWalletPopup: null,
 
-    _asyncToGenerator(
-    /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee2() {
-      return regeneratorRuntime.wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              _context2.prev = 0;
-              _context2.next = 3;
-              return window.ethereum.enable();
+  /**
+   * @property {function(string,Object)} onCredentialsUpdate
+   * @description
+   *   Handler registered by user; called when an credentials change for one of the tracked imparters.
+   * 
+   *   Only called when credentials are valid as per imparter: ready to be used for signing, transacting.
+   *
+   *   First string is the imparter tag, second object are the new credentials: imparter currency specific.
+   * 
+   *   The new credentials object will conform to the following:
+   * 
+   *   | imparter tag | credentials object |
+   *   | --- | --- |
+   *   | eth-web3 | `{address:..}` |
+   *   | ohledger | `{address:..,secret:..}` |
+   *   | ohledger-web3 | `{address:..}` |
+   *
+   *   In user code:
+   *
+   *   ```
+   *   oh$.onAddressUpdate = (imparterTag, creds) => {
+   *     if (imparterTag === 'eth-web3') console.log(`new address for ${imparterTag} is:${creds.address}`);
+   *   }
+   *   ```
+   */
+  onCredentialsUpdate: null,
 
-            case 3:
-              window.web3 = new web3__WEBPACK_IMPORTED_MODULE_0___default.a(window.ethereum);
-              _context2.next = 8;
-              break;
+  /**
+   * @property {function(string,Object)} onNetworkChange
+   * @description
+   *   Handler registered by user; called when the network changes for a particular imparter tag.
+   * 
+   *   For example for "eth0" the network could changed from "main" to "rinkeby".  
+   * 
+   *   The first string is the imparter tag, second object is the new network details: imparter currency specific.
+   *
+   *   The new credentials object will conform to the following:
+   *
+   *   | imparter tag | credentials object |
+   *   | --- | --- |
+   *   | eth-web3 | `{name:('main'|'rinkeby'|'kovan').., uri:..}` |
+   *   | ohledger | `{currency:'USD',mode:('prod'|'test'), uri:..}` |
+   *   | ohledger-web3 | `{currency:'USD',mode:('prod'|'test'), uri:..}` |
+   *
+   *   In user code:
+   *
+   *   ```
+   *   oh$.onNetworkChange = (imparterTag, details) => {
+   *     if (imparterTag === 'eth-web3') console.log(`new network selected for ${imparterTag} is:${details.name}`);
+   *     if (imparterTag === /ohledger/.test(imparterTag)) console.log(`working in currency: ${details.currency}`);
+   *   }
+   *   ```
+   */
+  onNetworkChange: null,
 
-            case 6:
-              _context2.prev = 6;
-              _context2.t0 = _context2["catch"](0);
+  /**
+   * @namespace oh$
+   * @function getImparterTags
+   * @description
+   *   Retrieves all imparter tags injected by wallets and statically available from the library.
+   * @returns {Array} of strings: the imparter tags available
+   */
+  getImparterTags: getImparterTags,
 
-            case 8:
-              _context2.next = 10;
-              return detectWalletCb();
+  /**
+   * @namespace oh$
+   * @function canSetCredentials
+   * @description
+   *   Interrogate whether the imparter tag can have credentials set by the user: or does the wallet control it
+   *   exclusively.
+   * 
+   *   Only the following imparter(s) will return 'true':
+   * 
+   *   - ohledger
+   * 
+   * @param {string} imparterTag
+   * @returns {boolean} 'true' if particular imparter tag can have credentials set.
+   */
+  canSetCredentials: canSetCredentials,
 
-            case 10:
-              setInterval(
-              /*#__PURE__*/
-              _asyncToGenerator(
-              /*#__PURE__*/
-              regeneratorRuntime.mark(function _callee() {
-                return regeneratorRuntime.wrap(function _callee$(_context) {
-                  while (1) {
-                    switch (_context.prev = _context.next) {
-                      case 0:
-                        _context.next = 2;
-                        return detectWalletCb();
+  /**
+   * @namespace oh$
+   * @function canGenerateCredentials
+   * @description
+   *   Interrogate whether the imparter tag can have credentials generated by the user: or does the wallet control it
+   *   exclusively.
+   *
+   *   Only the following imparter(s) will return 'true':
+   *
+   *   - ohledger
+   *
+   * @param {string} imparterTag
+   * @returns {boolean} 'true' if particular imparter tag can have credentials generated.
+   */
+  canGenerateCredentials: canGenerateCredentials,
 
-                      case 2:
-                      case "end":
-                        return _context.stop();
-                    }
-                  }
-                }, _callee);
-              })), WALLET_CHECK_INTERVAL_MS);
+  /**
+   * @namespace oh$
+   * @function canChangeNetwork
+   * @description
+   *   Interrogate whether the imparter tag can have network changed by the user via oh$: or does the wallet control it
+   *   exclusively.
+   *
+   *   Only the following imparter(s) will return 'true':
+   *
+   *   - ohledger
+   *   - ohledger-web3
+   *
+   * @param {string} imparterTag
+   * @returns {boolean} 'true' if particular imparter tag can have networks changed via oh$.
+   */
+  canChangeNetwork: canChangeNetwork,
 
-            case 11:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, _callee2, null, [[0, 6]]);
-    }))();
+  /**
+   * @namespace oh$
+   * @function generateCredentials
+   * @description
+   *   For imparters that can have credentials generated, generates them.  
+   * 
+   *   This setter calls `oh$.onCredentialsUpdate` when successful.
+   * @param {string} imparterTag
+   * @param {Object} options - imparter specific generation options, if any.
+   * 
+   *   The options objects are as follows:
+   * 
+   *   | imparter tag | credentials object |
+   *   | --- | --- |
+   *   | eth-web3 | N/A |
+   *   | ohledger | null |
+   *   | ohledger-web3 | N/A |
+   *
+   * @returns {Promise} representing a 'true' if success else 'false'; also calls `oh$.onCredentialsUpdate` on success
+   */
+  generateCredentials: generateCredentials,
 
-    var detectWalletCb =
-    /*#__PURE__*/
-    function () {
-      var _ref3 = _asyncToGenerator(
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee3() {
-        var currentAccounts, currentAddress, currentNetwork, imparterTagIndex;
-        return regeneratorRuntime.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.prev = 0;
-                _context3.next = 3;
-                return window.web3.eth.getAccounts();
+  /**
+   * @namespace oh$
+   * @function setCredentials
+   * @description
+   *   For imparters that can have credentials set, sets them.  
+   * 
+   *   This setter calls `oh$.onCredentialsUpdate` when successful.
+   * @param {string} imparterTag
+   * @param {Object} credentials - credentials object of imparter specific parameters to set.
+   * 
+   *   The credentials objects are as follows:
+   * 
+   *   | imparter tag | credentials object |
+   *   | --- | --- |
+   *   | eth-web3 | N/A |
+   *   | ohledger | `{address:..,secret:..}` |
+   *   | ohledger-web3 | N/A |
+   *
+   * @returns {Promise} representing a 'true' if success else 'false'; also calls `oh$.onCredentialsUpdate` on success
+   */
+  setCredentials: setCredentials,
 
-              case 3:
-                currentAccounts = _context3.sent;
-                currentAddress = currentAccounts && currentAccounts.length > 0 ? currentAccounts[0] : null;
-                _context3.next = 7;
-                return window.web3.eth.net.getNetworkType();
+  /**
+   * @namespace oh$
+   * @function setNetwork
+   * @description
+   *   For imparters that can have networks changed via oh$, changes it.  
+   * 
+   *   This setter calls `oh$.onNetworkChange` when successful.
+   * @param {string} imparterTag
+   * @param {Object} details - network details object of imparter specific parameters to set.
+   * 
+   *   The network details objects are as follows:
+   * 
+   *   | imparter tag | credentials object |
+   *   | --- | --- |
+   *   | eth-web3 | N/A |
+   *   | ohledger | `{currency:'USD', mode:'prod'|'test'}` |
+   *   | ohledger-web3 | `{currency:'USD', mode:'prod'|'test'}` |
+   *
+   * @returns {Promise} representing a 'true' if success else 'false'; also calls `oh$.onNetworkChange` on success
+   */
+  setNetwork: setNetwork,
 
-              case 7:
-                currentNetwork = _context3.sent;
-                _context3.next = 12;
-                break;
+  /**
+   * @namespace oh$
+   * @function getOverhideRemunerationAPIUri
+   * @description
+   *   Based on current network set returns the *overhide* remuneration API URI configured in the library.
+   * @param {string} imparterTag
+   * @returns {string} the URI.
+   */
+  getOverhideRemunerationAPIUri: getOverhideRemunerationAPIUri,
 
-              case 10:
-                _context3.prev = 10;
-                _context3.t0 = _context3["catch"](0);
+  /**
+   * @namespace oh$
+   * @function getTally
+   * @description
+   *   Retrieve a tally of all transactions on the imparter's ledger--perhaps within a date range.
+   * @param {string} imparterTag
+   * @param {Date} since - date to start tally since: date of oldest transaction to include.  No restriction if 'null'.
+   * @param {Object} recepient - imparter specific object describing recipient of transactions to tally for.
+   *
+   *   Recipient objects are as per:
+   *
+   *   | imparter tag | recipient object |
+   *   | --- | --- |
+   *   | eth-web3 | `{address:..}` |
+   *   | ohledger | `{address:..}` |
+   *   | ohledger-web3 | `{address:..}` |
+   *
+   * @returns {Promise} with the tally value in imparter specific currency
+   */
+  getTally: getTally,
 
-              case 12:
-                if (currentAddress !== data.ETH_WEB3_IMPARTER_TAG.walletAddress) {
-                  imparterTagIndex = imparterTags.findIndex(function (v) {
-                    return v === ETH_WEB3_IMPARTER_TAG;
-                  });
+  /**
+   * @namespace oh$
+   * @function getTransactions
+   * @description
+   *   Retrieve transactions on the imparter's ledger, perhaps within a date range, from credentials set against 
+   *   imparter to a recipient
+   * @param {string} imparterTag
+   * @param {Date} since - date to start tally since: date of oldest transaction to include.  No restriction if 'null'.
+   * @param {Object} recepient - imparter specific object describing recipient of transactions to tally for.
+   *
+   *   Recipient objects are as per:
+   *
+   *   | imparter tag | recipient object |
+   *   | --- | --- |
+   *   | eth-web3 | `{address:..}` |
+   *   | ohledger | `{address:..}` |
+   *   | ohledger-web3 | `{address:..}` |
+   *
+   * @returns {Promise} with the transactions: `[{"transaction-value":..,"transaction-date":..},..]`
+   */
+  getTransactions: getTransactions,
 
-                  if (imparterTagIndex && !currentAddress) {
-                    imparterTags.splice(imparterTagIndex, 1);
-                  } else if (!imparterTagIndex && currentAddress) {
-                    imparterTags.push(ETH_WEB3_IMPARTER_TAG);
-                    imparterTags.push(OHLEDGER_WEB3_IMPARTER_TAG);
-                  }
+  /**
+   * @namespace oh$
+   * @function isOnLedger
+   * @description
+   *   Determine if current credentials have some transaction on the imparter's ledger: transaction can be to anyone.
+   * 
+   *   Intent is to validate beyond just a valid address.  To validate the address has been used.
+   * 
+   *   Call may trigger `oh$.onWalletPopup`.
+   * @param {string} imparterTag
+   * @returns {Promise} with 'true' or 'false'; may call `oh$.onWalletPopup`
+   */
+  isOnLedger: isOnLedger,
 
-                  data.ETH_WEB3_IMPARTER_TAG.walletAddress = currentAddress;
-                  data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress = currentAddress;
+  /**
+   * @namespace oh$
+   * @function sign
+   * @description
+   *   Sign using the provided message using the credentials set against the specific imparter.
+   * 
+   *   Note: wallet might pop up a dialog upon this call, consider that in your UX flow.
+   * 
+   *   Call may trigger `oh$.onWalletPopup`.
+   * @param {string} imparterTag
+   * @param {string} message - to sign
+   * @returns {Promise} with the signature; may call `oh$.onWalletPopup`
+   */
+  sign: sign,
 
-                  if (root.oh$.onWalletChange) {
-                    root.oh$.onWalletChange(ETH_WEB3_IMPARTER_TAG, !!currentAddress);
-                    root.oh$.onWalletChange(OHLEDGER_WEB3_IMPARTER_TAG, !!currentAddress);
-                  }
-
-                  if (root.oh$.onCredentialsUpdate && currentAddress) {
-                    root.oh$.onCredentialsUpdate(ETH_WEB3_IMPARTER_TAG, {
-                      address: currentAddress
-                    });
-                    root.oh$.onCredentialsUpdate(OHLEDGER_WEB3_IMPARTER_TAG, {
-                      address: currentAddress
-                    });
-                  }
-                }
-
-                if (currentNetwork !== data.ETH_WEB3_IMPARTER_TAG.network) {
-                  if (root.oh$.onNetworkChange) {
-                    root.oh$.onNetworkChange(ETH_WEB3_IMPARTER_TAG, {
-                      name: currentNetwork,
-                      uri: data.ETH_WEB3_IMPARTER_TAG.remuneration_uri[currentNetwork]
-                    });
-                  }
-
-                  data.ETH_WEB3_IMPARTER_TAG.network = currentNetwork;
-                }
-
-              case 14:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3, null, [[0, 10]]);
-      }));
-
-      return function detectWalletCb() {
-        return _ref3.apply(this, arguments);
-      };
-    }();
-  }
-
-  function getImparterTags() {
-    return imparterTags;
-  }
-
-  function canSetCredentials(imparterTag) {
-    return imparterTag === OHLEDGER_IMPARTER_TAG;
-  }
-
-  function canGenerateCredentials(imparterTag) {
-    return imparterTag === OHLEDGER_IMPARTER_TAG;
-  }
-
-  function canChangeNetwork(imparterTag) {
-    switch (imparterTag) {
-      case OHLEDGER_IMPARTER_TAG:
-      case OHLEDGER_WEB3_IMPARTER_TAG:
-        return true;
-
-      default:
-        return false;
+  /**
+   * @namespace oh$
+   * @function createTransaction
+   * @description
+   *   Create a transaction on the imparter's ledger.
+   * 
+   *   Call may trigger `oh$.onWalletPopup`; wallet might pop up a dialog upon this call, consider that in your UX flow.
+   * @param {string} imparterTag
+   * @param {number} amount
+   * @param {string} to - address of recipient
+   * @param {Object} options - other options required for the specific imparter.
+   * 
+   *   The options objects are as follows:
+   *
+   *   | imparter tag | credentials object |
+   *   | --- | --- |
+   *   | eth-web3 | null |
+   *   | ohledger | {message:.., signature:..} |
+   *   | ohledger-web3 | {message:.., signature:..} |
+   * 
+   *   If *message* and *signature* are provided they are used instead of oh$ asking for wallet to resign message.
+   *
+   * @returns {Promise} of a 'true' for success or an Error; may call `oh$.onWalletPopup`
+   */
+  createTransaction: createTransaction
+});
+var WALLET_CHECK_INTERVAL_MS = 500;
+var ETH_WEB3_IMPARTER_TAG = 'eth-web3';
+var OHLEDGER_IMPARTER_TAG = 'ohledger';
+var OHLEDGER_WEB3_IMPARTER_TAG = 'ohledger-web3';
+var imparterTags = [OHLEDGER_IMPARTER_TAG];
+var data = {
+  ETH_WEB3_IMPARTER_TAG: {
+    walletAddress: null,
+    network: null,
+    remuneration_uri: {
+      'main': 'https://ethereum.overhide.io',
+      'rinkeby': 'https://rinkeby.ethereum.overhide.io'
+    }
+  },
+  OHLEDGER_IMPARTER_TAG: {
+    oh_ledger_transact_fn: {
+      'prod': null,
+      'test': null
+    },
+    address: null,
+    secret: null,
+    mode: 'test',
+    remuneration_uri: {
+      'prod': 'https://ohledger.com/v1',
+      'test': 'https://test.ohledger.com/v1'
+    }
+  },
+  OHLEDGER_WEB3_IMPARTER_TAG: {
+    oh_ledger_transact_fn: {
+      'prod': null,
+      'test': null
+    },
+    walletAddress: null,
+    mode: 'test',
+    remuneration_uri: {
+      'prod': 'https://ohledger.com/v1',
+      'test': 'https://test.ohledger.com/v1'
     }
   }
-
-  function setCredentials(_x, _x2) {
-    return _setCredentials.apply(this, arguments);
-  }
-
-  function _setCredentials() {
-    _setCredentials = _asyncToGenerator(
-    /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee4(imparterTag, credentials) {
-      return regeneratorRuntime.wrap(function _callee4$(_context4) {
-        while (1) {
-          switch (_context4.prev = _context4.next) {
-            case 0:
-              _context4.t0 = imparterTag;
-              _context4.next = _context4.t0 === OHLEDGER_IMPARTER_TAG ? 3 : 19;
-              break;
-
-            case 3:
-              if ('address' in credentials) {
-                _context4.next = 5;
-                break;
-              }
-
-              throw new Error("'address' must be passed in");
-
-            case 5:
-              if ('secret' in credentials) {
-                _context4.next = 7;
-                break;
-              }
-
-              throw new Error("'secret' must be passed in");
-
-            case 7:
-              data.OHLEDGER_IMPARTER_TAG.address = credentials.address;
-              data.OHLEDGER_IMPARTER_TAG.secret = credentials.secret;
-              _context4.prev = 9;
-
-              if (eth_accounts.recover(eth_accounts.sign('test message', credentials.secret)).toLowerCase() == credentials.address.toLowerCase()) {
-                _context4.next = 12;
-                break;
-              }
-
-              throw new Error("'secret' not valid for 'address");
-
-            case 12:
-              _context4.next = 17;
-              break;
-
-            case 14:
-              _context4.prev = 14;
-              _context4.t1 = _context4["catch"](9);
-              throw new Error("'secret' not valid for 'address");
-
-            case 17:
-              if (root.oh$.onCredentialsUpdate) root.oh$.onCredentialsUpdate(OHLEDGER_IMPARTER_TAG, {
-                address: credentials.address,
-                secret: credentials.secret
-              });
-              return _context4.abrupt("return", true);
-
-            case 19:
-              return _context4.abrupt("return", false);
-
-            case 20:
-            case "end":
-              return _context4.stop();
-          }
-        }
-      }, _callee4, null, [[9, 14]]);
-    }));
-    return _setCredentials.apply(this, arguments);
-  }
-
-  function generateCredentials(_x3, _x4) {
-    return _generateCredentials.apply(this, arguments);
-  }
-
-  function _generateCredentials() {
-    _generateCredentials = _asyncToGenerator(
-    /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee5(imparterTag, options) {
-      var res;
-      return regeneratorRuntime.wrap(function _callee5$(_context5) {
-        while (1) {
-          switch (_context5.prev = _context5.next) {
-            case 0:
-              _context5.t0 = imparterTag;
-              _context5.next = _context5.t0 === OHLEDGER_IMPARTER_TAG ? 3 : 8;
-              break;
-
-            case 3:
-              res = eth_accounts.create();
-              data.OHLEDGER_IMPARTER_TAG.address = res.address;
-              data.OHLEDGER_IMPARTER_TAG.secret = res.privateKey;
-              if (root.oh$.onCredentialsUpdate) root.oh$.onCredentialsUpdate(OHLEDGER_IMPARTER_TAG, {
-                address: res.address,
-                secret: res.privateKey
-              });
-              return _context5.abrupt("return", true);
-
-            case 8:
-              return _context5.abrupt("return", false);
-
-            case 9:
-            case "end":
-              return _context5.stop();
-          }
-        }
-      }, _callee5);
-    }));
-    return _generateCredentials.apply(this, arguments);
-  }
-
-  function setNetwork(_x5, _x6) {
-    return _setNetwork.apply(this, arguments);
-  }
-
-  function _setNetwork() {
-    _setNetwork = _asyncToGenerator(
-    /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee6(imparterTag, details) {
-      return regeneratorRuntime.wrap(function _callee6$(_context6) {
-        while (1) {
-          switch (_context6.prev = _context6.next) {
-            case 0:
-              if (!(ETH_WEB3_IMPARTER_TAG == imparterTag)) {
-                _context6.next = 2;
-                break;
-              }
-
-              return _context6.abrupt("return", false);
-
-            case 2:
-              if ('currency' in details) {
-                _context6.next = 4;
-                break;
-              }
-
-              throw new Error("'currency' must be passed in");
-
-            case 4:
-              if ('mode' in details) {
-                _context6.next = 6;
-                break;
-              }
-
-              throw new Error("'mode' must be passed in");
-
-            case 6:
-              details.currency = details.currency.toUpperCase();
-              details.mode = details.mode.toLowerCase();
-
-              if (!(details.currency !== 'USD')) {
-                _context6.next = 10;
-                break;
-              }
-
-              throw new Error("'currency' must be 'USD'");
-
-            case 10:
-              if (!(details.mode !== 'prod' && details.mode !== 'test')) {
-                _context6.next = 12;
-                break;
-              }
-
-              throw new Error("'mode' must be 'prod' or 'test'");
-
-            case 12:
-              _context6.t0 = imparterTag;
-              _context6.next = _context6.t0 === OHLEDGER_IMPARTER_TAG ? 15 : _context6.t0 === OHLEDGER_WEB3_IMPARTER_TAG ? 18 : 21;
-              break;
-
-            case 15:
-              data.OHLEDGER_IMPARTER_TAG.mode = details.mode;
-              if (root.oh$.onNetworkChange) root.oh$.onNetworkChange(OHLEDGER_IMPARTER_TAG, {
-                currency: 'USD',
-                mode: details.mode,
-                uri: data.OHLEDGER_IMPARTER_TAG.remuneration_uri[details.mode]
-              });
-              return _context6.abrupt("return", true);
-
-            case 18:
-              data.OHLEDGER_WEB3_IMPARTER_TAG.mode = details.mode;
-              if (root.oh$.onNetworkChange) root.oh$.onNetworkChange(OHLEDGER_WEB3_IMPARTER_TAG, {
-                currency: 'USD',
-                mode: details.mode,
-                uri: data.OHLEDGER_WEB3_IMPARTER_TAG.remuneration_uri[details.mode]
-              });
-              return _context6.abrupt("return", true);
-
-            case 21:
-              return _context6.abrupt("return", false);
-
-            case 22:
-            case "end":
-              return _context6.stop();
-          }
-        }
-      }, _callee6);
-    }));
-    return _setNetwork.apply(this, arguments);
-  }
-
-  function getOverhideRemunerationAPIUri(imparterTag) {
-    switch (imparterTag) {
-      case OHLEDGER_IMPARTER_TAG:
-        if (!data.OHLEDGER_IMPARTER_TAG.mode) throw new Error("network 'mode' must be set, use setNetwork");
-        return data.OHLEDGER_IMPARTER_TAG.remuneration_uri[data.OHLEDGER_IMPARTER_TAG.mode];
-
-      case OHLEDGER_WEB3_IMPARTER_TAG:
-        if (!data.OHLEDGER_WEB3_IMPARTER_TAG.mode) throw new Error("network 'mode' must be set, use setNetwork");
-        return data.OHLEDGER_WEB3_IMPARTER_TAG.remuneration_uri[data.OHLEDGER_WEB3_IMPARTER_TAG.mode];
-
-      case ETH_WEB3_IMPARTER_TAG:
-        return data.ETH_WEB3_IMPARTER_TAG.remuneration_uri[data.ETH_WEB3_IMPARTER_TAG.network];
-
-      default:
-        return null;
-    }
-  }
-
-  function getTally(_x7, _x8, _x9) {
-    return _getTally.apply(this, arguments);
-  }
-
-  function _getTally() {
-    _getTally = _asyncToGenerator(
-    /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee7(imparterTag, recipient, date) {
-      return regeneratorRuntime.wrap(function _callee7$(_context7) {
-        while (1) {
-          switch (_context7.prev = _context7.next) {
-            case 0:
-              _context7.next = 2;
-              return getTxs(imparterTag, recipient, date, true);
-
-            case 2:
-              return _context7.abrupt("return", _context7.sent.tally);
-
-            case 3:
-            case "end":
-              return _context7.stop();
-          }
-        }
-      }, _callee7);
-    }));
-    return _getTally.apply(this, arguments);
-  }
-
-  function getTransactions(_x10, _x11, _x12) {
-    return _getTransactions.apply(this, arguments);
-  }
-
-  function _getTransactions() {
-    _getTransactions = _asyncToGenerator(
-    /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee8(imparterTag, recipient, date) {
-      return regeneratorRuntime.wrap(function _callee8$(_context8) {
-        while (1) {
-          switch (_context8.prev = _context8.next) {
-            case 0:
-              _context8.next = 2;
-              return getTxs(imparterTag, recipient, date, false);
-
-            case 2:
-              return _context8.abrupt("return", _context8.sent.transactions);
-
-            case 3:
-            case "end":
-              return _context8.stop();
-          }
-        }
-      }, _callee8);
-    }));
-    return _getTransactions.apply(this, arguments);
-  }
-
-  function getTxs(_x13, _x14, _x15, _x16) {
-    return _getTxs.apply(this, arguments);
-  } // raise oh$-event
-  // @param {string} imparterTag
-  // @param {string} triggerFor 
-  // @param {Object} data - to stringify and sent as event.details.
-
-
-  function _getTxs() {
-    _getTxs = _asyncToGenerator(
-    /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee9(imparterTag, recipient, date, tallyOnly) {
-      var to, uri, from, since;
-      return regeneratorRuntime.wrap(function _callee9$(_context9) {
-        while (1) {
-          switch (_context9.prev = _context9.next) {
-            case 0:
-              if (!(date && !(date instanceof Date))) {
-                _context9.next = 2;
-                break;
-              }
-
-              throw new Error("'date' must be a Date is passed in");
-
-            case 2:
-              if ('address' in recipient) {
-                _context9.next = 4;
-                break;
-              }
-
-              throw new Error("'address' required in recipient");
-
-            case 4:
-              to = recipient.address;
-              uri = getOverhideRemunerationAPIUri(imparterTag);
-              _context9.t0 = imparterTag;
-              _context9.next = _context9.t0 === OHLEDGER_IMPARTER_TAG ? 9 : _context9.t0 === OHLEDGER_WEB3_IMPARTER_TAG ? 15 : _context9.t0 === ETH_WEB3_IMPARTER_TAG ? 21 : 27;
-              break;
-
-            case 9:
-              if (data.OHLEDGER_IMPARTER_TAG.mode) {
-                _context9.next = 11;
-                break;
-              }
-
-              throw new Error("network 'mode' must be set, use setNetwork");
-
-            case 11:
-              if (data.OHLEDGER_IMPARTER_TAG.address) {
-                _context9.next = 13;
-                break;
-              }
-
-              throw new Error("from 'address' not set: use setCredentials");
-
-            case 13:
-              from = data.OHLEDGER_IMPARTER_TAG.address;
-              return _context9.abrupt("break", 28);
-
-            case 15:
-              if (data.OHLEDGER_WEB3_IMPARTER_TAG.mode) {
-                _context9.next = 17;
-                break;
-              }
-
-              throw new Error("network 'mode' must be set, use setNetwork");
-
-            case 17:
-              if (data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress) {
-                _context9.next = 19;
-                break;
-              }
-
-              throw new Error("from 'walletAddress' not set: use wallet");
-
-            case 19:
-              from = data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress;
-              return _context9.abrupt("break", 28);
-
-            case 21:
-              if (data.ETH_WEB3_IMPARTER_TAG.network) {
-                _context9.next = 23;
-                break;
-              }
-
-              throw new Error("no network for imparter tag");
-
-            case 23:
-              if (data.ETH_WEB3_IMPARTER_TAG.walletAddress) {
-                _context9.next = 25;
-                break;
-              }
-
-              throw new Error("from 'walletAddress' not set: use wallet");
-
-            case 25:
-              from = data.ETH_WEB3_IMPARTER_TAG.walletAddress;
-              return _context9.abrupt("break", 28);
-
-            case 27:
-              throw new Error('unsupported imparter tag');
-
-            case 28:
-              if (uri) {
-                _context9.next = 30;
-                break;
-              }
-
-              throw new Error('no uri for request, unsupported network selected in wallet?');
-
-            case 30:
-              since = '';
-
-              if (date) {
-                since = "&since=".concat(date.toISOString());
-              }
-
-              _context9.next = 34;
-              return fetch("".concat(uri, "/get-transactions/").concat(from, "/").concat(to, "?tally-only=").concat(tallyOnly ? 'true' : 'false').concat(since)).then(function (res) {
-                return res.json();
-              })["catch"](function (e) {
-                throw String(e);
-              });
-
-            case 34:
-              return _context9.abrupt("return", _context9.sent);
-
-            case 35:
-            case "end":
-              return _context9.stop();
-          }
-        }
-      }, _callee9);
-    }));
-    return _getTxs.apply(this, arguments);
-  }
-
-  function raiseEventClick(imparterTag, triggerFor) {
-    window.parent.document.dispatchEvent(new CustomEvent('oh$-event', {
-      detail: JSON.stringify({
-        imparterTag: imparterTag,
-        triggerFor: triggerFor,
-        click: true
-      })
-    }));
-  } // raise oh$-event
-  // @param {string} imparterTag
-  // @param {string} triggerFor 
-  // @param {Object} data - to stringify and sent as event.details.
-
-
-  function raiseEvent(imparterTag, triggerFor, data) {
-    window.parent.document.dispatchEvent(new CustomEvent('oh$-event', {
-      detail: JSON.stringify(_objectSpread({}, data, {
-        imparterTag: imparterTag,
-        triggerFor: triggerFor
-      }))
-    }));
-  }
-
-  function isOnLedger(_x17) {
-    return _isOnLedger.apply(this, arguments);
-  }
-
-  function _isOnLedger() {
-    _isOnLedger = _asyncToGenerator(
-    /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee10(imparterTag) {
-      var uri, from, message, signature;
-      return regeneratorRuntime.wrap(function _callee10$(_context10) {
-        while (1) {
-          switch (_context10.prev = _context10.next) {
-            case 0:
-              uri = getOverhideRemunerationAPIUri(imparterTag);
-              _context10.t0 = imparterTag;
-              _context10.next = _context10.t0 === OHLEDGER_IMPARTER_TAG ? 4 : _context10.t0 === OHLEDGER_WEB3_IMPARTER_TAG ? 10 : _context10.t0 === ETH_WEB3_IMPARTER_TAG ? 16 : 22;
-              break;
-
-            case 4:
-              if (data.OHLEDGER_IMPARTER_TAG.mode) {
-                _context10.next = 6;
-                break;
-              }
-
-              throw new Error("network 'mode' must be set, use setNetwork");
-
-            case 6:
-              if (data.OHLEDGER_IMPARTER_TAG.address) {
-                _context10.next = 8;
-                break;
-              }
-
-              throw new Error("from 'address' not set: use setCredentials");
-
-            case 8:
-              from = data.OHLEDGER_IMPARTER_TAG.address;
-              return _context10.abrupt("break", 23);
-
-            case 10:
-              if (data.OHLEDGER_WEB3_IMPARTER_TAG.mode) {
-                _context10.next = 12;
-                break;
-              }
-
-              throw new Error("network 'mode' must be set, use setNetwork");
-
-            case 12:
-              if (data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress) {
-                _context10.next = 14;
-                break;
-              }
-
-              throw new Error("from 'walletAddress' not set: use wallet");
-
-            case 14:
-              from = data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress;
-              return _context10.abrupt("break", 23);
-
-            case 16:
-              if (data.ETH_WEB3_IMPARTER_TAG.network) {
-                _context10.next = 18;
-                break;
-              }
-
-              throw new Error("no network for imparter tag");
-
-            case 18:
-              if (data.ETH_WEB3_IMPARTER_TAG.walletAddress) {
-                _context10.next = 20;
-                break;
-              }
-
-              throw new Error("from 'walletAddress' not set: use wallet");
-
-            case 20:
-              from = data.ETH_WEB3_IMPARTER_TAG.walletAddress;
-              return _context10.abrupt("break", 23);
-
-            case 22:
-              throw new Error('unsupported imparter tag');
-
-            case 23:
-              if (uri) {
-                _context10.next = 25;
-                break;
-              }
-
-              throw new Error('no uri for request, unsupported network selected in wallet?');
-
-            case 25:
-              message = 'verify ownership of address by signing';
-              _context10.next = 28;
-              return sign(imparterTag, message);
-
-            case 28:
-              signature = _context10.sent;
-              _context10.next = 31;
-              return fetch("".concat(uri, "/is-signature-valid"), {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json; charset=utf-8"
-                },
-                body: JSON.stringify({
-                  signature: btoa(signature),
-                  message: btoa(message),
-                  address: from
-                })
-              }).then(function (result) {
-                if (result.status == 200) {
-                  return true;
-                } else {
-                  return false;
+};
+var eth_accounts = new web3_eth_accounts__WEBPACK_IMPORTED_MODULE_1__["Accounts"]('http://localhost:8545');
+createPopup();
+detectWeb3Wallet();
+/**
+ * Setup window.web3 to be the wallet's if available or offline if not (just for signing).
+ * 
+ * Sets up a timer to check for wallet being logged in and address changes.
+ * 
+ * @ignore
+ */
+
+function detectWeb3Wallet() {
+  if (!window.ethereum) return; // Modern dapp browsers...
+
+  _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee2() {
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.prev = 0;
+            _context2.next = 3;
+            return window.ethereum.enable();
+
+          case 3:
+            window.web3 = new web3__WEBPACK_IMPORTED_MODULE_0___default.a(window.ethereum);
+            _context2.next = 8;
+            break;
+
+          case 6:
+            _context2.prev = 6;
+            _context2.t0 = _context2["catch"](0);
+
+          case 8:
+            _context2.next = 10;
+            return detectWalletCb();
+
+          case 10:
+            setInterval(
+            /*#__PURE__*/
+            _asyncToGenerator(
+            /*#__PURE__*/
+            regeneratorRuntime.mark(function _callee() {
+              return regeneratorRuntime.wrap(function _callee$(_context) {
+                while (1) {
+                  switch (_context.prev = _context.next) {
+                    case 0:
+                      _context.next = 2;
+                      return detectWalletCb();
+
+                    case 2:
+                    case "end":
+                      return _context.stop();
+                  }
                 }
-              })["catch"](function (e) {
-                throw String(e);
-              });
+              }, _callee);
+            })), WALLET_CHECK_INTERVAL_MS);
 
-            case 31:
-              return _context10.abrupt("return", _context10.sent);
-
-            case 32:
-            case "end":
-              return _context10.stop();
-          }
+          case 11:
+          case "end":
+            return _context2.stop();
         }
-      }, _callee10);
-    }));
-    return _isOnLedger.apply(this, arguments);
-  }
-
-  function sign(_x18, _x19) {
-    return _sign.apply(this, arguments);
-  }
-
-  function _sign() {
-    _sign = _asyncToGenerator(
-    /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee11(imparterTag, message) {
-      return regeneratorRuntime.wrap(function _callee11$(_context11) {
-        while (1) {
-          switch (_context11.prev = _context11.next) {
-            case 0:
-              _context11.t0 = imparterTag;
-              _context11.next = _context11.t0 === OHLEDGER_IMPARTER_TAG ? 3 : _context11.t0 === OHLEDGER_WEB3_IMPARTER_TAG ? 6 : _context11.t0 === ETH_WEB3_IMPARTER_TAG ? 12 : 18;
-              break;
-
-            case 3:
-              if (data.OHLEDGER_IMPARTER_TAG.secret) {
-                _context11.next = 5;
-                break;
-              }
-
-              throw new Error("credentials for imparter ".concat(OHLEDGER_IMPARTER_TAG, " not set"));
-
-            case 5:
-              return _context11.abrupt("return", eth_accounts.sign(message, data.OHLEDGER_IMPARTER_TAG.secret).signature);
-
-            case 6:
-              if (data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress) {
-                _context11.next = 8;
-                break;
-              }
-
-              throw new Error("imparter ".concat(OHLEDGER_WEB3_IMPARTER_TAG, " not active"));
-
-            case 8:
-              if (root.oh$.onWalletPopup) root.oh$.onWalletPopup(OHLEDGER_WEB3_IMPARTER_TAG);
-              _context11.next = 11;
-              return window.web3.eth.personal.sign(message, data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress, '');
-
-            case 11:
-              return _context11.abrupt("return", _context11.sent);
-
-            case 12:
-              if (data.ETH_WEB3_IMPARTER_TAG.walletAddress) {
-                _context11.next = 14;
-                break;
-              }
-
-              throw new Error("imparter ".concat(ETH_WEB3_IMPARTER_TAG, " not active"));
-
-            case 14:
-              if (root.oh$.onWalletPopup) root.oh$.onWalletPopup(ETH_WEB3_IMPARTER_TAG);
-              _context11.next = 17;
-              return window.web3.eth.personal.sign(message, data.ETH_WEB3_IMPARTER_TAG.walletAddress, '');
-
-            case 17:
-              return _context11.abrupt("return", _context11.sent);
-
-            case 18:
-              return _context11.abrupt("return", null);
-
-            case 19:
-            case "end":
-              return _context11.stop();
-          }
-        }
-      }, _callee11);
-    }));
-    return _sign.apply(this, arguments);
-  }
-
-  function createTransaction(_x20, _x21, _x22, _x23) {
-    return _createTransaction.apply(this, arguments);
-  }
-
-  function _createTransaction() {
-    _createTransaction = _asyncToGenerator(
-    /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee12(imparterTag, amount, to, options) {
-      var from, message, signature, eventPromise;
-      return regeneratorRuntime.wrap(function _callee12$(_context12) {
-        while (1) {
-          switch (_context12.prev = _context12.next) {
-            case 0:
-              if (!(amount == 0)) {
-                _context12.next = 5;
-                break;
-              }
-
-              _context12.next = 3;
-              return isOnLedger(imparterTag);
-
-            case 3:
-              if (!_context12.sent) {
-                _context12.next = 5;
-                break;
-              }
-
-              return _context12.abrupt("return", true);
-
-            case 5:
-              _context12.t0 = imparterTag;
-              _context12.next = _context12.t0 === OHLEDGER_IMPARTER_TAG ? 8 : _context12.t0 === OHLEDGER_WEB3_IMPARTER_TAG ? 14 : _context12.t0 === ETH_WEB3_IMPARTER_TAG ? 20 : 26;
-              break;
-
-            case 8:
-              if (data.OHLEDGER_IMPARTER_TAG.mode) {
-                _context12.next = 10;
-                break;
-              }
-
-              throw new Error("network 'mode' must be set, use setNetwork");
-
-            case 10:
-              if (data.OHLEDGER_IMPARTER_TAG.address) {
-                _context12.next = 12;
-                break;
-              }
-
-              throw new Error("from 'address' not set: use setCredentials");
-
-            case 12:
-              from = data.OHLEDGER_IMPARTER_TAG.address;
-              return _context12.abrupt("break", 27);
-
-            case 14:
-              if (data.OHLEDGER_WEB3_IMPARTER_TAG.mode) {
-                _context12.next = 16;
-                break;
-              }
-
-              throw new Error("network 'mode' must be set, use setNetwork");
-
-            case 16:
-              if (data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress) {
-                _context12.next = 18;
-                break;
-              }
-
-              throw new Error("from 'walletAddress' not set: use wallet");
-
-            case 18:
-              from = data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress;
-              return _context12.abrupt("break", 27);
-
-            case 20:
-              if (data.ETH_WEB3_IMPARTER_TAG.network) {
-                _context12.next = 22;
-                break;
-              }
-
-              throw new Error("no network for imparter tag");
-
-            case 22:
-              if (data.ETH_WEB3_IMPARTER_TAG.walletAddress) {
-                _context12.next = 24;
-                break;
-              }
-
-              throw new Error("from 'walletAddress' not set: use wallet");
-
-            case 24:
-              from = data.ETH_WEB3_IMPARTER_TAG.walletAddress;
-              return _context12.abrupt("break", 27);
-
-            case 26:
-              throw new Error('unsupported imparter tag');
-
-            case 27:
-              _context12.t1 = imparterTag;
-              _context12.next = _context12.t1 === OHLEDGER_IMPARTER_TAG ? 30 : _context12.t1 === OHLEDGER_WEB3_IMPARTER_TAG ? 30 : _context12.t1 === ETH_WEB3_IMPARTER_TAG ? 49 : 53;
-              break;
-
-            case 30:
-              if (!(amount == 0)) {
-                _context12.next = 44;
-                break;
-              }
-
-              if (!('message' in options && 'signature' in options)) {
-                _context12.next = 36;
-                break;
-              }
-
-              message = options.message;
-              signature = options.signature;
-              _context12.next = 40;
-              break;
-
-            case 36:
-              message = "verify ownership of address by signing on ".concat(new Date().toLocaleString());
-              _context12.next = 39;
-              return sign(imparterTag, message);
-
-            case 39:
-              signature = _context12.sent;
-
-            case 40:
-              _context12.next = 42;
-              return showOhLedgerGratisIframeUri(imparterTag, from, signature, message);
-
-            case 42:
-              _context12.next = 48;
-              break;
-
-            case 44:
-              eventPromise = setupNewPromise();
-              data.OHLEDGER_IMPARTER_TAG.oh_ledger_transact_fn[data.OHLEDGER_IMPARTER_TAG.mode](amount, from, to);
-              _context12.next = 48;
-              return eventPromise;
-
-            case 48:
-              return _context12.abrupt("break", 54);
-
-            case 49:
-              if (root.oh$.onWalletPopup) root.oh$.onWalletPopup(ETH_WEB3_IMPARTER_TAG);
-              _context12.next = 52;
-              return web3.eth.sendTransaction({
-                from: from,
-                to: to,
-                value: amount
-              });
-
-            case 52:
-              return _context12.abrupt("break", 54);
-
-            case 53:
-              throw new Error('unsupported imparter tag');
-
-            case 54:
-              return _context12.abrupt("return", true);
-
-            case 55:
-            case "end":
-              return _context12.stop();
-          }
-        }
-      }, _callee12);
-    }));
-    return _createTransaction.apply(this, arguments);
-  }
-
-  var resolve = null;
-  var reject = null; // promise used for popups and resolutions via oh-ledger-* messages.
-
-  function setupNewPromise() {
-    console.assert(!resolve, 'oh-popup promise being set but already set when calling setupNewPromise(..)');
-    return new Promise(function (rs, rj) {
-      resolve = rs;
-      reject = rj;
-    });
-  } // make popup visible to be hidden with makePopupHidden
-
-
-  function makePopupVisible() {
-    var popup = document.getElementById('oh-popup-container');
-    popup.style.display = 'block';
-    return setupNewPromise();
-  }
-
-  function makePopupHidden(params, isError) {
-    var popup = document.getElementById('oh-popup-container');
-    hideAllPopupContents();
-    popup.style.display = 'none';
-    console.assert(resolve, 'oh-popup promise not set yet calling makePopupHidden(..)');
-    if (isError) reject(params);else resolve(params);
-    resolve = null;
-    reject = null;
-  }
-
-  window.addEventListener('message', function (e) {
-    if (e.data && e.data.event === 'oh-ledger-ok') {
-      makePopupHidden(e.data.detail);
-    } else if (e.data && e.data.event === 'oh-ledger-error') {
-      makePopupHidden(e.data.detail, true);
-    }
-  }, false);
-
-  function hideAllPopupContents() {
-    document.getElementById('oh-ledger-gratis-iframe').style.display = 'none';
-  }
-
-  function showOhLedgerGratisIframeUri(_x24, _x25, _x26, _x27) {
-    return _showOhLedgerGratisIframeUri.apply(this, arguments);
-  }
-
-  function _showOhLedgerGratisIframeUri() {
-    _showOhLedgerGratisIframeUri = _asyncToGenerator(
-    /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee13(imparterTag, from, signature, message) {
-      var uri, frame;
-      return regeneratorRuntime.wrap(function _callee13$(_context13) {
-        while (1) {
-          switch (_context13.prev = _context13.next) {
-            case 0:
-              hideAllPopupContents();
-              uri = getOverhideRemunerationAPIUri(imparterTag);
-              frame = document.getElementById('oh-ledger-gratis-iframe');
-              frame.setAttribute('src', "".concat(uri, "/gratis.html?address=").concat(from, "&signature=").concat(signature, "&message=").concat(message));
-              frame.style.display = 'block';
-              _context13.next = 7;
-              return makePopupVisible();
-
-            case 7:
-            case "end":
-              return _context13.stop();
-          }
-        }
-      }, _callee13);
-    }));
-    return _showOhLedgerGratisIframeUri.apply(this, arguments);
-  }
-
-  function createPopup() {
-    var popup = document.createElement('div');
-    popup.setAttribute('id', 'oh-popup-container');
-    popup.style.display = 'none';
-    popup.innerHTML = "\n      <div>\n        <a href=\"#\" title=\"Close\" id=\"oh-popup-close\" onclick=\"window.parent.document.dispatchEvent(new CustomEvent('oh$-popup-close',{})); return false;\">X</a>\n        <iframe id=\"oh-ledger-gratis-iframe\"></iframe>\n      </div>\n    ";
-    var style = document.createElement('style');
-    style.innerHTML = "\n      #oh-popup-container {\n          position: fixed;\n          font-family: arial, \"lucida console\", sans-serif;\n          top: 0;\n          right: 0;\n          bottom: 0;\n          left: 0;\n          background: rgba(0, 0, 0, 0.8);\n          z-index: 999;\n          opacity:1;\n          pointer-events: auto;\n      }\n      #oh-popup-container > div {\n          width: 80vw;\n          height: 75vh;\n          position: relative;\n          top: 15vh;\n          margin: auto auto;\n          padding: 5px 5px 5px 5px;\n          background: white;\n      }\n      #oh-popup-close {\n          background: grey;\n          color: white;\n          line-height: 25px;\n          position: absolute;\n          right: 2px;\n          text-align: center;\n          top: 2px;\n          width: 24px;\n          text-decoration: none;\n          font-weight: bold;\n      }\n      #oh-popup-close:hover {\n          background: black;\n      }\n\n      #oh-ledger-gratis-iframe {\n        display: none;\n        border: 0;\n        overflow: hidden;\n        width: 100%;\n        height: 100%;\n      }\n    ";
-
-    var attach = function attach() {
-      if (document.body) {
-        document.body.appendChild(popup);
-        document.body.appendChild(style);
-        loadOhLedgerTransactFns();
-      } else {
-        setTimeout(attach, 100);
       }
+    }, _callee2, null, [[0, 6]]);
+  }))();
 
-      ;
+  var detectWalletCb =
+  /*#__PURE__*/
+  function () {
+    var _ref3 = _asyncToGenerator(
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee3() {
+      var currentAccounts, currentAddress, currentNetwork, imparterTagIndex;
+      return regeneratorRuntime.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
+              _context3.next = 3;
+              return window.web3.eth.getAccounts();
+
+            case 3:
+              currentAccounts = _context3.sent;
+              currentAddress = currentAccounts && currentAccounts.length > 0 ? currentAccounts[0] : null;
+              _context3.next = 7;
+              return window.web3.eth.net.getNetworkType();
+
+            case 7:
+              currentNetwork = _context3.sent;
+              _context3.next = 12;
+              break;
+
+            case 10:
+              _context3.prev = 10;
+              _context3.t0 = _context3["catch"](0);
+
+            case 12:
+              if (currentAddress !== data.ETH_WEB3_IMPARTER_TAG.walletAddress) {
+                imparterTagIndex = imparterTags.findIndex(function (v) {
+                  return v === ETH_WEB3_IMPARTER_TAG;
+                });
+
+                if (imparterTagIndex && !currentAddress) {
+                  imparterTags.splice(imparterTagIndex, 1);
+                } else if (!imparterTagIndex && currentAddress) {
+                  imparterTags.push(ETH_WEB3_IMPARTER_TAG);
+                  imparterTags.push(OHLEDGER_WEB3_IMPARTER_TAG);
+                }
+
+                data.ETH_WEB3_IMPARTER_TAG.walletAddress = currentAddress;
+                data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress = currentAddress;
+
+                if (root.oh$.onWalletChange) {
+                  root.oh$.onWalletChange(ETH_WEB3_IMPARTER_TAG, !!currentAddress);
+                  root.oh$.onWalletChange(OHLEDGER_WEB3_IMPARTER_TAG, !!currentAddress);
+                }
+
+                if (root.oh$.onCredentialsUpdate && currentAddress) {
+                  root.oh$.onCredentialsUpdate(ETH_WEB3_IMPARTER_TAG, {
+                    address: currentAddress
+                  });
+                  root.oh$.onCredentialsUpdate(OHLEDGER_WEB3_IMPARTER_TAG, {
+                    address: currentAddress
+                  });
+                }
+              }
+
+              if (currentNetwork !== data.ETH_WEB3_IMPARTER_TAG.network) {
+                if (root.oh$.onNetworkChange) {
+                  root.oh$.onNetworkChange(ETH_WEB3_IMPARTER_TAG, {
+                    name: currentNetwork,
+                    uri: data.ETH_WEB3_IMPARTER_TAG.remuneration_uri[currentNetwork]
+                  });
+                }
+
+                data.ETH_WEB3_IMPARTER_TAG.network = currentNetwork;
+              }
+
+            case 14:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[0, 10]]);
+    }));
+
+    return function detectWalletCb() {
+      return _ref3.apply(this, arguments);
     };
+  }();
+}
 
-    attach();
+function getImparterTags() {
+  return imparterTags;
+}
+
+function canSetCredentials(imparterTag) {
+  return imparterTag === OHLEDGER_IMPARTER_TAG;
+}
+
+function canGenerateCredentials(imparterTag) {
+  return imparterTag === OHLEDGER_IMPARTER_TAG;
+}
+
+function canChangeNetwork(imparterTag) {
+  switch (imparterTag) {
+    case OHLEDGER_IMPARTER_TAG:
+    case OHLEDGER_WEB3_IMPARTER_TAG:
+      return true;
+
+    default:
+      return false;
   }
+}
 
-  window.document.addEventListener('oh$-popup-close', function (e) {
-    makePopupHidden('user close', true);
-  }); // https://stackoverflow.com/a/31374433
+function setCredentials(_x, _x2) {
+  return _setCredentials.apply(this, arguments);
+}
 
-  function loadJS(url, implementationCode, location) {
-    //url is URL of external file, implementationCode is the code
-    //to be called from the file, location is the location to 
-    //insert the <script> element
-    var scriptTag = document.createElement('script');
-    scriptTag.src = url;
-    scriptTag.onload = implementationCode;
-    scriptTag.onreadystatechange = implementationCode;
-    location.appendChild(scriptTag);
+function _setCredentials() {
+  _setCredentials = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee4(imparterTag, credentials) {
+    return regeneratorRuntime.wrap(function _callee4$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            _context4.t0 = imparterTag;
+            _context4.next = _context4.t0 === OHLEDGER_IMPARTER_TAG ? 3 : 19;
+            break;
+
+          case 3:
+            if ('address' in credentials) {
+              _context4.next = 5;
+              break;
+            }
+
+            throw new Error("'address' must be passed in");
+
+          case 5:
+            if ('secret' in credentials) {
+              _context4.next = 7;
+              break;
+            }
+
+            throw new Error("'secret' must be passed in");
+
+          case 7:
+            data.OHLEDGER_IMPARTER_TAG.address = credentials.address;
+            data.OHLEDGER_IMPARTER_TAG.secret = credentials.secret;
+            _context4.prev = 9;
+
+            if (eth_accounts.recover(eth_accounts.sign('test message', credentials.secret)).toLowerCase() == credentials.address.toLowerCase()) {
+              _context4.next = 12;
+              break;
+            }
+
+            throw new Error("'secret' not valid for 'address");
+
+          case 12:
+            _context4.next = 17;
+            break;
+
+          case 14:
+            _context4.prev = 14;
+            _context4.t1 = _context4["catch"](9);
+            throw new Error("'secret' not valid for 'address");
+
+          case 17:
+            if (root.oh$.onCredentialsUpdate) root.oh$.onCredentialsUpdate(OHLEDGER_IMPARTER_TAG, {
+              address: credentials.address,
+              secret: credentials.secret
+            });
+            return _context4.abrupt("return", true);
+
+          case 19:
+            return _context4.abrupt("return", false);
+
+          case 20:
+          case "end":
+            return _context4.stop();
+        }
+      }
+    }, _callee4, null, [[9, 14]]);
+  }));
+  return _setCredentials.apply(this, arguments);
+}
+
+function generateCredentials(_x3, _x4) {
+  return _generateCredentials.apply(this, arguments);
+}
+
+function _generateCredentials() {
+  _generateCredentials = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee5(imparterTag, options) {
+    var res;
+    return regeneratorRuntime.wrap(function _callee5$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+            _context5.t0 = imparterTag;
+            _context5.next = _context5.t0 === OHLEDGER_IMPARTER_TAG ? 3 : 8;
+            break;
+
+          case 3:
+            res = eth_accounts.create();
+            data.OHLEDGER_IMPARTER_TAG.address = res.address;
+            data.OHLEDGER_IMPARTER_TAG.secret = res.privateKey;
+            if (root.oh$.onCredentialsUpdate) root.oh$.onCredentialsUpdate(OHLEDGER_IMPARTER_TAG, {
+              address: res.address,
+              secret: res.privateKey
+            });
+            return _context5.abrupt("return", true);
+
+          case 8:
+            return _context5.abrupt("return", false);
+
+          case 9:
+          case "end":
+            return _context5.stop();
+        }
+      }
+    }, _callee5);
+  }));
+  return _generateCredentials.apply(this, arguments);
+}
+
+function setNetwork(_x5, _x6) {
+  return _setNetwork.apply(this, arguments);
+}
+
+function _setNetwork() {
+  _setNetwork = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee6(imparterTag, details) {
+    return regeneratorRuntime.wrap(function _callee6$(_context6) {
+      while (1) {
+        switch (_context6.prev = _context6.next) {
+          case 0:
+            if (!(ETH_WEB3_IMPARTER_TAG == imparterTag)) {
+              _context6.next = 2;
+              break;
+            }
+
+            return _context6.abrupt("return", false);
+
+          case 2:
+            if ('currency' in details) {
+              _context6.next = 4;
+              break;
+            }
+
+            throw new Error("'currency' must be passed in");
+
+          case 4:
+            if ('mode' in details) {
+              _context6.next = 6;
+              break;
+            }
+
+            throw new Error("'mode' must be passed in");
+
+          case 6:
+            details.currency = details.currency.toUpperCase();
+            details.mode = details.mode.toLowerCase();
+
+            if (!(details.currency !== 'USD')) {
+              _context6.next = 10;
+              break;
+            }
+
+            throw new Error("'currency' must be 'USD'");
+
+          case 10:
+            if (!(details.mode !== 'prod' && details.mode !== 'test')) {
+              _context6.next = 12;
+              break;
+            }
+
+            throw new Error("'mode' must be 'prod' or 'test'");
+
+          case 12:
+            _context6.t0 = imparterTag;
+            _context6.next = _context6.t0 === OHLEDGER_IMPARTER_TAG ? 15 : _context6.t0 === OHLEDGER_WEB3_IMPARTER_TAG ? 18 : 21;
+            break;
+
+          case 15:
+            data.OHLEDGER_IMPARTER_TAG.mode = details.mode;
+            if (root.oh$.onNetworkChange) root.oh$.onNetworkChange(OHLEDGER_IMPARTER_TAG, {
+              currency: 'USD',
+              mode: details.mode,
+              uri: data.OHLEDGER_IMPARTER_TAG.remuneration_uri[details.mode]
+            });
+            return _context6.abrupt("return", true);
+
+          case 18:
+            data.OHLEDGER_WEB3_IMPARTER_TAG.mode = details.mode;
+            if (root.oh$.onNetworkChange) root.oh$.onNetworkChange(OHLEDGER_WEB3_IMPARTER_TAG, {
+              currency: 'USD',
+              mode: details.mode,
+              uri: data.OHLEDGER_WEB3_IMPARTER_TAG.remuneration_uri[details.mode]
+            });
+            return _context6.abrupt("return", true);
+
+          case 21:
+            return _context6.abrupt("return", false);
+
+          case 22:
+          case "end":
+            return _context6.stop();
+        }
+      }
+    }, _callee6);
+  }));
+  return _setNetwork.apply(this, arguments);
+}
+
+function getOverhideRemunerationAPIUri(imparterTag) {
+  switch (imparterTag) {
+    case OHLEDGER_IMPARTER_TAG:
+      if (!data.OHLEDGER_IMPARTER_TAG.mode) throw new Error("network 'mode' must be set, use setNetwork");
+      return data.OHLEDGER_IMPARTER_TAG.remuneration_uri[data.OHLEDGER_IMPARTER_TAG.mode];
+
+    case OHLEDGER_WEB3_IMPARTER_TAG:
+      if (!data.OHLEDGER_WEB3_IMPARTER_TAG.mode) throw new Error("network 'mode' must be set, use setNetwork");
+      return data.OHLEDGER_WEB3_IMPARTER_TAG.remuneration_uri[data.OHLEDGER_WEB3_IMPARTER_TAG.mode];
+
+    case ETH_WEB3_IMPARTER_TAG:
+      return data.ETH_WEB3_IMPARTER_TAG.remuneration_uri[data.ETH_WEB3_IMPARTER_TAG.network];
+
+    default:
+      return null;
   }
+}
 
-  ;
+function getTally(_x7, _x8, _x9) {
+  return _getTally.apply(this, arguments);
+}
 
-  function loadOhLedgerTransactFns() {
-    // load prod ohledger transact fn
-    loadJS("".concat(data.OHLEDGER_IMPARTER_TAG.remuneration_uri.prod, "/transact.js"), function () {
-      data.OHLEDGER_IMPARTER_TAG.oh_ledger_transact_fn.prod = oh_ledger_transact;
-      data.OHLEDGER_WEB3_IMPARTER_TAG.oh_ledger_transact_fn.prod = oh_ledger_transact;
-    }, document.body); // load test ohledger transact fn
+function _getTally() {
+  _getTally = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee7(imparterTag, recipient, date) {
+    return regeneratorRuntime.wrap(function _callee7$(_context7) {
+      while (1) {
+        switch (_context7.prev = _context7.next) {
+          case 0:
+            _context7.next = 2;
+            return getTxs(imparterTag, recipient, date, true);
 
-    loadJS("".concat(data.OHLEDGER_IMPARTER_TAG.remuneration_uri.test, "/transact.js"), function () {
-      data.OHLEDGER_IMPARTER_TAG.oh_ledger_transact_fn.test = oh_ledger_transact;
-      data.OHLEDGER_WEB3_IMPARTER_TAG.oh_ledger_transact_fn.test = oh_ledger_transact;
-    }, document.body);
+          case 2:
+            return _context7.abrupt("return", _context7.sent.tally);
+
+          case 3:
+          case "end":
+            return _context7.stop();
+        }
+      }
+    }, _callee7);
+  }));
+  return _getTally.apply(this, arguments);
+}
+
+function getTransactions(_x10, _x11, _x12) {
+  return _getTransactions.apply(this, arguments);
+}
+
+function _getTransactions() {
+  _getTransactions = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee8(imparterTag, recipient, date) {
+    return regeneratorRuntime.wrap(function _callee8$(_context8) {
+      while (1) {
+        switch (_context8.prev = _context8.next) {
+          case 0:
+            _context8.next = 2;
+            return getTxs(imparterTag, recipient, date, false);
+
+          case 2:
+            return _context8.abrupt("return", _context8.sent.transactions);
+
+          case 3:
+          case "end":
+            return _context8.stop();
+        }
+      }
+    }, _callee8);
+  }));
+  return _getTransactions.apply(this, arguments);
+}
+
+function getTxs(_x13, _x14, _x15, _x16) {
+  return _getTxs.apply(this, arguments);
+} // raise oh$-event
+// @param {string} imparterTag
+// @param {string} triggerFor 
+// @param {Object} data - to stringify and sent as event.details.
+
+
+function _getTxs() {
+  _getTxs = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee9(imparterTag, recipient, date, tallyOnly) {
+    var to, uri, from, since;
+    return regeneratorRuntime.wrap(function _callee9$(_context9) {
+      while (1) {
+        switch (_context9.prev = _context9.next) {
+          case 0:
+            if (!(date && !(date instanceof Date))) {
+              _context9.next = 2;
+              break;
+            }
+
+            throw new Error("'date' must be a Date is passed in");
+
+          case 2:
+            if ('address' in recipient) {
+              _context9.next = 4;
+              break;
+            }
+
+            throw new Error("'address' required in recipient");
+
+          case 4:
+            to = recipient.address;
+            uri = getOverhideRemunerationAPIUri(imparterTag);
+            _context9.t0 = imparterTag;
+            _context9.next = _context9.t0 === OHLEDGER_IMPARTER_TAG ? 9 : _context9.t0 === OHLEDGER_WEB3_IMPARTER_TAG ? 15 : _context9.t0 === ETH_WEB3_IMPARTER_TAG ? 21 : 27;
+            break;
+
+          case 9:
+            if (data.OHLEDGER_IMPARTER_TAG.mode) {
+              _context9.next = 11;
+              break;
+            }
+
+            throw new Error("network 'mode' must be set, use setNetwork");
+
+          case 11:
+            if (data.OHLEDGER_IMPARTER_TAG.address) {
+              _context9.next = 13;
+              break;
+            }
+
+            throw new Error("from 'address' not set: use setCredentials");
+
+          case 13:
+            from = data.OHLEDGER_IMPARTER_TAG.address;
+            return _context9.abrupt("break", 28);
+
+          case 15:
+            if (data.OHLEDGER_WEB3_IMPARTER_TAG.mode) {
+              _context9.next = 17;
+              break;
+            }
+
+            throw new Error("network 'mode' must be set, use setNetwork");
+
+          case 17:
+            if (data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress) {
+              _context9.next = 19;
+              break;
+            }
+
+            throw new Error("from 'walletAddress' not set: use wallet");
+
+          case 19:
+            from = data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress;
+            return _context9.abrupt("break", 28);
+
+          case 21:
+            if (data.ETH_WEB3_IMPARTER_TAG.network) {
+              _context9.next = 23;
+              break;
+            }
+
+            throw new Error("no network for imparter tag");
+
+          case 23:
+            if (data.ETH_WEB3_IMPARTER_TAG.walletAddress) {
+              _context9.next = 25;
+              break;
+            }
+
+            throw new Error("from 'walletAddress' not set: use wallet");
+
+          case 25:
+            from = data.ETH_WEB3_IMPARTER_TAG.walletAddress;
+            return _context9.abrupt("break", 28);
+
+          case 27:
+            throw new Error('unsupported imparter tag');
+
+          case 28:
+            if (uri) {
+              _context9.next = 30;
+              break;
+            }
+
+            throw new Error('no uri for request, unsupported network selected in wallet?');
+
+          case 30:
+            since = '';
+
+            if (date) {
+              since = "&since=".concat(date.toISOString());
+            }
+
+            _context9.next = 34;
+            return fetch("".concat(uri, "/get-transactions/").concat(from, "/").concat(to, "?tally-only=").concat(tallyOnly ? 'true' : 'false').concat(since)).then(function (res) {
+              return res.json();
+            })["catch"](function (e) {
+              throw String(e);
+            });
+
+          case 34:
+            return _context9.abrupt("return", _context9.sent);
+
+          case 35:
+          case "end":
+            return _context9.stop();
+        }
+      }
+    }, _callee9);
+  }));
+  return _getTxs.apply(this, arguments);
+}
+
+function raiseEventClick(imparterTag, triggerFor) {
+  window.parent.document.dispatchEvent(new CustomEvent('oh$-event', {
+    detail: JSON.stringify({
+      imparterTag: imparterTag,
+      triggerFor: triggerFor,
+      click: true
+    })
+  }));
+} // raise oh$-event
+// @param {string} imparterTag
+// @param {string} triggerFor 
+// @param {Object} data - to stringify and sent as event.details.
+
+
+function raiseEvent(imparterTag, triggerFor, data) {
+  window.parent.document.dispatchEvent(new CustomEvent('oh$-event', {
+    detail: JSON.stringify(_objectSpread({}, data, {
+      imparterTag: imparterTag,
+      triggerFor: triggerFor
+    }))
+  }));
+}
+
+function isOnLedger(_x17) {
+  return _isOnLedger.apply(this, arguments);
+}
+
+function _isOnLedger() {
+  _isOnLedger = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee10(imparterTag) {
+    var uri, from, message, signature;
+    return regeneratorRuntime.wrap(function _callee10$(_context10) {
+      while (1) {
+        switch (_context10.prev = _context10.next) {
+          case 0:
+            uri = getOverhideRemunerationAPIUri(imparterTag);
+            _context10.t0 = imparterTag;
+            _context10.next = _context10.t0 === OHLEDGER_IMPARTER_TAG ? 4 : _context10.t0 === OHLEDGER_WEB3_IMPARTER_TAG ? 10 : _context10.t0 === ETH_WEB3_IMPARTER_TAG ? 16 : 22;
+            break;
+
+          case 4:
+            if (data.OHLEDGER_IMPARTER_TAG.mode) {
+              _context10.next = 6;
+              break;
+            }
+
+            throw new Error("network 'mode' must be set, use setNetwork");
+
+          case 6:
+            if (data.OHLEDGER_IMPARTER_TAG.address) {
+              _context10.next = 8;
+              break;
+            }
+
+            throw new Error("from 'address' not set: use setCredentials");
+
+          case 8:
+            from = data.OHLEDGER_IMPARTER_TAG.address;
+            return _context10.abrupt("break", 23);
+
+          case 10:
+            if (data.OHLEDGER_WEB3_IMPARTER_TAG.mode) {
+              _context10.next = 12;
+              break;
+            }
+
+            throw new Error("network 'mode' must be set, use setNetwork");
+
+          case 12:
+            if (data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress) {
+              _context10.next = 14;
+              break;
+            }
+
+            throw new Error("from 'walletAddress' not set: use wallet");
+
+          case 14:
+            from = data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress;
+            return _context10.abrupt("break", 23);
+
+          case 16:
+            if (data.ETH_WEB3_IMPARTER_TAG.network) {
+              _context10.next = 18;
+              break;
+            }
+
+            throw new Error("no network for imparter tag");
+
+          case 18:
+            if (data.ETH_WEB3_IMPARTER_TAG.walletAddress) {
+              _context10.next = 20;
+              break;
+            }
+
+            throw new Error("from 'walletAddress' not set: use wallet");
+
+          case 20:
+            from = data.ETH_WEB3_IMPARTER_TAG.walletAddress;
+            return _context10.abrupt("break", 23);
+
+          case 22:
+            throw new Error('unsupported imparter tag');
+
+          case 23:
+            if (uri) {
+              _context10.next = 25;
+              break;
+            }
+
+            throw new Error('no uri for request, unsupported network selected in wallet?');
+
+          case 25:
+            message = 'verify ownership of address by signing';
+            _context10.next = 28;
+            return sign(imparterTag, message);
+
+          case 28:
+            signature = _context10.sent;
+            _context10.next = 31;
+            return fetch("".concat(uri, "/is-signature-valid"), {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json; charset=utf-8"
+              },
+              body: JSON.stringify({
+                signature: btoa(signature),
+                message: btoa(message),
+                address: from
+              })
+            }).then(function (result) {
+              if (result.status == 200) {
+                return true;
+              } else {
+                return false;
+              }
+            })["catch"](function (e) {
+              throw String(e);
+            });
+
+          case 31:
+            return _context10.abrupt("return", _context10.sent);
+
+          case 32:
+          case "end":
+            return _context10.stop();
+        }
+      }
+    }, _callee10);
+  }));
+  return _isOnLedger.apply(this, arguments);
+}
+
+function sign(_x18, _x19) {
+  return _sign.apply(this, arguments);
+}
+
+function _sign() {
+  _sign = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee11(imparterTag, message) {
+    return regeneratorRuntime.wrap(function _callee11$(_context11) {
+      while (1) {
+        switch (_context11.prev = _context11.next) {
+          case 0:
+            _context11.t0 = imparterTag;
+            _context11.next = _context11.t0 === OHLEDGER_IMPARTER_TAG ? 3 : _context11.t0 === OHLEDGER_WEB3_IMPARTER_TAG ? 6 : _context11.t0 === ETH_WEB3_IMPARTER_TAG ? 12 : 18;
+            break;
+
+          case 3:
+            if (data.OHLEDGER_IMPARTER_TAG.secret) {
+              _context11.next = 5;
+              break;
+            }
+
+            throw new Error("credentials for imparter ".concat(OHLEDGER_IMPARTER_TAG, " not set"));
+
+          case 5:
+            return _context11.abrupt("return", eth_accounts.sign(message, data.OHLEDGER_IMPARTER_TAG.secret).signature);
+
+          case 6:
+            if (data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress) {
+              _context11.next = 8;
+              break;
+            }
+
+            throw new Error("imparter ".concat(OHLEDGER_WEB3_IMPARTER_TAG, " not active"));
+
+          case 8:
+            if (root.oh$.onWalletPopup) root.oh$.onWalletPopup(OHLEDGER_WEB3_IMPARTER_TAG);
+            _context11.next = 11;
+            return window.web3.eth.personal.sign(message, data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress, '');
+
+          case 11:
+            return _context11.abrupt("return", _context11.sent);
+
+          case 12:
+            if (data.ETH_WEB3_IMPARTER_TAG.walletAddress) {
+              _context11.next = 14;
+              break;
+            }
+
+            throw new Error("imparter ".concat(ETH_WEB3_IMPARTER_TAG, " not active"));
+
+          case 14:
+            if (root.oh$.onWalletPopup) root.oh$.onWalletPopup(ETH_WEB3_IMPARTER_TAG);
+            _context11.next = 17;
+            return window.web3.eth.personal.sign(message, data.ETH_WEB3_IMPARTER_TAG.walletAddress, '');
+
+          case 17:
+            return _context11.abrupt("return", _context11.sent);
+
+          case 18:
+            return _context11.abrupt("return", null);
+
+          case 19:
+          case "end":
+            return _context11.stop();
+        }
+      }
+    }, _callee11);
+  }));
+  return _sign.apply(this, arguments);
+}
+
+function createTransaction(_x20, _x21, _x22, _x23) {
+  return _createTransaction.apply(this, arguments);
+}
+
+function _createTransaction() {
+  _createTransaction = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee12(imparterTag, amount, to, options) {
+    var from, message, signature, eventPromise;
+    return regeneratorRuntime.wrap(function _callee12$(_context12) {
+      while (1) {
+        switch (_context12.prev = _context12.next) {
+          case 0:
+            if (!(amount == 0)) {
+              _context12.next = 5;
+              break;
+            }
+
+            _context12.next = 3;
+            return isOnLedger(imparterTag);
+
+          case 3:
+            if (!_context12.sent) {
+              _context12.next = 5;
+              break;
+            }
+
+            return _context12.abrupt("return", true);
+
+          case 5:
+            _context12.t0 = imparterTag;
+            _context12.next = _context12.t0 === OHLEDGER_IMPARTER_TAG ? 8 : _context12.t0 === OHLEDGER_WEB3_IMPARTER_TAG ? 14 : _context12.t0 === ETH_WEB3_IMPARTER_TAG ? 20 : 26;
+            break;
+
+          case 8:
+            if (data.OHLEDGER_IMPARTER_TAG.mode) {
+              _context12.next = 10;
+              break;
+            }
+
+            throw new Error("network 'mode' must be set, use setNetwork");
+
+          case 10:
+            if (data.OHLEDGER_IMPARTER_TAG.address) {
+              _context12.next = 12;
+              break;
+            }
+
+            throw new Error("from 'address' not set: use setCredentials");
+
+          case 12:
+            from = data.OHLEDGER_IMPARTER_TAG.address;
+            return _context12.abrupt("break", 27);
+
+          case 14:
+            if (data.OHLEDGER_WEB3_IMPARTER_TAG.mode) {
+              _context12.next = 16;
+              break;
+            }
+
+            throw new Error("network 'mode' must be set, use setNetwork");
+
+          case 16:
+            if (data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress) {
+              _context12.next = 18;
+              break;
+            }
+
+            throw new Error("from 'walletAddress' not set: use wallet");
+
+          case 18:
+            from = data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress;
+            return _context12.abrupt("break", 27);
+
+          case 20:
+            if (data.ETH_WEB3_IMPARTER_TAG.network) {
+              _context12.next = 22;
+              break;
+            }
+
+            throw new Error("no network for imparter tag");
+
+          case 22:
+            if (data.ETH_WEB3_IMPARTER_TAG.walletAddress) {
+              _context12.next = 24;
+              break;
+            }
+
+            throw new Error("from 'walletAddress' not set: use wallet");
+
+          case 24:
+            from = data.ETH_WEB3_IMPARTER_TAG.walletAddress;
+            return _context12.abrupt("break", 27);
+
+          case 26:
+            throw new Error('unsupported imparter tag');
+
+          case 27:
+            _context12.t1 = imparterTag;
+            _context12.next = _context12.t1 === OHLEDGER_IMPARTER_TAG ? 30 : _context12.t1 === OHLEDGER_WEB3_IMPARTER_TAG ? 30 : _context12.t1 === ETH_WEB3_IMPARTER_TAG ? 49 : 53;
+            break;
+
+          case 30:
+            if (!(amount == 0)) {
+              _context12.next = 44;
+              break;
+            }
+
+            if (!('message' in options && 'signature' in options)) {
+              _context12.next = 36;
+              break;
+            }
+
+            message = options.message;
+            signature = options.signature;
+            _context12.next = 40;
+            break;
+
+          case 36:
+            message = "verify ownership of address by signing on ".concat(new Date().toLocaleString());
+            _context12.next = 39;
+            return sign(imparterTag, message);
+
+          case 39:
+            signature = _context12.sent;
+
+          case 40:
+            _context12.next = 42;
+            return showOhLedgerGratisIframeUri(imparterTag, from, signature, message);
+
+          case 42:
+            _context12.next = 48;
+            break;
+
+          case 44:
+            eventPromise = setupNewPromise();
+            data.OHLEDGER_IMPARTER_TAG.oh_ledger_transact_fn[data.OHLEDGER_IMPARTER_TAG.mode](amount, from, to);
+            _context12.next = 48;
+            return eventPromise;
+
+          case 48:
+            return _context12.abrupt("break", 54);
+
+          case 49:
+            if (root.oh$.onWalletPopup) root.oh$.onWalletPopup(ETH_WEB3_IMPARTER_TAG);
+            _context12.next = 52;
+            return web3.eth.sendTransaction({
+              from: from,
+              to: to,
+              value: amount
+            });
+
+          case 52:
+            return _context12.abrupt("break", 54);
+
+          case 53:
+            throw new Error('unsupported imparter tag');
+
+          case 54:
+            return _context12.abrupt("return", true);
+
+          case 55:
+          case "end":
+            return _context12.stop();
+        }
+      }
+    }, _callee12);
+  }));
+  return _createTransaction.apply(this, arguments);
+}
+
+var resolve = null;
+var reject = null; // promise used for popups and resolutions via oh-ledger-* messages.
+
+function setupNewPromise() {
+  console.assert(!resolve, 'oh-popup promise being set but already set when calling setupNewPromise(..)');
+  return new Promise(function (rs, rj) {
+    resolve = rs;
+    reject = rj;
+  });
+} // make popup visible to be hidden with makePopupHidden
+
+
+function makePopupVisible() {
+  var popup = document.getElementById('oh-popup-container');
+  popup.style.display = 'block';
+  return setupNewPromise();
+}
+
+function makePopupHidden(params, isError) {
+  var popup = document.getElementById('oh-popup-container');
+  hideAllPopupContents();
+  popup.style.display = 'none';
+  console.assert(resolve, 'oh-popup promise not set yet calling makePopupHidden(..)');
+  if (isError) reject(params);else resolve(params);
+  resolve = null;
+  reject = null;
+}
+
+window.addEventListener('message', function (e) {
+  if (e.data && e.data.event === 'oh-ledger-ok') {
+    makePopupHidden(e.data.detail);
+  } else if (e.data && e.data.event === 'oh-ledger-error') {
+    makePopupHidden(e.data.detail, true);
   }
+}, false);
 
-  return root.oh$;
-})());
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1)))
+function hideAllPopupContents() {
+  document.getElementById('oh-ledger-gratis-iframe').style.display = 'none';
+}
+
+function showOhLedgerGratisIframeUri(_x24, _x25, _x26, _x27) {
+  return _showOhLedgerGratisIframeUri.apply(this, arguments);
+}
+
+function _showOhLedgerGratisIframeUri() {
+  _showOhLedgerGratisIframeUri = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee13(imparterTag, from, signature, message) {
+    var uri, frame;
+    return regeneratorRuntime.wrap(function _callee13$(_context13) {
+      while (1) {
+        switch (_context13.prev = _context13.next) {
+          case 0:
+            hideAllPopupContents();
+            uri = getOverhideRemunerationAPIUri(imparterTag);
+            frame = document.getElementById('oh-ledger-gratis-iframe');
+            frame.setAttribute('src', "".concat(uri, "/gratis.html?address=").concat(from, "&signature=").concat(signature, "&message=").concat(message));
+            frame.style.display = 'block';
+            _context13.next = 7;
+            return makePopupVisible();
+
+          case 7:
+          case "end":
+            return _context13.stop();
+        }
+      }
+    }, _callee13);
+  }));
+  return _showOhLedgerGratisIframeUri.apply(this, arguments);
+}
+
+function createPopup() {
+  var popup = document.createElement('div');
+  popup.setAttribute('id', 'oh-popup-container');
+  popup.style.display = 'none';
+  popup.innerHTML = "\n    <div>\n      <a href=\"#\" title=\"Close\" id=\"oh-popup-close\" onclick=\"window.parent.document.dispatchEvent(new CustomEvent('oh$-popup-close',{})); return false;\">X</a>\n      <iframe id=\"oh-ledger-gratis-iframe\"></iframe>\n    </div>\n  ";
+  var style = document.createElement('style');
+  style.innerHTML = "\n    #oh-popup-container {\n        position: fixed;\n        font-family: arial, \"lucida console\", sans-serif;\n        top: 0;\n        right: 0;\n        bottom: 0;\n        left: 0;\n        background: rgba(0, 0, 0, 0.8);\n        z-index: 999;\n        opacity:1;\n        pointer-events: auto;\n    }\n    #oh-popup-container > div {\n        width: 80vw;\n        height: 75vh;\n        position: relative;\n        top: 15vh;\n        margin: auto auto;\n        padding: 5px 5px 5px 5px;\n        background: white;\n    }\n    #oh-popup-close {\n        background: grey;\n        color: white;\n        line-height: 25px;\n        position: absolute;\n        right: 2px;\n        text-align: center;\n        top: 2px;\n        width: 24px;\n        text-decoration: none;\n        font-weight: bold;\n    }\n    #oh-popup-close:hover {\n        background: black;\n    }\n\n    #oh-ledger-gratis-iframe {\n      display: none;\n      border: 0;\n      overflow: hidden;\n      width: 100%;\n      height: 100%;\n    }\n  ";
+
+  var attach = function attach() {
+    if (document.body) {
+      document.body.appendChild(popup);
+      document.body.appendChild(style);
+      loadOhLedgerTransactFns();
+    } else {
+      setTimeout(attach, 100);
+    }
+
+    ;
+  };
+
+  attach();
+}
+
+window.document.addEventListener('oh$-popup-close', function (e) {
+  makePopupHidden('user close', true);
+}); // https://stackoverflow.com/a/31374433
+
+function loadJS(url, implementationCode, location) {
+  //url is URL of external file, implementationCode is the code
+  //to be called from the file, location is the location to 
+  //insert the <script> element
+  var scriptTag = document.createElement('script');
+  scriptTag.src = url;
+  scriptTag.onload = implementationCode;
+  scriptTag.onreadystatechange = implementationCode;
+  location.appendChild(scriptTag);
+}
+
+;
+
+function loadOhLedgerTransactFns() {
+  // load prod ohledger transact fn
+  loadJS("".concat(data.OHLEDGER_IMPARTER_TAG.remuneration_uri.prod, "/transact.js"), function () {
+    data.OHLEDGER_IMPARTER_TAG.oh_ledger_transact_fn.prod = oh_ledger_transact;
+    data.OHLEDGER_WEB3_IMPARTER_TAG.oh_ledger_transact_fn.prod = oh_ledger_transact;
+  }, document.body); // load test ohledger transact fn
+
+  loadJS("".concat(data.OHLEDGER_IMPARTER_TAG.remuneration_uri.test, "/transact.js"), function () {
+    data.OHLEDGER_IMPARTER_TAG.oh_ledger_transact_fn.test = oh_ledger_transact;
+    data.OHLEDGER_WEB3_IMPARTER_TAG.oh_ledger_transact_fn.test = oh_ledger_transact;
+  }, document.body);
+}
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports) {
-
-var g; // This works in non-strict mode
-
-g = function () {
-  return this;
-}();
-
-try {
-  // This works if eval is allowed (see CSP)
-  g = g || new Function("return this")();
-} catch (e) {
-  // This works if the window reference is available
-  if (typeof window === "object") g = window;
-} // g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-
-module.exports = g;
-
-/***/ }),
-/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function (global, factory) {
-   true ? module.exports = factory(__webpack_require__(3), __webpack_require__(4), __webpack_require__(5), __webpack_require__(8), __webpack_require__(9), __webpack_require__(11), __webpack_require__(13), __webpack_require__(15), __webpack_require__(17), __webpack_require__(292), __webpack_require__(354), __webpack_require__(544), __webpack_require__(545), __webpack_require__(517), __webpack_require__(522)) : undefined;
+   true ? module.exports = factory(__webpack_require__(2), __webpack_require__(3), __webpack_require__(4), __webpack_require__(7), __webpack_require__(8), __webpack_require__(10), __webpack_require__(12), __webpack_require__(14), __webpack_require__(16), __webpack_require__(292), __webpack_require__(354), __webpack_require__(544), __webpack_require__(545), __webpack_require__(517), __webpack_require__(522)) : undefined;
 })(this, function (_classCallCheck, _createClass, _possibleConstructorReturn, _get, _getPrototypeOf, _set, _inherits, web3Core, web3Providers, Utils, web3Eth, web3Shh, web3Bzz, web3Net, web3EthPersonal) {
   'use strict';
 
@@ -1939,7 +1894,7 @@ module.exports = g;
 });
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, exports) {
 
 function _classCallCheck(instance, Constructor) {
@@ -1951,7 +1906,7 @@ function _classCallCheck(instance, Constructor) {
 module.exports = _classCallCheck;
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports) {
 
 function _defineProperties(target, props) {
@@ -1973,12 +1928,12 @@ function _createClass(Constructor, protoProps, staticProps) {
 module.exports = _createClass;
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _typeof = __webpack_require__(6);
+var _typeof = __webpack_require__(5);
 
-var assertThisInitialized = __webpack_require__(7);
+var assertThisInitialized = __webpack_require__(6);
 
 function _possibleConstructorReturn(self, call) {
   if (call && (_typeof(call) === "object" || typeof call === "function")) {
@@ -1991,7 +1946,7 @@ function _possibleConstructorReturn(self, call) {
 module.exports = _possibleConstructorReturn;
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports) {
 
 function _typeof2(obj) {
@@ -2025,7 +1980,7 @@ function _typeof(obj) {
 module.exports = _typeof;
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports) {
 
 function _assertThisInitialized(self) {
@@ -2039,12 +1994,12 @@ function _assertThisInitialized(self) {
 module.exports = _assertThisInitialized;
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getPrototypeOf = __webpack_require__(9);
+var getPrototypeOf = __webpack_require__(8);
 
-var superPropBase = __webpack_require__(10);
+var superPropBase = __webpack_require__(9);
 
 function _get(target, property, receiver) {
   if (typeof Reflect !== "undefined" && Reflect.get) {
@@ -2069,7 +2024,7 @@ function _get(target, property, receiver) {
 module.exports = _get;
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports) {
 
 function _getPrototypeOf(o) {
@@ -2082,10 +2037,10 @@ function _getPrototypeOf(o) {
 module.exports = _getPrototypeOf;
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getPrototypeOf = __webpack_require__(9);
+var getPrototypeOf = __webpack_require__(8);
 
 function _superPropBase(object, property) {
   while (!Object.prototype.hasOwnProperty.call(object, property)) {
@@ -2099,14 +2054,14 @@ function _superPropBase(object, property) {
 module.exports = _superPropBase;
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getPrototypeOf = __webpack_require__(9);
+var getPrototypeOf = __webpack_require__(8);
 
-var superPropBase = __webpack_require__(10);
+var superPropBase = __webpack_require__(9);
 
-var defineProperty = __webpack_require__(12);
+var defineProperty = __webpack_require__(11);
 
 function set(target, property, value, receiver) {
   if (typeof Reflect !== "undefined" && Reflect.set) {
@@ -2160,7 +2115,7 @@ function _set(target, property, value, receiver, isStrict) {
 module.exports = _set;
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports) {
 
 function _defineProperty(obj, key, value) {
@@ -2181,10 +2136,10 @@ function _defineProperty(obj, key, value) {
 module.exports = _defineProperty;
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var setPrototypeOf = __webpack_require__(14);
+var setPrototypeOf = __webpack_require__(13);
 
 function _inherits(subClass, superClass) {
   if (typeof superClass !== "function" && superClass !== null) {
@@ -2204,7 +2159,7 @@ function _inherits(subClass, superClass) {
 module.exports = _inherits;
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports) {
 
 function _setPrototypeOf(o, p) {
@@ -2219,11 +2174,11 @@ function _setPrototypeOf(o, p) {
 module.exports = _setPrototypeOf;
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function (global, factory) {
-   true ? factory(exports, __webpack_require__(3), __webpack_require__(4), __webpack_require__(16), __webpack_require__(17), __webpack_require__(84), __webpack_require__(292)) : undefined;
+   true ? factory(exports, __webpack_require__(2), __webpack_require__(3), __webpack_require__(15), __webpack_require__(16), __webpack_require__(84), __webpack_require__(292)) : undefined;
 })(this, function (exports, _classCallCheck, _createClass, isObject, web3Providers, web3CoreMethod, web3Utils) {
   'use strict';
 
@@ -2380,7 +2335,7 @@ module.exports = _setPrototypeOf;
 });
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports) {
 
 /**
@@ -2416,11 +2371,11 @@ function isObject(value) {
 module.exports = isObject;
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process, Buffer) {(function (global, factory) {
-   true ? factory(exports, __webpack_require__(3), __webpack_require__(4), __webpack_require__(23), __webpack_require__(26), __webpack_require__(69), __webpack_require__(6), __webpack_require__(72), __webpack_require__(16), __webpack_require__(5), __webpack_require__(9), __webpack_require__(8), __webpack_require__(13), __webpack_require__(79), __webpack_require__(81), __webpack_require__(82), __webpack_require__(83), __webpack_require__(28), __webpack_require__(62)) : undefined;
+   true ? factory(exports, __webpack_require__(2), __webpack_require__(3), __webpack_require__(23), __webpack_require__(26), __webpack_require__(69), __webpack_require__(5), __webpack_require__(72), __webpack_require__(15), __webpack_require__(4), __webpack_require__(8), __webpack_require__(7), __webpack_require__(12), __webpack_require__(79), __webpack_require__(81), __webpack_require__(82), __webpack_require__(83), __webpack_require__(28), __webpack_require__(62)) : undefined;
 })(this, function (exports, _classCallCheck, _createClass, websocket, xhr2Cookies, URL, _typeof, isFunction, isObject, _possibleConstructorReturn, _getPrototypeOf, _get, _inherits, _regeneratorRuntime, _asyncToGenerator, EventEmitter, isArray, http, https) {
   'use strict';
 
@@ -3963,10 +3918,10 @@ module.exports = isObject;
     value: true
   });
 });
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18), __webpack_require__(19).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17), __webpack_require__(18).Buffer))
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -4179,7 +4134,7 @@ process.umask = function () {
 };
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6036,7 +5991,30 @@ function blitBuffer(src, dst, offset, length) {
 function isnan(val) {
   return val !== val; // eslint-disable-line no-self-compare
 }
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19)))
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports) {
+
+var g; // This works in non-strict mode
+
+g = function () {
+  return this;
+}();
+
+try {
+  // This works if eval is allowed (see CSP)
+  g = g || new Function("return this")();
+} catch (e) {
+  // This works if the window reference is available
+  if (typeof window === "object") g = window;
+} // g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+
+module.exports = g;
 
 /***/ }),
 /* 20 */
@@ -6990,7 +6968,7 @@ exports.XMLHttpRequest = XMLHttpRequest;
 XMLHttpRequest.prototype.nodejsHttpAgent = http.globalAgent;
 XMLHttpRequest.prototype.nodejsHttpsAgent = https.globalAgent;
 XMLHttpRequest.prototype.nodejsBaseUrl = null;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18), __webpack_require__(19).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17), __webpack_require__(18).Buffer))
 
 /***/ }),
 /* 28 */
@@ -7045,7 +7023,7 @@ http.Agent.defaultMaxSockets = 4;
 http.globalAgent = new http.Agent();
 http.STATUS_CODES = statusCodes;
 http.METHODS = ['CHECKOUT', 'CONNECT', 'COPY', 'DELETE', 'GET', 'HEAD', 'LOCK', 'M-SEARCH', 'MERGE', 'MKACTIVITY', 'MKCOL', 'MOVE', 'NOTIFY', 'OPTIONS', 'PATCH', 'POST', 'PROPFIND', 'PROPPATCH', 'PURGE', 'PUT', 'REPORT', 'SEARCH', 'SUBSCRIBE', 'TRACE', 'UNLOCK', 'UNSUBSCRIBE'];
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19)))
 
 /***/ }),
 /* 29 */
@@ -7350,7 +7328,7 @@ ClientRequest.prototype.setSocketKeepAlive = function () {}; // Taken from http:
 
 
 var unsafeHeaders = ['accept-charset', 'accept-encoding', 'access-control-request-headers', 'access-control-request-method', 'connection', 'content-length', 'cookie', 'cookie2', 'date', 'dnt', 'expect', 'host', 'keep-alive', 'origin', 'referer', 'te', 'trailer', 'transfer-encoding', 'upgrade', 'via'];
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19).Buffer, __webpack_require__(1), __webpack_require__(18)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18).Buffer, __webpack_require__(19), __webpack_require__(17)))
 
 /***/ }),
 /* 30 */
@@ -7426,7 +7404,7 @@ function isFunction(value) {
 }
 
 xhr = null; // Help gc
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19)))
 
 /***/ }),
 /* 31 */
@@ -7702,7 +7680,7 @@ IncomingMessage.prototype._onXHRProgress = function () {
     self.push(null);
   }
 };
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18), __webpack_require__(19).Buffer, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17), __webpack_require__(18).Buffer, __webpack_require__(19)))
 
 /***/ }),
 /* 33 */
@@ -8761,7 +8739,7 @@ function indexOf(xs, x) {
 
   return -1;
 }
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1), __webpack_require__(18)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19), __webpack_require__(17)))
 
 /***/ }),
 /* 35 */
@@ -8819,7 +8797,7 @@ function nextTick(fn, arg1, arg2, arg3) {
       });
   }
 }
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)))
 
 /***/ }),
 /* 36 */
@@ -9255,7 +9233,7 @@ module.exports = __webpack_require__(36).EventEmitter;
 /***/ (function(module, exports, __webpack_require__) {
 
 /* eslint-disable node/no-deprecated-api */
-var buffer = __webpack_require__(19);
+var buffer = __webpack_require__(18);
 
 var Buffer = buffer.Buffer; // alternative to using Object.keys for old browsers
 
@@ -9443,7 +9421,7 @@ exports.isBuffer = Buffer.isBuffer;
 function objectToString(o) {
   return Object.prototype.toString.call(o);
 }
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18).Buffer))
 
 /***/ }),
 /* 40 */
@@ -10457,7 +10435,7 @@ Writable.prototype._destroy = function (err, cb) {
   this.end();
   cb(err);
 };
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18), __webpack_require__(46).setImmediate, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17), __webpack_require__(46).setImmediate, __webpack_require__(19)))
 
 /***/ }),
 /* 46 */
@@ -10521,7 +10499,7 @@ __webpack_require__(47); // On some exotic environments, it's not clear which ob
 
 exports.setImmediate = typeof self !== "undefined" && self.setImmediate || typeof global !== "undefined" && global.setImmediate || this && this.setImmediate;
 exports.clearImmediate = typeof self !== "undefined" && self.clearImmediate || typeof global !== "undefined" && global.clearImmediate || this && this.clearImmediate;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19)))
 
 /***/ }),
 /* 47 */
@@ -10728,7 +10706,7 @@ exports.clearImmediate = typeof self !== "undefined" && self.clearImmediate || t
   attachTo.setImmediate = setImmediate;
   attachTo.clearImmediate = clearImmediate;
 })(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self);
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1), __webpack_require__(18)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19), __webpack_require__(17)))
 
 /***/ }),
 /* 48 */
@@ -10802,7 +10780,7 @@ function config(name) {
   if (null == val) return false;
   return String(val).toLowerCase() === 'true';
 }
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19)))
 
 /***/ }),
 /* 49 */
@@ -11418,7 +11396,7 @@ PassThrough.prototype._transform = function (chunk, encoding, cb) {
 /* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Buffer = __webpack_require__(19).Buffer;
+var Buffer = __webpack_require__(18).Buffer;
 
 module.exports = function (buf) {
   // If the buffer is backed by a Uint8Array, a faster version will work
@@ -12821,7 +12799,7 @@ Url.prototype.parseHost = function () {
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
   } else {}
 })(this);
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(57)(module), __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(57)(module), __webpack_require__(19)))
 
 /***/ }),
 /* 57 */
@@ -13470,7 +13448,7 @@ function (_super) {
 }(xml_http_request_event_target_1.XMLHttpRequestEventTarget);
 
 exports.XMLHttpRequestUpload = XMLHttpRequestUpload;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18).Buffer))
 
 /***/ }),
 /* 68 */
@@ -14223,7 +14201,7 @@ Url.extractProtocol = extractProtocol;
 Url.location = lolcation;
 Url.qs = qs;
 module.exports = Url;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19)))
 
 /***/ }),
 /* 70 */
@@ -14395,7 +14373,7 @@ exports.parse = querystring;
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(73),
-    isObject = __webpack_require__(16);
+    isObject = __webpack_require__(15);
 /** `Object#toString` result references. */
 
 
@@ -14499,7 +14477,7 @@ module.exports = root;
 /* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
 var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
 module.exports = freeGlobal;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19)))
 
 /***/ }),
 /* 77 */
@@ -15728,7 +15706,7 @@ module.exports = isArray;
 /***/ (function(module, exports, __webpack_require__) {
 
 (function (global, factory) {
-   true ? factory(exports, __webpack_require__(3), __webpack_require__(4), __webpack_require__(82), __webpack_require__(85), __webpack_require__(5), __webpack_require__(9), __webpack_require__(13), __webpack_require__(72), __webpack_require__(86), __webpack_require__(79), __webpack_require__(81), __webpack_require__(90), __webpack_require__(92), __webpack_require__(190), __webpack_require__(8)) : undefined;
+   true ? factory(exports, __webpack_require__(2), __webpack_require__(3), __webpack_require__(82), __webpack_require__(85), __webpack_require__(4), __webpack_require__(8), __webpack_require__(12), __webpack_require__(72), __webpack_require__(86), __webpack_require__(79), __webpack_require__(81), __webpack_require__(90), __webpack_require__(92), __webpack_require__(190), __webpack_require__(7)) : undefined;
 })(this, function (exports, _classCallCheck, _createClass, EventEmitter, web3CoreSubscriptions, _possibleConstructorReturn, _getPrototypeOf, _inherits, isFunction, _toConsumableArray, _regeneratorRuntime, _asyncToGenerator, isString, cloneDeep, rxjs, _get) {
   'use strict';
 
@@ -17896,7 +17874,7 @@ module.exports = isArray;
 /***/ (function(module, exports, __webpack_require__) {
 
 (function (global, factory) {
-   true ? factory(exports, __webpack_require__(3), __webpack_require__(4), __webpack_require__(5), __webpack_require__(9), __webpack_require__(13), __webpack_require__(72), __webpack_require__(82), __webpack_require__(8)) : undefined;
+   true ? factory(exports, __webpack_require__(2), __webpack_require__(3), __webpack_require__(4), __webpack_require__(8), __webpack_require__(12), __webpack_require__(72), __webpack_require__(82), __webpack_require__(7)) : undefined;
 })(this, function (exports, _classCallCheck, _createClass, _possibleConstructorReturn, _getPrototypeOf, _inherits, isFunction, EventEmitter, _get) {
   'use strict';
 
@@ -18330,7 +18308,7 @@ var Stack = __webpack_require__(94),
     isArray = __webpack_require__(83),
     isBuffer = __webpack_require__(141),
     isMap = __webpack_require__(186),
-    isObject = __webpack_require__(16),
+    isObject = __webpack_require__(15),
     isSet = __webpack_require__(188),
     keys = __webpack_require__(136);
 /** Used to compose bitmasks for cloning. */
@@ -18925,7 +18903,7 @@ module.exports = getNative;
 
 var isFunction = __webpack_require__(72),
     isMasked = __webpack_require__(111),
-    isObject = __webpack_require__(16),
+    isObject = __webpack_require__(15),
     toSource = __webpack_require__(113);
 /**
  * Used to match `RegExp`
@@ -20275,7 +20253,7 @@ module.exports = keysIn;
 /* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isObject = __webpack_require__(16),
+var isObject = __webpack_require__(15),
     isPrototype = __webpack_require__(150),
     nativeKeysIn = __webpack_require__(157);
 /** Used for built-in method references. */
@@ -21072,7 +21050,7 @@ module.exports = initCloneObject;
 /* 185 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isObject = __webpack_require__(16);
+var isObject = __webpack_require__(15);
 /** Built-in value references. */
 
 
@@ -27883,7 +27861,7 @@ function (_super) {
 /***/ (function(module, exports, __webpack_require__) {
 
 (function (global, factory) {
-   true ? factory(exports, __webpack_require__(6), __webpack_require__(16), __webpack_require__(90), __webpack_require__(83), __webpack_require__(293), __webpack_require__(294), __webpack_require__(295), __webpack_require__(296), __webpack_require__(300), __webpack_require__(301), __webpack_require__(302), __webpack_require__(304), __webpack_require__(306), __webpack_require__(351)) : undefined;
+   true ? factory(exports, __webpack_require__(5), __webpack_require__(15), __webpack_require__(90), __webpack_require__(83), __webpack_require__(293), __webpack_require__(294), __webpack_require__(295), __webpack_require__(296), __webpack_require__(300), __webpack_require__(301), __webpack_require__(302), __webpack_require__(304), __webpack_require__(306), __webpack_require__(351)) : undefined;
 })(this, function (exports, _typeof, isObject, isString, isArray, isBoolean, isNumber, isNull, numberToBN, utf8, Hash, BN, ethjsUnit, map, randomhex) {
   'use strict';
 
@@ -28736,7 +28714,7 @@ module.exports = function numberToBN(arg) {
   var Buffer;
 
   try {
-    Buffer = __webpack_require__(19).Buffer;
+    Buffer = __webpack_require__(18).Buffer;
   } catch (e) {}
 
   BN.isBN = function isBN(num) {
@@ -32419,7 +32397,7 @@ module.exports = function isHexPrefixed(str) {
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
   } else { var key, hasOwnProperty, object; }
 })(this);
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(57)(module), __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(57)(module), __webpack_require__(19)))
 
 /***/ }),
 /* 301 */
@@ -36493,7 +36471,7 @@ module.exports = {
   var Buffer;
 
   try {
-    Buffer = __webpack_require__(19).Buffer;
+    Buffer = __webpack_require__(18).Buffer;
   } catch (e) {}
 
   BN.isBN = function isBN(num) {
@@ -40745,7 +40723,7 @@ module.exports = getMatchData;
 /* 324 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isObject = __webpack_require__(16);
+var isObject = __webpack_require__(15);
 /**
  * Checks if `value` is suitable for strict equality comparisons, i.e. `===`.
  *
@@ -41705,7 +41683,7 @@ module.exports = window.crypto;
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer) {(function (global, factory) {
-   true ? factory(exports, __webpack_require__(355), __webpack_require__(357), __webpack_require__(501), __webpack_require__(502), __webpack_require__(522), __webpack_require__(503), __webpack_require__(356), __webpack_require__(517), __webpack_require__(292), __webpack_require__(79), __webpack_require__(81), __webpack_require__(3), __webpack_require__(4), __webpack_require__(523), __webpack_require__(5), __webpack_require__(9), __webpack_require__(13), __webpack_require__(84), __webpack_require__(8), __webpack_require__(90), __webpack_require__(85), __webpack_require__(17), __webpack_require__(11), __webpack_require__(15)) : undefined;
+   true ? factory(exports, __webpack_require__(355), __webpack_require__(357), __webpack_require__(501), __webpack_require__(502), __webpack_require__(522), __webpack_require__(503), __webpack_require__(356), __webpack_require__(517), __webpack_require__(292), __webpack_require__(79), __webpack_require__(81), __webpack_require__(2), __webpack_require__(3), __webpack_require__(523), __webpack_require__(4), __webpack_require__(8), __webpack_require__(12), __webpack_require__(84), __webpack_require__(7), __webpack_require__(90), __webpack_require__(85), __webpack_require__(16), __webpack_require__(10), __webpack_require__(14)) : undefined;
 })(this, function (exports, web3CoreHelpers, web3EthAccounts, web3EthEns, web3EthContract, web3EthPersonal, web3EthAbi, web3EthIban, web3Net, Utils, _regeneratorRuntime, _asyncToGenerator, _classCallCheck, _createClass, EthereumTx, _possibleConstructorReturn, _getPrototypeOf, _inherits, web3CoreMethod, _get, isString, web3CoreSubscriptions, web3Providers, _set, web3Core) {
   'use strict';
 
@@ -42329,14 +42307,14 @@ module.exports = window.crypto;
     value: true
   });
 });
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18).Buffer))
 
 /***/ }),
 /* 355 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function (global, factory) {
-   true ? factory(exports, __webpack_require__(90), __webpack_require__(83), __webpack_require__(16), __webpack_require__(294), __webpack_require__(292), __webpack_require__(356)) : undefined;
+   true ? factory(exports, __webpack_require__(90), __webpack_require__(83), __webpack_require__(15), __webpack_require__(294), __webpack_require__(292), __webpack_require__(356)) : undefined;
 })(this, function (exports, isString, isArray, isObject, isNumber, Utils, web3EthIban) {
   'use strict';
 
@@ -42705,7 +42683,7 @@ module.exports = window.crypto;
 /***/ (function(module, exports, __webpack_require__) {
 
 (function (global, factory) {
-   true ? factory(exports, __webpack_require__(3), __webpack_require__(4), __webpack_require__(292), __webpack_require__(302)) : undefined;
+   true ? factory(exports, __webpack_require__(2), __webpack_require__(3), __webpack_require__(292), __webpack_require__(302)) : undefined;
 })(this, function (exports, _classCallCheck, _createClass, Utils, BigNumber) {
   'use strict';
 
@@ -42869,7 +42847,7 @@ module.exports = window.crypto;
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, Buffer) {(function (global, factory) {
-   true ? factory(exports, __webpack_require__(292), __webpack_require__(355), __webpack_require__(3), __webpack_require__(5), __webpack_require__(9), __webpack_require__(13), __webpack_require__(84), __webpack_require__(79), __webpack_require__(81), __webpack_require__(4), __webpack_require__(7), __webpack_require__(72), __webpack_require__(16), __webpack_require__(358), __webpack_require__(359), __webpack_require__(360), __webpack_require__(492), __webpack_require__(15), __webpack_require__(494), __webpack_require__(90), __webpack_require__(496)) : undefined;
+   true ? factory(exports, __webpack_require__(292), __webpack_require__(355), __webpack_require__(2), __webpack_require__(4), __webpack_require__(8), __webpack_require__(12), __webpack_require__(84), __webpack_require__(79), __webpack_require__(81), __webpack_require__(3), __webpack_require__(6), __webpack_require__(72), __webpack_require__(15), __webpack_require__(358), __webpack_require__(359), __webpack_require__(360), __webpack_require__(492), __webpack_require__(14), __webpack_require__(494), __webpack_require__(90), __webpack_require__(496)) : undefined;
 })(this, function (exports, Utils, web3CoreHelpers, _classCallCheck, _possibleConstructorReturn, _getPrototypeOf, _inherits, web3CoreMethod, _regeneratorRuntime, _asyncToGenerator, _createClass, _assertThisInitialized, isFunction, isObject, Hash, RLP, Bytes, EthLibAccount, web3Core, scryptsy, isString, uuid) {
   'use strict';
 
@@ -43434,7 +43412,7 @@ module.exports = window.crypto;
     value: true
   });
 });
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1), __webpack_require__(19).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19), __webpack_require__(18).Buffer))
 
 /***/ }),
 /* 358 */
@@ -44239,7 +44217,7 @@ function randomBytes(size, cb) {
 
   return bytes;
 }
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1), __webpack_require__(18)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19), __webpack_require__(17)))
 
 /***/ }),
 /* 364 */
@@ -44693,7 +44671,7 @@ module.exports = __webpack_require__(33).PassThrough;
 "use strict";
 
 
-var Buffer = __webpack_require__(19).Buffer;
+var Buffer = __webpack_require__(18).Buffer;
 
 var inherits = __webpack_require__(31);
 
@@ -45966,7 +45944,7 @@ module.exports = function (password, salt, iterations, keylen, digest, callback)
     return sync(password, salt, iterations, keylen, digest);
   }), callback);
 };
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1), __webpack_require__(18)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19), __webpack_require__(17)))
 
 /***/ }),
 /* 389 */
@@ -46001,7 +45979,7 @@ module.exports = function (password, salt, iterations, keylen) {
     throw new TypeError('Bad key length');
   }
 };
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18).Buffer))
 
 /***/ }),
 /* 390 */
@@ -46018,7 +45996,7 @@ if (process.browser) {
 }
 
 module.exports = defaultEncoding;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)))
 
 /***/ }),
 /* 391 */
@@ -47146,7 +47124,7 @@ exports.decrypt = function (self, block) {
 
   return buffer;
 };
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18).Buffer))
 
 /***/ }),
 /* 407 */
@@ -47283,7 +47261,7 @@ exports.encrypt = function (self, chunk) {
   self._cache = self._cache.slice(chunk.length);
   return xor(chunk, pad);
 };
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18).Buffer))
 
 /***/ }),
 /* 411 */
@@ -48107,7 +48085,7 @@ function createDiffieHellman(prime, enc, generator, genc) {
 
 exports.DiffieHellmanGroup = exports.createDiffieHellmanGroup = exports.getDiffieHellman = getDiffieHellman;
 exports.createDiffieHellman = exports.DiffieHellman = createDiffieHellman;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18).Buffer))
 
 /***/ }),
 /* 422 */
@@ -48601,7 +48579,7 @@ function formatReturnValue(bn, enc) {
     return buf.toString(enc);
   }
 }
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18).Buffer))
 
 /***/ }),
 /* 428 */
@@ -48707,7 +48685,7 @@ module.exports = {
   createSign: createSign,
   createVerify: createVerify
 };
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18).Buffer))
 
 /***/ }),
 /* 429 */
@@ -48874,7 +48852,7 @@ function makeR(g, k, p, q) {
 module.exports = sign;
 module.exports.getKey = getKey;
 module.exports.makeKey = makeKey;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18).Buffer))
 
 /***/ }),
 /* 430 */
@@ -48927,7 +48905,7 @@ function getr(priv) {
 
   return r;
 }
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18).Buffer))
 
 /***/ }),
 /* 431 */
@@ -53577,7 +53555,7 @@ var inherits = __webpack_require__(31);
 
 var Reporter = __webpack_require__(467).Reporter;
 
-var Buffer = __webpack_require__(19).Buffer;
+var Buffer = __webpack_require__(18).Buffer;
 
 function DecoderBuffer(base, options) {
   Reporter.call(this, options);
@@ -54514,7 +54492,7 @@ function derDecodeLen(buf, primitive, fail) {
 
 var inherits = __webpack_require__(31);
 
-var Buffer = __webpack_require__(19).Buffer;
+var Buffer = __webpack_require__(18).Buffer;
 
 var DERDecoder = __webpack_require__(474);
 
@@ -54571,7 +54549,7 @@ encoders.pem = __webpack_require__(478);
 
 var inherits = __webpack_require__(31);
 
-var Buffer = __webpack_require__(19).Buffer;
+var Buffer = __webpack_require__(18).Buffer;
 
 var asn1 = __webpack_require__(463);
 
@@ -55033,7 +55011,7 @@ function checkValue(b, q) {
 }
 
 module.exports = verify;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18).Buffer))
 
 /***/ }),
 /* 484 */
@@ -55180,7 +55158,7 @@ function formatReturnValue(bn, enc, len) {
     return buf.toString(enc);
   }
 }
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18).Buffer))
 
 /***/ }),
 /* 485 */
@@ -55637,7 +55615,7 @@ function randomFillSync(buf, offset, size) {
   assertSize(size, offset, buf.length);
   return actualFill(buf, offset, size);
 }
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1), __webpack_require__(18)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19), __webpack_require__(17)))
 
 /***/ }),
 /* 492 */
@@ -55724,7 +55702,7 @@ module.exports = {
   encodeSignature,
   decodeSignature
 };
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18).Buffer))
 
 /***/ }),
 /* 493 */
@@ -55954,7 +55932,7 @@ function arraycopy(src, srcPos, dest, destPos, length) {
 }
 
 module.exports = scrypt;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18).Buffer))
 
 /***/ }),
 /* 496 */
@@ -56169,7 +56147,7 @@ module.exports = v4;
 /***/ (function(module, exports, __webpack_require__) {
 
 (function (global, factory) {
-   true ? factory(exports, __webpack_require__(292), __webpack_require__(355), __webpack_require__(17), __webpack_require__(502), __webpack_require__(503), __webpack_require__(517), __webpack_require__(3), __webpack_require__(4), __webpack_require__(79), __webpack_require__(81), __webpack_require__(5), __webpack_require__(9), __webpack_require__(8), __webpack_require__(13), __webpack_require__(84), __webpack_require__(15), __webpack_require__(72), __webpack_require__(518)) : undefined;
+   true ? factory(exports, __webpack_require__(292), __webpack_require__(355), __webpack_require__(16), __webpack_require__(502), __webpack_require__(503), __webpack_require__(517), __webpack_require__(2), __webpack_require__(3), __webpack_require__(79), __webpack_require__(81), __webpack_require__(4), __webpack_require__(8), __webpack_require__(7), __webpack_require__(12), __webpack_require__(84), __webpack_require__(14), __webpack_require__(72), __webpack_require__(518)) : undefined;
 })(this, function (exports, Utils, web3CoreHelpers, web3Providers, web3EthContract, web3EthAbi, web3Net, _classCallCheck, _createClass, _regeneratorRuntime, _asyncToGenerator, _possibleConstructorReturn, _getPrototypeOf, _get, _inherits, web3CoreMethod, web3Core, isFunction, namehash) {
   'use strict';
 
@@ -57353,7 +57331,7 @@ module.exports = v4;
 /***/ (function(module, exports, __webpack_require__) {
 
 (function (global, factory) {
-   true ? factory(exports, __webpack_require__(292), __webpack_require__(355), __webpack_require__(503), __webpack_require__(3), __webpack_require__(4), __webpack_require__(83), __webpack_require__(5), __webpack_require__(9), __webpack_require__(8), __webpack_require__(13), __webpack_require__(84), __webpack_require__(72), __webpack_require__(516), __webpack_require__(92), __webpack_require__(85), __webpack_require__(7), __webpack_require__(15)) : undefined;
+   true ? factory(exports, __webpack_require__(292), __webpack_require__(355), __webpack_require__(503), __webpack_require__(2), __webpack_require__(3), __webpack_require__(83), __webpack_require__(4), __webpack_require__(8), __webpack_require__(7), __webpack_require__(12), __webpack_require__(84), __webpack_require__(72), __webpack_require__(516), __webpack_require__(92), __webpack_require__(85), __webpack_require__(6), __webpack_require__(14)) : undefined;
 })(this, function (exports, Utils, web3CoreHelpers, web3EthAbi, _classCallCheck, _createClass, isArray, _possibleConstructorReturn, _getPrototypeOf, _get, _inherits, web3CoreMethod, isFunction, isUndefined, cloneDeep, web3CoreSubscriptions, _assertThisInitialized, web3Core) {
   'use strict';
 
@@ -58720,7 +58698,7 @@ module.exports = v4;
 /***/ (function(module, exports, __webpack_require__) {
 
 (function (global, factory) {
-   true ? factory(exports, __webpack_require__(292), __webpack_require__(504), __webpack_require__(3), __webpack_require__(4), __webpack_require__(83), __webpack_require__(16)) : undefined;
+   true ? factory(exports, __webpack_require__(292), __webpack_require__(504), __webpack_require__(2), __webpack_require__(3), __webpack_require__(83), __webpack_require__(15)) : undefined;
 })(this, function (exports, Utils, abiCoder, _classCallCheck, _createClass, isArray, isObject) {
   'use strict';
 
@@ -62029,7 +62007,7 @@ exports.keccak256 = keccak256;
     }
   }
 })();
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18), __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17), __webpack_require__(19)))
 
 /***/ }),
 /* 514 */
@@ -62469,7 +62447,7 @@ module.exports = isUndefined;
 /***/ (function(module, exports, __webpack_require__) {
 
 (function (global, factory) {
-   true ? factory(exports, __webpack_require__(355), __webpack_require__(292), __webpack_require__(3), __webpack_require__(5), __webpack_require__(9), __webpack_require__(13), __webpack_require__(84), __webpack_require__(79), __webpack_require__(81), __webpack_require__(4), __webpack_require__(15), __webpack_require__(72)) : undefined;
+   true ? factory(exports, __webpack_require__(355), __webpack_require__(292), __webpack_require__(2), __webpack_require__(4), __webpack_require__(8), __webpack_require__(12), __webpack_require__(84), __webpack_require__(79), __webpack_require__(81), __webpack_require__(3), __webpack_require__(14), __webpack_require__(72)) : undefined;
 })(this, function (exports, web3CoreHelpers, Utils, _classCallCheck, _possibleConstructorReturn, _getPrototypeOf, _inherits, web3CoreMethod, _regeneratorRuntime, _asyncToGenerator, _createClass, web3Core, isFunction) {
   'use strict';
 
@@ -62643,7 +62621,7 @@ function normalize(name) {
 
 exports.hash = namehash;
 exports.normalize = normalize;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18).Buffer))
 
 /***/ }),
 /* 519 */
@@ -63190,7 +63168,7 @@ exports.normalize = normalize;
     }
   }
 })();
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18), __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17), __webpack_require__(19)))
 
 /***/ }),
 /* 520 */
@@ -63354,7 +63332,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* This file is 
 /***/ (function(module, exports, __webpack_require__) {
 
 (function (global, factory) {
-   true ? factory(exports, __webpack_require__(517), __webpack_require__(292), __webpack_require__(355), __webpack_require__(17), __webpack_require__(3), __webpack_require__(5), __webpack_require__(9), __webpack_require__(13), __webpack_require__(84), __webpack_require__(4), __webpack_require__(11), __webpack_require__(8), __webpack_require__(15)) : undefined;
+   true ? factory(exports, __webpack_require__(517), __webpack_require__(292), __webpack_require__(355), __webpack_require__(16), __webpack_require__(2), __webpack_require__(4), __webpack_require__(8), __webpack_require__(12), __webpack_require__(84), __webpack_require__(3), __webpack_require__(10), __webpack_require__(7), __webpack_require__(14)) : undefined;
 })(this, function (exports, web3Net, Utils, web3CoreHelpers, web3Providers, _classCallCheck, _possibleConstructorReturn, _getPrototypeOf, _inherits, web3CoreMethod, _createClass, _set, _get, web3Core) {
   'use strict';
 
@@ -63831,7 +63809,7 @@ var Transaction = function () {
 }();
 
 module.exports = Transaction;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18).Buffer))
 
 /***/ }),
 /* 524 */
@@ -65379,7 +65357,7 @@ exports.isLengthGTZero = function (value, message) {
 exports.isNumberInInterval = function (number, x, y, message) {
   if (number <= x || number >= y) throw RangeError(message);
 };
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18).Buffer))
 
 /***/ }),
 /* 534 */
@@ -66407,7 +66385,7 @@ var objectKeys = Object.keys || function (obj) {
 
   return keys;
 };
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19)))
 
 /***/ }),
 /* 539 */
@@ -67132,7 +67110,7 @@ function callbackify(original) {
 }
 
 exports.callbackify = callbackify;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)))
 
 /***/ }),
 /* 540 */
@@ -67420,7 +67398,7 @@ function toBuffer(v) {
 
   return v;
 }
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18).Buffer))
 
 /***/ }),
 /* 542 */
@@ -67662,7 +67640,7 @@ module.exports = {
   getKeys: getKeys,
   isHexString: isHexString
 };
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18).Buffer))
 
 /***/ }),
 /* 543 */
@@ -67675,7 +67653,7 @@ module.exports = {"genesisGasLimit":{"v":5000,"d":"Gas limit of the Genesis bloc
 /***/ (function(module, exports, __webpack_require__) {
 
 (function (global, factory) {
-   true ? factory(exports, __webpack_require__(517), __webpack_require__(292), __webpack_require__(355), __webpack_require__(17), __webpack_require__(3), __webpack_require__(5), __webpack_require__(9), __webpack_require__(13), __webpack_require__(84), __webpack_require__(4), __webpack_require__(85), __webpack_require__(11), __webpack_require__(8), __webpack_require__(15)) : undefined;
+   true ? factory(exports, __webpack_require__(517), __webpack_require__(292), __webpack_require__(355), __webpack_require__(16), __webpack_require__(2), __webpack_require__(4), __webpack_require__(8), __webpack_require__(12), __webpack_require__(84), __webpack_require__(3), __webpack_require__(85), __webpack_require__(10), __webpack_require__(7), __webpack_require__(14)) : undefined;
 })(this, function (exports, web3Net, Utils, web3CoreHelpers, web3Providers, _classCallCheck, _possibleConstructorReturn, _getPrototypeOf, _inherits, web3CoreMethod, _createClass, web3CoreSubscriptions, _set, _get, web3Core) {
   'use strict';
 
@@ -67871,7 +67849,7 @@ module.exports = {"genesisGasLimit":{"v":5000,"d":"Gas limit of the Genesis bloc
 /***/ (function(module, exports, __webpack_require__) {
 
 (function (global, factory) {
-   true ? factory(exports, __webpack_require__(3), __webpack_require__(4), __webpack_require__(16), __webpack_require__(90), __webpack_require__(546)) : undefined;
+   true ? factory(exports, __webpack_require__(2), __webpack_require__(3), __webpack_require__(15), __webpack_require__(90), __webpack_require__(546)) : undefined;
 })(this, function (exports, _classCallCheck, _createClass, isObject, isString, swarm) {
   'use strict';
 
@@ -68914,7 +68892,7 @@ if (typeof window !== "undefined") {
 }
 
 module.exports = win;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(19)))
 
 /***/ }),
 /* 558 */
