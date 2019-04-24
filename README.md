@@ -25,7 +25,11 @@ The *business logic* does not leverage *ledgers.js*--the *library* is intended f
 
 ## Getting Started
 
-The *ledgers.js* library [source file](https://github.com/overhide/ledgers.js/blob/master/src/ledgers.js) is the distributable artifact.  
+The *ledgers.js* library ['dist' file](https://github.com/overhide/ledgers.js/blob/master/dist/ledgers.js) is the distributable artifact.
+
+> The checked in version is large and un-optimized for purposes of debugging in the demo.
+>
+> When you pull in *ledgers.js* as a dependency, optimizations will be as you desire.
 
 You must use [webpack](https://webpack.js.org/) to pull it in and its dependencies ([web3.js](https://github.com/ethereum/web3.js/)).
 
