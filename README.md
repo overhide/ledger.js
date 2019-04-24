@@ -31,7 +31,7 @@ The *ledgers.js* library ['dist' file](https://github.com/overhide/ledgers.js/bl
 >
 > When you pull in *ledgers.js* as a dependency, optimizations will be as you desire.
 
-You must use [webpack](https://webpack.js.org/) to pull it in and its dependencies ([web3.js](https://github.com/ethereum/web3.js/)).
+You must use [webpack](https://webpack.js.org/) to pull this library in and its dependencies ([web3.js](https://github.com/ethereum/web3.js/)).
 
 > Since *web3.js* [requires the use of *webpack*](https://github.com/ethereum/web3.js/issues/2291), so does *ledgers.js*.
 
