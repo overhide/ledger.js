@@ -104,7 +104,7 @@ import {Accounts} from 'web3-eth-accounts';
  * An 'ohledger' mode is on of 'prod' or 'test'
  * 
  */
-var oh$ = (function() {
+export default (function() {
 
   var root = typeof self == 'object' && self.self === self && self ||
     typeof global == 'object' && global.global === global && global ||
@@ -970,5 +970,3 @@ var oh$ = (function() {
 
   return root.oh$;
 })();
-
-export default oh$;
