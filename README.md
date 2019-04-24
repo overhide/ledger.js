@@ -25,13 +25,13 @@ The *business logic* does not leverage *ledgers.js*--the *library* is intended f
 
 ## Getting Started
 
-The *ledgers.js* library ['dist' file](https://github.com/overhide/ledgers.js/blob/master/dist/ledgers.js) is the distributable artifact.
+The *ledgers.js* library ['dist' file](https://github.com/overhide/ledgers.js/blob/master/dist) is the distributable artifact.
 
 > The checked in version is large and un-optimized for purposes of debugging in the demo.
 >
 > When you pull in *ledgers.js* as a dependency, optimizations will be as you desire.
 
-You must use [webpack](https://webpack.js.org/) to pull it in and its dependencies ([web3.js](https://github.com/ethereum/web3.js/)).
+You must use [webpack](https://webpack.js.org/) to pull this library in and its dependencies ([web3.js](https://github.com/ethereum/web3.js/)).
 
 > Since *web3.js* [requires the use of *webpack*](https://github.com/ethereum/web3.js/issues/2291), so does *ledgers.js*.
 
@@ -46,7 +46,7 @@ import oh$ from "ledgers.js";
 oh$.onWalletChange = ...
 ```
 
-Once bundled with its dependencies--the library can be loaded straight into your HTML and accessed by its `oh$` 
+Alternativelly--once bundled with its dependencies--the library can be loaded straight into your HTML and accessed by its `oh$` 
 property from the browser's `window` object:
 
 ```
