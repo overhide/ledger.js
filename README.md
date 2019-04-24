@@ -6,7 +6,7 @@
 
 [This repository](https://github.com/overhide/ledgers.js) is two things:
 
-1. [distribution](https://www.npmjs.com/package/ledgers.js) of the *ledgers.js* library ([source](https://github.com/overhide/ledgers.js/blob/master/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)) in support of [ledger-based](https://github.com/overhide/ledgers.js/blob/master/why/why.md) login pages.
+1. [distribution](https://www.npmjs.com/package/ledgers.js) of the *ledgers.js* library ([source](https://github.com/overhide/ledgers.js/blob/master/src/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)) in support of [ledger-based](https://github.com/overhide/ledgers.js/blob/master/why/why.md) login pages.
 1. a [tutorial/demo/example login page](https://overhide.github.io/ledgers.js/demo/login.html) ([repo](https://github.com/overhide/ledgers.js)) for the [ledger-based authorization
 workflow](https://github.com/overhide/ledgers.js/blob/master/why/why.md).
 
@@ -25,73 +25,34 @@ The *business logic* does not leverage *ledgers.js*--the *library* is intended f
 
 ## Getting Started
 
-The *ledgers.js* library [source file](https://github.com/overhide/ledgers.js/blob/master/ledgers.js) is the distributable artifact.  
+The *ledgers.js* library [source file](https://github.com/overhide/ledgers.js/blob/master/src/ledgers.js) is the distributable artifact.  
 
-If you're using *npm* simply:  `npm install ledgers.js --save-prod`.
+You must use [webpack](https://webpack.js.org/) to pull it in and its dependencies ([web3.js](https://github.com/ethereum/web3.js/)).
 
-The library has no exports, it has a global `oh$` object.  If using *webpack* simply `import "ledgers.js"` to bring in the `oh$` object.
+> Since *web3.js* [requires the use of *webpack*](https://github.com/ethereum/web3.js/issues/2291), so does *ledgers.js*.
+
+Within your front-end projects; using *npm* simply:  `npm install ledgers.js --save-prod`.
+
+The *ledgers.js* library exports the `oh$` object--it also sets a global `oh$` object on `window`.
+
+To bring in the `oh$` object into your code:
+
+```
+import oh$ from "ledgers.js";
+oh$.onWalletChange = ...
+```
+
+Once bundled with its dependencies--the library can be loaded straight into your HTML and accessed by its `oh$` 
+property from the browser's `window` object:
+
+```
+<script src="./dist/ledgers.js"></script>
+<script>
+  oh$.onWalletChange = ...
+</script>
+```
 
 Keep in mind *ledgers.js* is meant to run with a DOM present--in a browser (not *Node.js*).
-
-### Quick and Dirty :: CDN Distribution
-
-You can include *ledgers.js* via CDN:
-
-* `https://cdn.jsdelivr.net/npm/ledgers.js/ledgers.js`
-* `https://cdn.jsdelivr.net/npm/ledgers.js/ledgers.min.js`
-
-For a specific version, e.g. version *1.0.5*: `https://cdn.jsdelivr.net/npm/ledgers.js@1.0.5/ledgers.min.js`
-
-> *Important*
->
-> The *ledgers.js* library depends on *web3.js*: if using CDN you must explicitly load *web3.js* beforehand.  It is not
-> sufficient to depend on wallet injection for this.
-
-**(¬-_-)¬** create an *index.html* file with the following contents:
-
-```
- <script src="https://cdn.jsdelivr.net/npm/ledgers.js/ledgers.min.js"></script>
- 
- <script>
-  alert(JSON.stringify(oh$.getImparterTags(),null,2));
- </script>
-```
-
-**(¬-_-)¬** open the *index.html* file in your browser
-
-**( o_o)** notice the alert popup with a list of [imparters](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html), this shows we're using `oh$`, the *ledgers.js* global object
-
-### Quick and Dirty :: Non-CDN Build
-
-In your console, in a new temporary folder:
-
-**(¬-_-)¬** `npm install`
-
-**(¬-_-)¬** `npm install ledgers.js --save-prod`
-
-**(¬-_-)¬** `npm install browserify -g`
-
-**(¬-_-)¬** create an *index.js* file with the following contents:
-
-```
-require('ledgers.js');
-```
-
-**(¬-_-)¬** `browserify index.js > bundle.js`
-
-**(¬-_-)¬** create an *index.html* file with the following contents:
-
-```
- <script src="bundle.js"></script>
- 
- <script>
-  alert(JSON.stringify(oh$.getImparterTags(),null,2));
- </script>
-```
-
-**(¬-_-)¬** open the *index.html* file in your browser
-
-**( o_o)** notice the alert popup with a list of [imparters](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html), this shows we're using `oh$`, the *ledgers.js* global object
 
 # Demo and Details
 
@@ -103,7 +64,7 @@ To make sense of the [demo](https://overhide.github.io/ledgers.js/demo/login.htm
 
 ## [2] Purpose
 
-The main purpose of this repository is to make available the *ledgers.js* library ([source](https://github.com/overhide/ledgers.js/blob/master/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)).
+The main purpose of this repository is to make available the *ledgers.js* library ([source](https://github.com/overhide/ledgers.js/blob/master/src/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)).
 
 Make it available for [download](NPM_TBD).
 
@@ -111,13 +72,13 @@ But also make it available in terms of how it's used: hence the demo with emphas
 
 ## [3] Ecosystem
 
-*ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)) is part of a larger envisioned ecosystem called [overhide](https://overhide.io).  It works in tandem with the *overhide* Remuneration API.
+*ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/src/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)) is part of a larger envisioned ecosystem called [overhide](https://overhide.io).  It works in tandem with the *overhide* Remuneration API.
 
 The *overhide* remuneration API is meant to [enable "ledger-based authorization" with fiat currencies and cryptos](https://github.com/overhide/ledgers.js/blob/master/why/why.md).
 
-The *ledgers.js* library ([source](https://github.com/overhide/ledgers.js/blob/master/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)) is an integral partner to the *overhide* Remuneration API, providing utilities and abstractions for for the browser-centric authentication and payment portions; to enable ledger-based authorization later in the *service-code* or *backend*.
+The *ledgers.js* library ([source](https://github.com/overhide/ledgers.js/blob/master/src/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)) is an integral partner to the *overhide* Remuneration API, providing utilities and abstractions for for the browser-centric authentication and payment portions; to enable ledger-based authorization later in the *service-code* or *backend*.
 
-The figure shows the *overhide* Remuneration API landscape and highlights *ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)) helping a Web app orchestrate a login from within a browser--the red outgoing arrows--as it interacts with the *service code* and *APIs* in the *cloud*.
+The figure shows the *overhide* Remuneration API landscape and highlights *ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/src/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)) helping a Web app orchestrate a login from within a browser--the red outgoing arrows--as it interacts with the *service code* and *APIs* in the *cloud*.
 
 ![](.github/overview-demo.png)
 *Figure 2: Shows where ledgers.js fits within the overhide Remuneration API landscape and the pieces this demo highlights.*
@@ -157,19 +118,19 @@ For *production instances* of both APIs see:
 
 #### [3.1.3] Additional Notes on APIs
 
-The *overhide-ledger* [Swagger documentation](https://test.ohledger.com/swagger.html) discusses some additional *HTML*/*js* getter endpoints particular to *overhide-ledger* and not part of the generic remuneration API.  The *ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html))  leverages these additional endpoints when it calls on *overhide-ledger* functionality.  This is similar to how *ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)) leverages the [web3.js](https://github.com/ethereum/web3.js/) library when working with ether.
+The *overhide-ledger* [Swagger documentation](https://test.ohledger.com/swagger.html) discusses some additional *HTML*/*js* getter endpoints particular to *overhide-ledger* and not part of the generic remuneration API.  The *ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/src/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html))  leverages these additional endpoints when it calls on *overhide-ledger* functionality.  This is similar to how *ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/src/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)) leverages the [web3.js](https://github.com/ethereum/web3.js/) library when working with ether.
 
 
-### [3.2] *ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html))
+### [3.2] *ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/src/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html))
 
-*ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)) complements blockchain wallets in the browser hence enables authorization via all supported ledgers in the *Service Code* ([source](https://github.com/overhide/ledgers.js/blob/master/demo/service.html)):
+*ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/src/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)) complements blockchain wallets in the browser hence enables authorization via all supported ledgers in the *Service Code* ([source](https://github.com/overhide/ledgers.js/blob/master/demo/service.html)):
 
 * provides transaction and signing functionality for [*overhide-ledger*](https://test.ohledger.com)
 * abstracts [web3](https://github.com/ethereum/web3.js/) wallets' transaction and signing functionality for [ethers](https://rinkeby.ethereum.overhide.io/swagger.html)
 
-This library abstracts wallets in the [*login*](https://overhide.github.io/ledgers.js/demo/login.html) page; streamlining work for the UX developer.  To try this, run the [demo app](https://overhide.github.io/ledgers.js/demo/login.html) connected to a [web3.js](https://github.com/ethereum/web3.js/) wallet such as [MetaMask](https://metamask.io/).  Keep in mind that at no point in *login.html* ([source](https://github.com/overhide/ledgers.js/blob/master/demo/login.html)) do we talk to [web3.js](https://github.com/ethereum/web3.js/) directly.  All interaction is abstracted by *ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)).  __This is the intent of the *ledgers.js library* ([source](https://github.com/overhide/ledgers.js/blob/master/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)), to abstract interactions with wallets supporting ledgers that have *overhide* remuneration providers__.
+This library abstracts wallets in the [*login*](https://overhide.github.io/ledgers.js/demo/login.html) page; streamlining work for the UX developer.  To try this, run the [demo app](https://overhide.github.io/ledgers.js/demo/login.html) connected to a [web3.js](https://github.com/ethereum/web3.js/) wallet such as [MetaMask](https://metamask.io/).  Keep in mind that at no point in *login.html* ([source](https://github.com/overhide/ledgers.js/blob/master/demo/login.html)) do we talk to [web3.js](https://github.com/ethereum/web3.js/) directly.  All interaction is abstracted by *ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/src/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)).  __This is the intent of the *ledgers.js library* ([source](https://github.com/overhide/ledgers.js/blob/master/src/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)), to abstract interactions with wallets supporting ledgers that have *overhide* remuneration providers__.
 
-The [*overhide-ledger*](https://test.ohledger.com) does not have a wallet, but it can use any [web3.js](https://github.com/ethereum/web3.js/) wallet for key management and signing--[*overhide-ledger*](https://test.ohledger.com) works with Ethereum public-key infrastructure.  Although Ethereum wallets can be used for [*overhide-ledger's*](https://test.ohledger.com) credential management, no Ethereum wallet can transact with [*overhide-ledger*](https://test.ohledger.com)--[*overhide-ledger*](https://test.ohledger.com) is not an Ethereum node.  To make [*overhide-ledger*](https://test.ohledger.com) transactions more seamless, *ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)) provides [*overhide-ledger*](https://test.ohledger.com) specific tooling to assist the *login* page UX developer.  Again, see the [demo](https://overhide.github.io/ledgers.js/demo/login.html) ([source](https://github.com/overhide/ledgers.js/blob/master/demo/login.html)).
+The [*overhide-ledger*](https://test.ohledger.com) does not have a wallet, but it can use any [web3.js](https://github.com/ethereum/web3.js/) wallet for key management and signing--[*overhide-ledger*](https://test.ohledger.com) works with Ethereum public-key infrastructure.  Although Ethereum wallets can be used for [*overhide-ledger's*](https://test.ohledger.com) credential management, no Ethereum wallet can transact with [*overhide-ledger*](https://test.ohledger.com)--[*overhide-ledger*](https://test.ohledger.com) is not an Ethereum node.  To make [*overhide-ledger*](https://test.ohledger.com) transactions more seamless, *ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/src/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)) provides [*overhide-ledger*](https://test.ohledger.com) specific tooling to assist the *login* page UX developer.  Again, see the [demo](https://overhide.github.io/ledgers.js/demo/login.html) ([source](https://github.com/overhide/ledgers.js/blob/master/demo/login.html)).
 
 ## [4] Play-By-Play Run-Through of a [demo](https://overhide.github.io/ledgers.js/demo/login.html) ([source](https://github.com/overhide/ledgers.js/blob/master/demo/login.html)) Session
 

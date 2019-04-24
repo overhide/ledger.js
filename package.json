@@ -1,6 +1,6 @@
 {
   "name": "ledgers.js",
-  "version": "1.0.10",
+  "version": "1.1.0",
   "description": "Overhide remuneration API JavaScript library :: abstracting different ledgers to be used in an application's authentication and authorization workflows.",
   "main": "ledgers.js",
   "repository": {
@@ -21,23 +21,29 @@
   },
   "homepage": "https://github.com/overhide/ledgers.js#readme",
   "dependencies": {
-    "web3": "1.0.0-beta.52"
+    "web3": "^1.0.0-beta.52"
   },
-  "dev-dependencies": {
+  "devDependencies": {
+    "@babel/core": "^7.4.3",
+    "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/preset-env": "^7.4.3",
+    "babel-loader": "^8.0.5",
     "copyfiles": "2.1.0",
     "documentation": "9.3.1",
-    "babel-minify": "0.5.0",
+    "hard-source-webpack-plugin": "^0.13.1",
+    "http-server": "0.11.1",
     "watch": "1.0.2",
-    "http-server": "0.11.1"
+    "webpack": "^4.30.0",
+    "webpack-cli": "^3.3.1"
   },
   "scripts": {
     "docs": "documentation build ledgers.js --project-name \"ledgers.js :: overhide remuneration library for browser use\" --project-version \"$npm_package_version\" --project-homepage \"https://www.npmjs.com/package/ledgers.js\" --shallow true --format html --output docs/ledgers.js-rendered-docs",
     "copy:demo": "copyfiles demo/** docs",
-    "copy:ledgers.js": "copyfiles ledgers.js docs/demo",
-    "copy": "npm run copy:demo & npm run copy:ledgers.js",
-    "minify": "minify ledgers.js --out-file ledgers.min.js",
-    "all": "npm run docs & npm run copy & npm run minify",
-    "watch": "watch \"npm run copy\" ./",
+    "pack:ledgers.js": "webpack --module-bind js=babel-loader",
+    "copy:ledgers.js": "copyfiles --flat dist/** docs/demo",
+    "copy": "npm run copy:demo & npm run pack:ledgers.js & npm run copy:ledgers.js",
+    "all": "npm run docs & npm run copy",
+    "watch": "watch \"npm run copy\" ./src ./demo",
     "dev": "http-server ./docs/demo"
   }
 }
