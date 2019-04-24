@@ -25,7 +25,7 @@ The *business logic* does not leverage *ledgers.js*--the *library* is intended f
 
 ## Getting Started
 
-The *ledgers.js* library ['dist' file](https://github.com/overhide/ledgers.js/blob/master/dist/ledgers.js) is the distributable artifact.
+The *ledgers.js* library ['dist' file](https://github.com/overhide/ledgers.js/blob/master/dist) is the distributable artifact.
 
 > The checked in version is large and un-optimized for purposes of debugging in the demo.
 >
