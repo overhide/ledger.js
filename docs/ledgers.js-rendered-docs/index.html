@@ -24,6 +24,186 @@
           <div id='toc'>
             <ul class='list-reset h5 py1-ul'>
               
+                
+                <li><a
+                  href='#oh'
+                  class="">
+                  oh$
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#onwalletchange'
+                  class="">
+                  onWalletChange
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#onwalletpopup'
+                  class="">
+                  onWalletPopup
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#oncredentialsupdate'
+                  class="">
+                  onCredentialsUpdate
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#onnetworkchange'
+                  class="">
+                  onNetworkChange
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getimpartertags'
+                  class="">
+                  getImparterTags
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#cansetcredentials'
+                  class="">
+                  canSetCredentials
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#cangeneratecredentials'
+                  class="">
+                  canGenerateCredentials
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#canchangenetwork'
+                  class="">
+                  canChangeNetwork
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#generatecredentials'
+                  class="">
+                  generateCredentials
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#setcredentials'
+                  class="">
+                  setCredentials
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#setnetwork'
+                  class="">
+                  setNetwork
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getoverhideremunerationapiuri'
+                  class="">
+                  getOverhideRemunerationAPIUri
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#gettally'
+                  class="">
+                  getTally
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#gettransactions'
+                  class="">
+                  getTransactions
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#isonledger'
+                  class="">
+                  isOnLedger
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#sign'
+                  class="">
+                  sign
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#createtransaction'
+                  class="">
+                  createTransaction
+                  
+                </a>
+                
+                </li>
+              
             </ul>
           </div>
           <div class='mt1 h6 quiet'>
@@ -32,6 +212,1580 @@
         </div>
       </div>
       <div id='split-right' class='relative overflow-auto height-viewport-100'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='oh'>
+      oh$
+    </h3>
+    
+    
+  </div>
+  
+
+  <h4>REFERENCES</h4>
+<p>Library code: <a href="https://github.com/overhide/ledgers.js/blob/master/ledgers.js">https://github.com/overhide/ledgers.js/blob/master/ledgers.js</a>.</p>
+<p>Repository for this library is <a href="https://github.com/overhide/ledgers.js">https://github.com/overhide/ledgers.js</a>.</p>
+<p>The repository contains a demo app of this library working in conjunction with the <em>overhide</em> Ethereum remuneration
+provider (Rinkeby testnet -- <a href="https://rinkeby.ethereum.overhide.io">https://rinkeby.ethereum.overhide.io</a>) and the <em>overhide-ledger</em> (test environment -- <a href="https://test.ohledger.com">https://test.ohledger.com</a>)</p>
+<h4>ABOUT</h4>
+<p>JavaScript library to be used in-browser and interrogate <em>overhide</em> remuneration providers as to validity
+of ledger credentials and transactions involving these credentials.</p>
+<p>The goal of the library and the <em>overhide</em> remuneration providers is to ease using of all types of ledgers for
+authentication (I am who I say) and authorization (paid access tiers).</p>
+<p>The library leverages injected currency wallets where it can, and exposes functions to work with <em>loose</em> currencies
+(without wallets) where it cannot.</p>
+<p>The library exports the <code>oh$</code> object for use as a module when bundling.</p>
+<pre><code>import oh$ from "ledgers.js";
+oh$.onWalletChange = ...
+</code></pre>
+<p>Once bundled with its dependencies--the library can be loaded straight into your HTML and accessed by its <code>oh$</code>
+property from the browser's <code>window</code> object:</p>
+<pre><code>&#x3C;script src="./dist/ledgers.js">&#x3C;/script>
+&#x3C;script>
+  oh$.onWalletChange = ...
+&#x3C;/script>
+</code></pre>
+<h4>IMPARTERS</h4>
+<p>The library works with a concept of <em>imprater</em> tags.  Wallets impart credentials, signatures, and transactions.  For
+<em>loose change</em>--where no wallet exists--the library can be interrogated as to which entities should be set by the
+user (can* functions); causing the entities to be imparted back to the user in a common code flow.  </p>
+<p>The imparter tags are a simple naming convention.  For example if multiple Ethereum wallet APIs were imparting data
+they  would be individually tagged with a prefix "eth" and a dashed suffix.  No suffix indicates a <em>loose change</em>
+imparter:</p>
+<ul>
+<li>eth-web3</li>
+<li>eth-?</li>
+</ul>
+<p>Similarly for <em>overhide-ledger</em>, the prefix is "ohledger", the suffix won't be attached on the <em>loose change</em> version
+and will be suffixed on the <em>web3</em> walleted version:</p>
+<ul>
+<li>ohledger</li>
+<li>ohledger-web3</li>
+</ul>
+<p>The following sections cover special notes on each imparter.  The library adheres to these notes.</p>
+<h5>eth-web3</h5>
+<p>Ethereum addresses are 20 bytes: 42 character 'hex' strings prefixed with '0x'.</p>
+<p>Ethereum secret keys for signing addresses are 32 bytes: 66 character 'hex' strings prefixed with '0x'.</p>
+<p>Ethereum networks names are:</p>
+<ul>
+<li>main</li>
+<li>kovan</li>
+<li>rinkeyby</li>
+<li>ropsten</li>
+</ul>
+<p>The denomination for amounts is the Wei</p>
+<h5>ohledger, ohledger-web3</h5>
+<p>Addresses and secret keys use Ethereum format.</p>
+<p>Addresses are 20 bytes: 42 character 'hex' strings prefixed with '0x'.</p>
+<p>Secret keys for signing addresses are 32 bytes: 66 character 'hex' strings prefixed with '0x'.</p>
+<p>Network tuples consist of a 'currency' as a three letter ISO fiat currency code and a 'mode'.  The supported
+'currency' names are:</p>
+<ul>
+<li>'USD' (cents)</li>
+</ul>
+<p>The denomination in brackets is not part of the name and is the denomination for amounts.</p>
+<p>Note: at this point only USD are supported.  If there is a need, and <em>overhide-ledger</em> instances in currencies
+other than USD come online, we'll revisit this.</p>
+<p>An 'ohledger' mode is on of 'prod' or 'test'</p>
+
+    <div class='pre p1 fill-light mt0'>oh$</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='onwalletchange'>
+      onWalletChange
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Handler registered by user; called when wallets' state changes.</p>
+<p>  The library passes in the imparter tag undergoing change and a boolean indicating 'true' if wallet available
+or 'false.</p>
+<p>  In user code:</p>
+<pre><code>oh$.onWalletChange = (imparterTag, isPresent) => console.log(`wallet for ${imparterTag} is available:${isPresent}`);
+</code></pre>
+
+    <div class='pre p1 fill-light mt0'>onWalletChange</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>onWalletChange</span> <code class='quiet'>(function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>))</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='onwalletpopup'>
+      onWalletPopup
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Handler registered by user; called when wallet is expected to popup.  Useful in case user wants to react to popup in UI.</p>
+<p>  The library passes in the imparter tag causing the popup.</p>
+<p>  In user code:</p>
+<pre><code>oh$.onWalletPopup = (imparterTag) => console.log(`wallet for ${imparterTag} popped`);
+</code></pre>
+
+    <div class='pre p1 fill-light mt0'>onWalletPopup</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>onWalletPopup</span> <code class='quiet'>(function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>))</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='oncredentialsupdate'>
+      onCredentialsUpdate
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Handler registered by user; called when an credentials change for one of the tracked imparters.</p>
+<p>  Only called when credentials are valid as per imparter: ready to be used for signing, transacting.</p>
+<p>  First string is the imparter tag, second object are the new credentials: imparter currency specific.</p>
+<p>  The new credentials object will conform to the following:</p>
+<table>
+<thead>
+<tr>
+<th>imparter tag</th>
+<th>credentials object</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>eth-web3</td>
+<td><code>{address:..}</code></td>
+</tr>
+<tr>
+<td>ohledger</td>
+<td><code>{address:..,secret:..}</code></td>
+</tr>
+<tr>
+<td>ohledger-web3</td>
+<td><code>{address:..}</code></td>
+</tr>
+</tbody>
+</table>
+<p>  In user code:</p>
+<pre><code>oh$.onAddressUpdate = (imparterTag, creds) => {
+  if (imparterTag === 'eth-web3') console.log(`new address for ${imparterTag} is:${creds.address}`);
+}
+</code></pre>
+
+    <div class='pre p1 fill-light mt0'>onCredentialsUpdate</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>onCredentialsUpdate</span> <code class='quiet'>(function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>))</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='onnetworkchange'>
+      onNetworkChange
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Handler registered by user; called when the network changes for a particular imparter tag.</p>
+<p>  For example for "eth0" the network could changed from "main" to "rinkeby".  </p>
+<p>  The first string is the imparter tag, second object is the new network details: imparter currency specific.</p>
+<p>  The new credentials object will conform to the following:</p>
+<table>
+<thead>
+<tr>
+<th>imparter tag</th>
+<th>credentials object</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>eth-web3</td>
+<td><code>{name:('main'|'rinkeby'|'kovan').., uri:..}</code></td>
+</tr>
+<tr>
+<td>ohledger</td>
+<td><code>{currency:'USD',mode:('prod'|'test'), uri:..}</code></td>
+</tr>
+<tr>
+<td>ohledger-web3</td>
+<td><code>{currency:'USD',mode:('prod'|'test'), uri:..}</code></td>
+</tr>
+</tbody>
+</table>
+<p>  In user code:</p>
+<pre><code>oh$.onNetworkChange = (imparterTag, details) => {
+  if (imparterTag === 'eth-web3') console.log(`new network selected for ${imparterTag} is:${details.name}`);
+  if (imparterTag === /ohledger/.test(imparterTag)) console.log(`working in currency: ${details.currency}`);
+}
+</code></pre>
+
+    <div class='pre p1 fill-light mt0'>onNetworkChange</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>onNetworkChange</span> <code class='quiet'>(function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>))</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getimpartertags'>
+      getImparterTags
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Retrieves all imparter tags injected by wallets and statically available from the library.</p>
+
+    <div class='pre p1 fill-light mt0'>getImparterTags(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></code>:
+        of strings: the imparter tags available
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='cansetcredentials'>
+      canSetCredentials
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Interrogate whether the imparter tag can have credentials set by the user: or does the wallet control it
+exclusively.</p>
+<p>  Only the following imparter(s) will return 'true':</p>
+<ul>
+<li>ohledger</li>
+</ul>
+
+    <div class='pre p1 fill-light mt0'>canSetCredentials(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>imparterTag</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>:
+        'true' if particular imparter tag can have credentials set.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='cangeneratecredentials'>
+      canGenerateCredentials
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Interrogate whether the imparter tag can have credentials generated by the user: or does the wallet control it
+exclusively.</p>
+<p>  Only the following imparter(s) will return 'true':</p>
+<ul>
+<li>ohledger</li>
+</ul>
+
+    <div class='pre p1 fill-light mt0'>canGenerateCredentials(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>imparterTag</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>:
+        'true' if particular imparter tag can have credentials generated.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='canchangenetwork'>
+      canChangeNetwork
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Interrogate whether the imparter tag can have network changed by the user via oh$: or does the wallet control it
+exclusively.</p>
+<p>  Only the following imparter(s) will return 'true':</p>
+<ul>
+<li>ohledger</li>
+<li>ohledger-web3</li>
+</ul>
+
+    <div class='pre p1 fill-light mt0'>canChangeNetwork(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>imparterTag</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>:
+        'true' if particular imparter tag can have networks changed via oh$.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='generatecredentials'>
+      generateCredentials
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>For imparters that can have credentials generated, generates them.  </p>
+<p>  This setter calls <code>oh$.onCredentialsUpdate</code> when successful.</p>
+
+    <div class='pre p1 fill-light mt0'>generateCredentials(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>imparterTag</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    imparter specific generation options, if any.
+<p>  The options objects are as follows:</p>
+<table>
+<thead>
+<tr>
+<th>imparter tag</th>
+<th>credentials object</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>eth-web3</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>ohledger</td>
+<td>null</td>
+</tr>
+<tr>
+<td>ohledger-web3</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        representing a 'true' if success else 'false'; also calls 
+<code>oh$.onCredentialsUpdate</code>
+ on success
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='setcredentials'>
+      setCredentials
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>For imparters that can have credentials set, sets them.  </p>
+<p>  This setter calls <code>oh$.onCredentialsUpdate</code> when successful.</p>
+
+    <div class='pre p1 fill-light mt0'>setCredentials(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, credentials: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>imparterTag</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>credentials</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    credentials object of imparter specific parameters to set.
+<p>  The credentials objects are as follows:</p>
+<table>
+<thead>
+<tr>
+<th>imparter tag</th>
+<th>credentials object</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>eth-web3</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>ohledger</td>
+<td><code>{address:..,secret:..}</code></td>
+</tr>
+<tr>
+<td>ohledger-web3</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        representing a 'true' if success else 'false'; also calls 
+<code>oh$.onCredentialsUpdate</code>
+ on success
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='setnetwork'>
+      setNetwork
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>For imparters that can have networks changed via oh$, changes it.  </p>
+<p>  This setter calls <code>oh$.onNetworkChange</code> when successful.</p>
+
+    <div class='pre p1 fill-light mt0'>setNetwork(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, details: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>imparterTag</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>details</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    network details object of imparter specific parameters to set.
+<p>  The network details objects are as follows:</p>
+<table>
+<thead>
+<tr>
+<th>imparter tag</th>
+<th>credentials object</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>eth-web3</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>ohledger</td>
+<td><code>{currency:'USD', mode:'prod'|'test'}</code></td>
+</tr>
+<tr>
+<td>ohledger-web3</td>
+<td><code>{currency:'USD', mode:'prod'|'test'}</code></td>
+</tr>
+</tbody>
+</table>
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        representing a 'true' if success else 'false'; also calls 
+<code>oh$.onNetworkChange</code>
+ on success
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getoverhideremunerationapiuri'>
+      getOverhideRemunerationAPIUri
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Based on current network set returns the <em>overhide</em> remuneration API URI configured in the library.</p>
+
+    <div class='pre p1 fill-light mt0'>getOverhideRemunerationAPIUri(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>imparterTag</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>:
+        the URI.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='gettally'>
+      getTally
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Retrieve a tally of all transactions on the imparter's ledger--perhaps within a date range.</p>
+
+    <div class='pre p1 fill-light mt0'>getTally(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, since: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date">Date</a>, recepient: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>imparterTag</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>since</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date">Date</a>)</code>
+	    date to start tally since: date of oldest transaction to include.  No restriction if 'null'.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>recepient</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    imparter specific object describing recipient of transactions to tally for.
+<p>  Recipient objects are as per:</p>
+<table>
+<thead>
+<tr>
+<th>imparter tag</th>
+<th>recipient object</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>eth-web3</td>
+<td><code>{address:..}</code></td>
+</tr>
+<tr>
+<td>ohledger</td>
+<td><code>{address:..}</code></td>
+</tr>
+<tr>
+<td>ohledger-web3</td>
+<td><code>{address:..}</code></td>
+</tr>
+</tbody>
+</table>
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        with the tally value in imparter specific currency
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='gettransactions'>
+      getTransactions
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Retrieve transactions on the imparter's ledger, perhaps within a date range, from credentials set against
+imparter to a recipient</p>
+
+    <div class='pre p1 fill-light mt0'>getTransactions(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, since: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date">Date</a>, recepient: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>imparterTag</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>since</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date">Date</a>)</code>
+	    date to start tally since: date of oldest transaction to include.  No restriction if 'null'.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>recepient</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    imparter specific object describing recipient of transactions to tally for.
+<p>  Recipient objects are as per:</p>
+<table>
+<thead>
+<tr>
+<th>imparter tag</th>
+<th>recipient object</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>eth-web3</td>
+<td><code>{address:..}</code></td>
+</tr>
+<tr>
+<td>ohledger</td>
+<td><code>{address:..}</code></td>
+</tr>
+<tr>
+<td>ohledger-web3</td>
+<td><code>{address:..}</code></td>
+</tr>
+</tbody>
+</table>
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        with the transactions: 
+<code>[{"transaction-value":..,"transaction-date":..},..]</code>
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='isonledger'>
+      isOnLedger
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Determine if current credentials have some transaction on the imparter's ledger: transaction can be to anyone.</p>
+<p>  Intent is to validate beyond just a valid address.  To validate the address has been used.</p>
+<p>  Call may trigger <code>oh$.onWalletPopup</code>.</p>
+
+    <div class='pre p1 fill-light mt0'>isOnLedger(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>imparterTag</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        with 'true' or 'false'; may call 
+<code>oh$.onWalletPopup</code>
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='sign'>
+      sign
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Sign using the provided message using the credentials set against the specific imparter.</p>
+<p>  Note: wallet might pop up a dialog upon this call, consider that in your UX flow.</p>
+<p>  Call may trigger <code>oh$.onWalletPopup</code>.</p>
+
+    <div class='pre p1 fill-light mt0'>sign(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, message: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>imparterTag</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>message</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    to sign
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        with the signature; may call 
+<code>oh$.onWalletPopup</code>
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='createtransaction'>
+      createTransaction
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Create a transaction on the imparter's ledger.</p>
+<p>  Call may trigger <code>oh$.onWalletPopup</code>; wallet might pop up a dialog upon this call, consider that in your UX flow.</p>
+
+    <div class='pre p1 fill-light mt0'>createTransaction(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, amount: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, to: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>imparterTag</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>amount</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>to</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    address of recipient
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    other options required for the specific imparter.
+<p>  The options objects are as follows:</p>
+<table>
+<thead>
+<tr>
+<th>imparter tag</th>
+<th>credentials object</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>eth-web3</td>
+<td>null</td>
+</tr>
+<tr>
+<td>ohledger</td>
+<td>{message:.., signature:..}</td>
+</tr>
+<tr>
+<td>ohledger-web3</td>
+<td>{message:.., signature:..}</td>
+</tr>
+</tbody>
+</table>
+<p>  If <em>message</em> and <em>signature</em> are provided they are used instead of oh$ asking for wallet to resign message.</p>
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        of a 'true' for success or an Error; may call 
+<code>oh$.onWalletPopup</code>
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
         
       </div>
     </div>

@@ -37,7 +37,7 @@
     "webpack-cli": "^3.3.1"
   },
   "scripts": {
-    "docs": "documentation build ledgers.js --project-name \"ledgers.js :: overhide remuneration library for browser use\" --project-version \"$npm_package_version\" --project-homepage \"https://www.npmjs.com/package/ledgers.js\" --shallow true --format html --output docs/ledgers.js-rendered-docs",
+    "docs": "documentation build src/ledgers.js --project-name \"ledgers.js :: overhide remuneration library for browser use\" --project-version \"$npm_package_version\" --project-homepage \"https://www.npmjs.com/package/ledgers.js\" --shallow true --format html --output docs/ledgers.js-rendered-docs",
     "copy:demo": "copyfiles demo/** docs",
     "pack:ledgers.js": "webpack --module-bind js=babel-loader",
     "copy:ledgers.js": "copyfiles --flat dist/** docs/demo",
