@@ -25,11 +25,13 @@ The *business logic* does not leverage *ledgers.js*--the *library* is intended f
 
 ## Getting Started
 
-The *ledgers.js* library [source file](https://github.com/overhide/ledgers.js/blob/master/ledgers.js) is the distributable artifact.  You can simply copy it ([or the minfied variant](https://github.com/overhide/ledgers.js/blob/master/ledgers.min.js)).
+The *ledgers.js* library [source file](https://github.com/overhide/ledgers.js/blob/master/ledgers.js) is the distributable artifact.  
 
 If you're using *npm* simply:  `npm install ledgers.js --save-prod`.
 
-Keep in mind *ledgers.js* is meant to run with a DOM present--in a browser.
+The library has no exports, it has a global `oh$` object.  If using *webpack* simply `import "ledgers.js"` to bring in the `oh$` object.
+
+Keep in mind *ledgers.js* is meant to run with a DOM present--in a browser (not *Node.js*).
 
 ### Quick and Dirty :: CDN Distribution
 
@@ -39,6 +41,11 @@ You can include *ledgers.js* via CDN:
 * `https://cdn.jsdelivr.net/npm/ledgers.js/ledgers.min.js`
 
 For a specific version, e.g. version *1.0.5*: `https://cdn.jsdelivr.net/npm/ledgers.js@1.0.5/ledgers.min.js`
+
+> *Important*
+>
+> The *ledgers.js* library depends on *web3.js*: if using CDN you must explicitly load *web3.js* beforehand.  It is not
+> sufficient to depend on wallet injection for this.
 
 **(¬-_-)¬** create an *index.html* file with the following contents:
 

@@ -427,7 +427,7 @@
   const OHLEDGER_IMPARTER_TAG = 'ohledger'
   const OHLEDGER_WEB3_IMPARTER_TAG = 'ohledger-web3'
 
-  var imparterTags = [OHLEDGER_IMPARTER_TAG];
+  var imparterTags = [];
 
   var data = {
     ETH_WEB3_IMPARTER_TAG: {
@@ -475,57 +475,70 @@
    * 
    * @ignore
    */
-  function detectWeb3Wallet() {
+  function detectWeb3Wallet() {    
+    if (typeof Web3 != 'function') {
+      console.log('web3 library not loaded/injected :: skipping');
+      return;
+    }
+
+    imparterTags = [OHLEDGER_IMPARTER_TAG]; // at least imported web3 available for OHLEDGER
     window.web3 = new Web3();
 
+    if (!window.ethereum) return;
+ 
     // Modern dapp browsers...
-    if (window.ethereum) {
-      (async () => {
-        try {
-          await ethereum.enable();
-          window.web3 = new Web3(ethereum);
-        } catch (e) {/*noop*/ }
+    (async () => {
+      try {
+        await window.ethereum.enable();
+        window.web3 = new Web3(window.ethereum);
+      } catch (e) {/*noop*/ }
 
+      await detectWalletCb();
+
+      setInterval(async function () {
         await detectWalletCb();
+      }, WALLET_CHECK_INTERVAL_MS);
+    })();
 
-        setInterval(async function () {
-          await detectWalletCb();
-        }, WALLET_CHECK_INTERVAL_MS);
-      })();
-
-      var detectWalletCb = async () => {
-        try {
-          var currentAddress = (await window.web3.eth.getAccounts())[0];
-          var currentNetwork = (await window.web3.eth.net.getNetworkType());
-        } catch (e) {/*noop*/ }
-        if (currentAddress !== data.ETH_WEB3_IMPARTER_TAG.walletAddress) {
-          let imparterTagIndex = imparterTags.findIndex(v => v === ETH_WEB3_IMPARTER_TAG);
-          if (imparterTagIndex && !currentAddress) {
-            imparterTags.splice(imparterTagIndex,1);
-          } else if (!imparterTagIndex && currentAddress) {
-            imparterTags.push(ETH_WEB3_IMPARTER_TAG);
-            imparterTags.push(OHLEDGER_WEB3_IMPARTER_TAG);
-          }
-          data.ETH_WEB3_IMPARTER_TAG.walletAddress = currentAddress;
-          data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress = currentAddress;
-          if (root.oh$.onWalletChange) {
-            root.oh$.onWalletChange(ETH_WEB3_IMPARTER_TAG,!!currentAddress);
-            root.oh$.onWalletChange(OHLEDGER_WEB3_IMPARTER_TAG, !!currentAddress);
-          }
-          if (root.oh$.onCredentialsUpdate && currentAddress) {
-            root.oh$.onCredentialsUpdate(ETH_WEB3_IMPARTER_TAG, {address:currentAddress});
-            root.oh$.onCredentialsUpdate(OHLEDGER_WEB3_IMPARTER_TAG, { address: currentAddress });
-          }
+    var detectWalletCb = async () => {
+      try {
+        console.log('go go go');
+        var currentAccounts = await window.web3.eth.getAccounts();
+        if (!currentAccounts || !currentAccounts.length) return;
+        var currentAddress = currentAccounts[0];
+        var currentNetwork = (await window.web3.eth.net.getNetworkType());
+      } catch (e) {
+        /*noop*/ 
+        console.log('error');
+        return;
+      }
+      if (currentAddress !== data.ETH_WEB3_IMPARTER_TAG.walletAddress) {
+        let imparterTagIndex = imparterTags.findIndex(v => v === ETH_WEB3_IMPARTER_TAG);
+        if (imparterTagIndex && !currentAddress) {
+          imparterTags.splice(imparterTagIndex,1);
+        } else if (!imparterTagIndex && currentAddress) {
+          imparterTags.push(ETH_WEB3_IMPARTER_TAG);
+          imparterTags.push(OHLEDGER_WEB3_IMPARTER_TAG);
         }
-        if (currentNetwork !== data.ETH_WEB3_IMPARTER_TAG.network) {
-          if (root.oh$.onNetworkChange) {
-            root.oh$.onNetworkChange(ETH_WEB3_IMPARTER_TAG, {name:currentNetwork, uri: data.ETH_WEB3_IMPARTER_TAG.remuneration_uri[currentNetwork]});
-          }
-          data.ETH_WEB3_IMPARTER_TAG.network = currentNetwork;
+        data.ETH_WEB3_IMPARTER_TAG.walletAddress = currentAddress;
+        data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress = currentAddress;
+        if (root.oh$.onWalletChange) {
+          root.oh$.onWalletChange(ETH_WEB3_IMPARTER_TAG,!!currentAddress);
+          root.oh$.onWalletChange(OHLEDGER_WEB3_IMPARTER_TAG, !!currentAddress);
+        }
+        if (root.oh$.onCredentialsUpdate && currentAddress) {
+          root.oh$.onCredentialsUpdate(ETH_WEB3_IMPARTER_TAG, {address:currentAddress});
+          root.oh$.onCredentialsUpdate(OHLEDGER_WEB3_IMPARTER_TAG, { address: currentAddress });
         }
       }
+      if (currentNetwork !== data.ETH_WEB3_IMPARTER_TAG.network) {
+        if (root.oh$.onNetworkChange) {
+          root.oh$.onNetworkChange(ETH_WEB3_IMPARTER_TAG, {name:currentNetwork, uri: data.ETH_WEB3_IMPARTER_TAG.remuneration_uri[currentNetwork]});
+        }
+        data.ETH_WEB3_IMPARTER_TAG.network = currentNetwork;
+      }
     }
-  }
+  } 
 
   function getImparterTags() {
     return imparterTags;
