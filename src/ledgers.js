@@ -104,7 +104,7 @@ import {Accounts} from 'web3-eth-accounts';
  * An 'ohledger' mode is on of 'prod' or 'test'
  * 
  */
-export default {
+module.exports = {
   /**
    * @property {function(string,boolean)} onWalletChange 
    * @description
