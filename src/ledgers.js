@@ -939,6 +939,21 @@ var oh$ = (function() {
     makePopupHidden('user close', true);
   });
 
+  // https://stackoverflow.com/a/31374433
+  function loadJS(url, implementationCode, location) {
+    //url is URL of external file, implementationCode is the code
+    //to be called from the file, location is the location to 
+    //insert the <script> element
+
+    var scriptTag = document.createElement('script');
+    scriptTag.src = url;
+
+    scriptTag.onload = implementationCode;
+    scriptTag.onreadystatechange = implementationCode;
+
+    location.appendChild(scriptTag);
+  };
+
   function loadOhLedgerTransactFns() {
     // load prod ohledger transact fn
     loadJS(`${data.OHLEDGER_IMPARTER_TAG.remuneration_uri.prod}/transact.js`, () => {
@@ -952,21 +967,6 @@ var oh$ = (function() {
       data.OHLEDGER_WEB3_IMPARTER_TAG.oh_ledger_transact_fn.test = oh_ledger_transact;
     }, document.body);
   }
-
-  // https://stackoverflow.com/a/31374433
-  var loadJS = function (url, implementationCode, location) {
-    //url is URL of external file, implementationCode is the code
-    //to be called from the file, location is the location to 
-    //insert the <script> element
-
-    var scriptTag = document.createElement('script');
-    scriptTag.src = url;
-
-    scriptTag.onload = implementationCode;
-    scriptTag.onreadystatechange = implementationCode;
-
-    location.appendChild(scriptTag);
-  };
 
   return root.oh$;
 })();
