@@ -2,7 +2,7 @@
   "name": "ledgers.js",
   "version": "1.1.0",
   "description": "Overhide remuneration API JavaScript library :: abstracting different ledgers to be used in an application's authentication and authorization workflows.",
-  "main": "ledgers.js",
+  "main": "dist/ledgers.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/overhide/ledgers.js.git"
