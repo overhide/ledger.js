@@ -9,7 +9,8 @@ module.exports = {
   entry: `${APP_DIR}/ledgers.js`,
   output: {
     path: BUILD_DIR,
-    filename: 'ledgers.js'
+    filename: 'ledgers.js',
+    library: 'oh$'
   },
   devtool: 'source-map',
   mode: "none",
