@@ -285,7 +285,7 @@ function _typeof(obj) {
  * 
  */
 
-var oh$ = function () {
+(function () {
   var root = (typeof self === "undefined" ? "undefined" : _typeof(self)) == 'object' && self.self === self && self || (typeof global === "undefined" ? "undefined" : _typeof(global)) == 'object' && global.global === global && global || this || {};
   root.oh$ = {
     /**
@@ -1757,8 +1757,16 @@ var oh$ = function () {
   }
 
   return root.oh$;
-}();
+})();
 
+var oh$ = {
+  a: function a() {
+    return true;
+  },
+  b: function b() {
+    return false;
+  }
+};
 /* harmony default export */ __webpack_exports__["default"] = (oh$);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1)))
 
