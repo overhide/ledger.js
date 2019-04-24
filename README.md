@@ -46,7 +46,7 @@ import oh$ from "ledgers.js";
 oh$.onWalletChange = ...
 ```
 
-Once bundled with its dependencies--the library can be loaded straight into your HTML and accessed by its `oh$` 
+Alternativelly--once bundled with its dependencies--the library can be loaded straight into your HTML and accessed by its `oh$` 
 property from the browser's `window` object:
 
 ```
