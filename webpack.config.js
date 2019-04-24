@@ -10,7 +10,7 @@ module.exports = {
   output: {
     path: BUILD_DIR,
     filename: 'ledgers.js',
-    library: 'ledgers',
+    library: '__oh$__',
     libraryTarget: 'umd',
     umdNamedDefine: true    
   },

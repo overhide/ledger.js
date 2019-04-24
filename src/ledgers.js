@@ -971,4 +971,4 @@ const oh$ = (function() {
   return root.oh$;
 })();
 
-export default $oh;
+export default oh$;

@@ -2,11 +2,11 @@
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
-		define("ledgers", [], factory);
+		define("__oh$__", [], factory);
 	else if(typeof exports === 'object')
-		exports["ledgers"] = factory();
+		exports["__oh$__"] = factory();
 	else
-		root["ledgers"] = factory();
+		root["__oh$__"] = factory();
 })(window, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -1769,7 +1769,7 @@ var oh$ = function () {
   return root.oh$;
 }();
 
-/* harmony default export */ __webpack_exports__["default"] = ($oh);
+/* harmony default export */ __webpack_exports__["default"] = (oh$);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1)))
 
 /***/ }),
