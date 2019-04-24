@@ -12,10 +12,7 @@ module.exports = {
     filename: 'ledgers.js'
   },
   devtool: 'source-map',
-  mode: "development",
-  optimization: {
-    minimize: false
-  }, 
+  mode: "none",
   plugins: [
     new HardSourceWebpackPlugin()
   ],   
