@@ -807,7 +807,23 @@ const oh$ = (function() {
         break;
       case ETH_WEB3_IMPARTER_TAG:
         if (root.oh$.onWalletPopup) root.oh$.onWalletPopup(ETH_WEB3_IMPARTER_TAG);
-        await web3.eth.sendTransaction({from:from, to:to, value: amount});
+        await (new Promise((resolve, reject) => {
+          web3.eth.sendTransaction({ from: from, to: to, value: amount })
+          .on('transactionHash', function (hash) {
+            console.log('ledgers.js :: eth-web3 :: transactionHash');
+          })
+          .on('receipt', function (receipt) {
+            console.log('ledgers.js :: eth-web3 :: receipt');
+          })
+          .on('confirmation', function (confirmationNumber, receipt) {
+            console.log('ledgers.js :: eth-web3 :: confirmation ' + confirmationNumber);
+            resolve();
+          })
+          .on('error', (error) => {
+            console.error('ledgers.js :: eth-web3 :: error :: ' + error);
+            reject();
+          }); 
+        }));
         break;
       default:
         throw new Error('unsupported imparter tag');
