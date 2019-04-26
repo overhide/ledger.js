@@ -510,6 +510,12 @@ const oh$ = (function() {
         var currentAddress = (currentAccounts && currentAccounts.length > 0) ? currentAccounts[0] : null;
         var currentNetwork = (await window.web3.eth.net.getNetworkType());
       } catch (e) {/*noop*/}
+      if (currentNetwork !== data.ETH_WEB3_IMPARTER_TAG.network) {
+        data.ETH_WEB3_IMPARTER_TAG.network = currentNetwork;
+        if (root.oh$.onNetworkChange) {
+          root.oh$.onNetworkChange(ETH_WEB3_IMPARTER_TAG, {name:currentNetwork, uri: data.ETH_WEB3_IMPARTER_TAG.remuneration_uri[currentNetwork]});
+        }
+      }
       if (currentAddress !== data.ETH_WEB3_IMPARTER_TAG.walletAddress) {
         let imparterTagIndex = imparterTags.findIndex(v => v === ETH_WEB3_IMPARTER_TAG);
         if (imparterTagIndex && !currentAddress) {
@@ -528,12 +534,6 @@ const oh$ = (function() {
           root.oh$.onCredentialsUpdate(ETH_WEB3_IMPARTER_TAG, {address:currentAddress});
           root.oh$.onCredentialsUpdate(OHLEDGER_WEB3_IMPARTER_TAG, { address: currentAddress });
         }
-      }
-      if (currentNetwork !== data.ETH_WEB3_IMPARTER_TAG.network) {
-        if (root.oh$.onNetworkChange) {
-          root.oh$.onNetworkChange(ETH_WEB3_IMPARTER_TAG, {name:currentNetwork, uri: data.ETH_WEB3_IMPARTER_TAG.remuneration_uri[currentNetwork]});
-        }
-        data.ETH_WEB3_IMPARTER_TAG.network = currentNetwork;
       }
     }
   } 

@@ -754,6 +754,17 @@ var oh$ = function () {
                 _context3.t0 = _context3["catch"](0);
 
               case 12:
+                if (currentNetwork !== data.ETH_WEB3_IMPARTER_TAG.network) {
+                  data.ETH_WEB3_IMPARTER_TAG.network = currentNetwork;
+
+                  if (root.oh$.onNetworkChange) {
+                    root.oh$.onNetworkChange(ETH_WEB3_IMPARTER_TAG, {
+                      name: currentNetwork,
+                      uri: data.ETH_WEB3_IMPARTER_TAG.remuneration_uri[currentNetwork]
+                    });
+                  }
+                }
+
                 if (currentAddress !== data.ETH_WEB3_IMPARTER_TAG.walletAddress) {
                   imparterTagIndex = imparterTags.findIndex(function (v) {
                     return v === ETH_WEB3_IMPARTER_TAG;
@@ -782,17 +793,6 @@ var oh$ = function () {
                       address: currentAddress
                     });
                   }
-                }
-
-                if (currentNetwork !== data.ETH_WEB3_IMPARTER_TAG.network) {
-                  if (root.oh$.onNetworkChange) {
-                    root.oh$.onNetworkChange(ETH_WEB3_IMPARTER_TAG, {
-                      name: currentNetwork,
-                      uri: data.ETH_WEB3_IMPARTER_TAG.remuneration_uri[currentNetwork]
-                    });
-                  }
-
-                  data.ETH_WEB3_IMPARTER_TAG.network = currentNetwork;
                 }
 
               case 14:
