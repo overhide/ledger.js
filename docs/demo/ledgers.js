@@ -1622,16 +1622,10 @@ var oh$ = function () {
                   from: from,
                   to: to,
                   value: amount
-                }).on('transactionHash', function (hash) {
-                  console.log('ledgers.js :: eth-web3 :: transactionHash');
-                }).on('receipt', function (receipt) {
-                  console.log('ledgers.js :: eth-web3 :: receipt');
                 }).on('confirmation', function (confirmationNumber, receipt) {
-                  console.log('ledgers.js :: eth-web3 :: confirmation ' + confirmationNumber);
                   resolve();
                 }).on('error', function (error) {
-                  console.error('ledgers.js :: eth-web3 :: error :: ' + error);
-                  reject();
+                  reject(error);
                 });
               });
 
