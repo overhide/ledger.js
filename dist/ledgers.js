@@ -524,7 +524,6 @@ var oh$ = function () {
      * @description
      *   Retrieve a tally of all transactions on the imparter's ledger--perhaps within a date range.
      * @param {string} imparterTag
-     * @param {Date} since - date to start tally since: date of oldest transaction to include.  No restriction if 'null'.
      * @param {Object} recepient - imparter specific object describing recipient of transactions to tally for.
      *
      *   Recipient objects are as per:
@@ -535,6 +534,7 @@ var oh$ = function () {
      *   | ohledger | `{address:..}` |
      *   | ohledger-web3 | `{address:..}` |
      *
+     * @param {Date} since - date to start tally since: date of oldest transaction to include.  No restriction if 'null'.
      * @returns {Promise} with the tally value in imparter specific currency
      */
     getTally: getTally,
