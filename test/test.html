@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>ledgers.js adhoc tester</title>
+    <script type="text/javascript" src="../dist/ledgers.js"></script>
+
+    <!-- ignore below :: code pane / logging  pane setup -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> <!-- only needed for logging and code panes -->
+    <script src="ignore/logging.js"></script> <!-- helper JS functionality to support showing source code for this file in the UI -->
+    <link rel="stylesheet" type="text/css" href="ignore/styles.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <!-- ignore above :: code pane / logging  pane setup -->
+  </head>
+
+  <body>
+    <p id="getwider">  |<---->| Cannot view, screen to narrow, please revisit on a wider device.</p>
+    <div id="window">
+      <div id="demoview">
+
+        <!--- =========================================================================
+                                              ** UI Forms **
+              ========================================================================= -->
+
+        <!-- setTestData -->
+        <div class="w3-panel w3-card">
+          <details>
+            <summary class="usecase">setImparterTag</summary>
+            <p>
+              Set data for tests below.
+            </p>
+          </details>
+          <form id="setTestData">
+            <p>
+              <input name="address" class="w3-input" type="text" onchange="scrubForm(event)"><label
+                class="w3-text-blue">address</label>
+              <input name="secret" class="w3-input" type="text" onchange="scrubForm(event)"><label
+                class="w3-text-blue">secret</label>
+              <p><select name="imparterTag" class="w3-select" onchange="scrubForm(event)">
+                  <option value="eth-web3" selected>eth-web3</option>
+                  <option value="ohledger">ohledger</option>
+                  <option value="ohledger-web3">ohledger-web3</option>
+                </select><label class="w3-text-blue">imparterTag</label></p>
+            </p>
+          </form>
+        </div>
+
+        <!-- getConfig -->
+        <div class="w3-panel w3-card">
+          <details><summary class="usecase">getConfig</summary><p>
+            Calls <em>oh$.getImparterTags</em>, <em>oh$.canSetCredentials</em>, <em>oh$.canGenerateCredentials</em>, <em>oh$.canChangeNetwork</em>.
+          </p></details>
+          <form id="getConfig"><p>
+            <input name="imparterTag" class="w3-input" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label>
+          </p></form>
+          <p><button class="w3-btn w3-blue w3-left-align w3-block" onclick="getConfig()">run getConfig()</button></p>
+        </div>
+
+        <!-- generateCredentials -->
+        <div class="w3-panel w3-card">
+          <details><summary class="usecase">generateCredentials</summary><p>
+            Call <em>generateCredentials(..)</em> (<a href='../docs/ledgers.js-rendered-docs/index.html#generatecredentials' target='_blank'>documentation for generateCredentials()</a>).
+          </p></details>
+          <form id="generateCredentials"><p>
+            <input name="imparterTag" class="w3-input" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label>
+            <textarea name="generateCredentialsOptions" class="w3-input w3-border" rows="2" required onchange="scrubForm(event)"></textarea><label class="w3-text-blue">options JSON</label>
+          </p></form>
+          <p><button class="w3-btn w3-blue w3-left-align w3-block" onclick="generateCredentials()">run generateCredentials()</button></p>
+        </div>
+
+      </div>
+      <div id="panes">
+        <div id="logview">
+          <div id="logviewcontents"></div>
+        </div>
+        <div id="codeview">
+          <iframe id="codeframe" src="ignore/code.html#welcome.txt"></iframe>
+        </div>
+      </div>
+    </div>
+  </body>
+  
+  <script>
+
+    /* =========================================================================
+                                ** Initialization **
+       ========================================================================= */
+
+    var data = {
+      imparterTag: 'ohledger'
+    };
+    fillForms();
+
+    window.onload = function () {
+      showPostScreenSetupLogs(); // ignore above :: logging setup
+    }
+  
+    /* =========================================================================
+                         ** Supporting Methods / Utilities **
+       ========================================================================= */
+
+    /**
+     * Update use-case 'data' (global) with JSON passed in.
+     * 
+     * SIDE EFFECT:  refreshes all forms.
+     */ 
+    function updateData(withWhat) {
+      data = {...data, ...withWhat};
+      fillForms();
+    }
+
+    /**
+     * Scrub form fields of the caller's form into 'data'
+     * 
+     * @param {} event -- event originating from an input within a form to scrub
+     */
+    function scrubForm(event) {
+      var form = event.target.form;
+      var json = {};
+      for (element of form) {
+        json[element.name] = element.value;
+      }
+      updateData(json);
+    }
+
+    /**
+     * Fill form fields from JSON
+     * 
+     * @param {string} formId - element ID of the form to fill
+     * @param {Object} values - object to source values from by keys matching form field 'names'
+     * @param {boolean} disabled - if true, the form is disabled, default, false
+     */
+    function disableForm(formId, disabled) {
+      var form = document.getElementById(formId);
+      for (element of form) {
+        element.disabled = !!disabled;
+      }
+    }
+
+    /**
+     * Go through all forms and fill matching fields with 'data' (data attribut -> field name)
+     */
+    function fillForms() {
+      for (form of document.forms) {
+        for (element of form) {
+          if (element.name in data) {
+            element.value = data[element.name];
+          }
+        }
+      }
+    }
+
+    /* =========================================================================
+                                    ** Events **
+       ========================================================================= */
+
+    /**
+     * Handle events from ledgers.js instance.
+     * 
+     * @param {String} tag -- descriptive tag for remotestorage instance
+     * @param {} rsInstance -- to handle events for
+     */
+
+    oh$.onWalletChange = (imparterTag, isPresent) => {
+      log('onWalletChange called', {imparterTag, isPresent});
+    }
+
+    oh$.onWalletPopup = (imparterTag) => {
+      log('onWalletPopup called', {imparterTag});
+    }
+
+    oh$.onCredentialsUpdate = (imparterTag, newCedentials) => {
+      log('onCredentialsUpdate called', {imparterTag, newCedentials});
+      updateData({
+        address: newCedentials.address,
+        secret: newCedentials.secret
+      });
+    }
+
+    oh$.onNetworkChange = (imparterTag, details) => {
+      log('onNetworkChange called', {imparterTag, details});
+    }
+
+    /* =========================================================================
+                          ** Form Actions / Use Case Functions **
+       ========================================================================= */
+
+    async function getConfig() {
+      log('getConfig :: start');
+      log('getConfig :: getImparterTags()', {result: oh$.getImparterTags()});
+      log('getConfig :: canSetCredentials()', {result: oh$.canSetCredentials(data.imparterTag)});
+      log('getConfig :: canGenerateCredentials()', {result: oh$.canGenerateCredentials(data.imparterTag)});
+      log('getConfig :: canChangeNetwork()', {result: oh$.canChangeNetwork(data.imparterTag)});
+      log('getConfig :: done');
+    }
+
+    async function generateCredentials() {
+      log('generateCredentials :: start', {imparterTag: data.imparterTag, options: data.generateCredentialsOptions || null });
+      let result = await oh$.generateCredentials(data.imparterTag, data.generateCredentialsOptions);
+      log('generateCredentials :: result', {result: result});
+      log('generateCredentials :: done');
+    }
+
+  </script>
+
+</html>

@@ -40,6 +40,7 @@
     "docs": "documentation build src/ledgers.js --project-name \"ledgers.js :: overhide remuneration library for browser use\" --project-version \"$npm_package_version\" --project-homepage \"https://www.npmjs.com/package/ledgers.js\" --shallow true --format html --output docs/ledgers.js-rendered-docs",
     "pack": "webpack --module-bind js=babel-loader",
     "all": "npm run docs & npm run pack",
-    "watch": "watch \"npm run copy\" ./src ./demo"
+    "watch": "watch \"npm run pack\" ./src",
+    "test": "http-server ./"
   }
 }

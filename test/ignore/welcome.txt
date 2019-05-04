@@ -1,0 +1,27 @@
+
+
+                  ,-------.
+                  | ABOUT |
+                  `-------'
+
+Ad-hoc test for ledgers.js.
+
+               ,--------------.
+               | INSTRUCTIONS |
+               `--------------'
+
+  The pane on the LEFT is the actual rendered 
+  example application for you to interact with.
+
+  The TOP-RIGHT pane shows "logs" logged from this
+  test application. 
+  
+  When this test Web application's JavaScript 
+  calls a "log" function, the logged message 
+  appears in the TOP-RIGHT pane.
+
+  Clicking any log message will scroll the 
+  BOTTOM-RIGHT pane to the corresponding 
+  JavaScript source code where this log message 
+  occurs.
+
