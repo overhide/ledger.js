@@ -41,6 +41,6 @@
     "pack": "webpack --module-bind js=babel-loader",
     "all": "npm run docs & npm run pack",
     "watch": "watch \"npm run pack\" ./src",
-    "test": "http-server ./"
+    "play": "http-server ./"
   }
 }

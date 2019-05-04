@@ -23,6 +23,10 @@ The *business logic* does not leverage *ledgers.js*--the *library* is intended f
 
 For more information, videos, write-ups, please visit https://overhide.io.
 
+## Getting a Taste
+
+There are two demo applications using *ledgers.js* and a *live API playground*.
+
 ## Getting Started
 
 The *ledgers.js* library ['dist' folder](https://github.com/overhide/ledgers.js/blob/master/dist) contains the distributable artifact.

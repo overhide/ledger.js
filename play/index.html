@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>ledgers.js adhoc tester</title>
+    <script type="text/javascript" src="../dist/ledgers.js"></script>
+
+    <!-- ignore below :: code pane / logging  pane setup -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> <!-- only needed for logging and code panes -->
+    <script src="ignore/logging.js"></script> <!-- helper JS functionality to support showing source code for this file in the UI -->
+    <link rel="stylesheet" type="text/css" href="ignore/styles.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <!-- ignore above :: code pane / logging  pane setup -->
+  </head>
+
+  <body>
+    <p id="getwider">  |<---->| Cannot view, screen to narrow, please revisit on a wider device.</p>
+    <div id="window">
+      <div id="demoview">
+
+        <!--- =========================================================================
+                                              ** UI Forms **
+              ========================================================================= -->
+
+        <!-- setTestData -->
+        <div class="w3-panel w3-card">
+          <details>
+            <summary class="usecase">setImparterTag</summary>
+            <p>
+              Set data for tests below.
+            </p>
+          </details>
+          <form id="setTestData">
+            <p>
+              <input name="address" class="w3-input" type="text" onchange="scrubForm(event)"><label
+                class="w3-text-blue">address</label>
+              <input name="secret" class="w3-input" type="text" onchange="scrubForm(event)"><label
+                class="w3-text-blue">secret</label>
+              <input name="signature" class="w3-input" type="text" onchange="scrubForm(event)"><label
+                class="w3-text-blue">signature</label>
+              <p>
+                <select name="imparterTag" class="w3-select" onchange="scrubForm(event)">
+                  <option value="eth-web3" selected>eth-web3</option>
+                  <option value="ohledger">ohledger</option>
+                  <option value="ohledger-web3">ohledger-web3</option>
+                </select><label class="w3-text-blue">imparterTag</label>
+              </p>
+            </p>
+          </form>
+        </div>
+
+        <!-- getConfig -->
+        <div class="w3-panel w3-card">
+          <details><summary class="usecase">getConfig</summary><p>
+            Calls <ul>
+              <li>oh$.getImparterTags</li>
+              <li>oh$.canSetCredentials</li>
+              <li>oh$.canGenerateCredentials</li>
+              <li>oh$.canChangeNetwork</li>
+              <li>oh$.getOverhideRemunerationAPIUri</li>
+            </ul>
+          </p></details>
+          <form id="getConfig"><p>
+            <input name="imparterTag" class="w3-input" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label>
+          </p></form>
+          <p><button class="w3-btn w3-blue w3-left-align w3-block" onclick="getConfig()">run getConfig()</button></p>
+        </div>
+
+        <!-- generateCredentials -->
+        <div class="w3-panel w3-card">
+          <details><summary class="usecase">generateCredentials</summary><p>
+            Call <em>generateCredentials(..)</em> (<a href='../docs/ledgers.js-rendered-docs/index.html#generatecredentials' target='_blank'>documentation for generateCredentials()</a>).
+          </p></details>
+          <form id="generateCredentials"><p>
+            <input name="imparterTag" class="w3-input" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label>
+            <textarea name="generateCredentialsOptionsJSON" class="w3-input w3-border" rows="2" required onchange="scrubForm(event)"></textarea><label class="w3-text-blue">options JSON (<a href='../docs/ledgers.js-rendered-docs/index.html#generatecredentials' target='_blank'>see docs</a>)</label>
+          </p></form>
+          <p><button class="w3-btn w3-blue w3-left-align w3-block" onclick="generateCredentials()">run generateCredentials()</button></p>
+        </div>
+
+        <!-- setCredentials -->
+        <div class="w3-panel w3-card">
+          <details><summary class="usecase">setCredentials</summary><p>
+            Call <em>setCredentials(..)</em> (<a href='../docs/ledgers.js-rendered-docs/index.html#setcredentials' target='_blank'>documentation for setCredentials()</a>).
+          </p></details>
+          <form id="setCredentials"><p>
+            <input name="imparterTag" class="w3-input" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label>
+            <textarea name="credentialsOptionsJSON" class="w3-input w3-border" rows="2" required onchange="scrubForm(event)"></textarea><label class="w3-text-blue">options JSON (<a href='../docs/ledgers.js-rendered-docs/index.html#setcredentials' target='_blank'>see docs</a>)</label>
+          </p></form>
+          <p><button class="w3-btn w3-blue w3-left-align w3-block" onclick="setCredentials()">run setCredentials()</button></p>
+        </div>
+
+        <!-- setNetwork -->
+        <div class="w3-panel w3-card">
+          <details><summary class="usecase">setNetwork</summary><p>
+            Call <em>setNetwork(..)</em> (<a href='../docs/ledgers.js-rendered-docs/index.html#setnetwork' target='_blank'>documentation for setNetwork()</a>).
+          </p></details>
+          <form id="setNetwork"><p>
+            <input name="imparterTag" class="w3-input" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label>
+            <textarea name="networkDetailsJSON" class="w3-input w3-border" rows="2" required onchange="scrubForm(event)"></textarea><label class="w3-text-blue">options JSON (<a href='../docs/ledgers.js-rendered-docs/index.html#setnetwork' target='_blank'>see docs</a>)</label>
+          </p></form>
+          <p><button class="w3-btn w3-blue w3-left-align w3-block" onclick="setNetwork()">run setNetwork()</button></p>
+        </div>
+
+        <!-- getTally -->
+        <div class="w3-panel w3-card">
+          <details><summary class="usecase">getTally</summary><p>
+            Call <em>getTally(..)</em> (<a href='../docs/ledgers.js-rendered-docs/index.html#gettally' target='_blank'>documentation for getTally()</a>).
+          </p></details>
+          <form id="getTally"><p>
+            <input name="imparterTag" class="w3-input" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label>
+            <textarea name="recipientJSON" class="w3-input w3-border" rows="2" required onchange="scrubForm(event)"></textarea><label class="w3-text-blue">recipient JSON (<a href='../docs/ledgers.js-rendered-docs/index.html#gettally' target='_blank'>see docs</a>)</label>
+            <input name="since" class="w3-input" type="datetime-local" onchange="scrubForm(event)"><label class="w3-text-blue">since</label>
+          </p></form>
+          <p><button class="w3-btn w3-blue w3-left-align w3-block" onclick="getTally()">run getTally()</button></p>
+        </div>
+
+        <!-- getTransactions -->
+        <div class="w3-panel w3-card">
+          <details><summary class="usecase">getTransactions</summary><p>
+            Call <em>getTransactions(..)</em> (<a href='../docs/ledgers.js-rendered-docs/index.html#gettransactions' target='_blank'>documentation for getTransactions()</a>).
+          </p></details>
+          <form id="getTransactions"><p>
+            <input name="imparterTag" class="w3-input" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label>
+            <textarea name="recipientJSON" class="w3-input w3-border" rows="2" required onchange="scrubForm(event)"></textarea><label class="w3-text-blue">recipient JSON (<a href='../docs/ledgers.js-rendered-docs/index.html#gettransactions' target='_blank'>see docs</a>)</label>
+            <input name="since" class="w3-input" type="datetime-local" onchange="scrubForm(event)"><label class="w3-text-blue">since</label>
+          </p></form>
+          <p><button class="w3-btn w3-blue w3-left-align w3-block" onclick="getTransactions()">run getTransactions()</button></p>
+        </div>
+
+        <!-- isOnLedger -->
+        <div class="w3-panel w3-card">
+          <details><summary class="usecase">isOnLedger</summary><p>
+            Call <em>isOnLedger(..)</em> (<a href='../docs/ledgers.js-rendered-docs/index.html#isonledger' target='_blank'>documentation for isOnLedger()</a>).
+          </p></details>
+          <form id="isOnLedger"><p>
+            <input name="imparterTag" class="w3-input" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label>
+          </p></form>
+          <p><button class="w3-btn w3-blue w3-left-align w3-block" onclick="isOnLedger()">run isOnLedger()</button></p>
+        </div>
+
+        <!-- sign -->
+        <div class="w3-panel w3-card">
+          <details><summary class="usecase">sign</summary><p>
+            Call <em>sign(..)</em> (<a href='../docs/ledgers.js-rendered-docs/index.html#sign' target='_blank'>documentation for sign()</a>).
+          </p></details>
+          <form id="sign"><p>
+            <input name="imparterTag" class="w3-input" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label>
+            <input name="message" class="w3-input" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">message</label>
+          </p></form>
+          <p><button class="w3-btn w3-blue w3-left-align w3-block" onclick="sign()">run sign()</button></p>
+        </div>
+
+        <!-- createTransaction -->
+        <div class="w3-panel w3-card">
+          <details><summary class="usecase">createTransaction</summary><p>
+            Call <em>createTransaction(..)</em> (<a href='../docs/ledgers.js-rendered-docs/index.html#createtransaction' target='_blank'>documentation for createTransaction()</a>).
+          </p></details>
+          <form id="createTransaction"><p>
+            <input name="imparterTag" class="w3-input" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label>
+            <input name="amount" class="w3-input" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">amount</label>
+            <input name="to" class="w3-input" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">to (address)</label>
+            <textarea name="transactionOptionsJSON" class="w3-input w3-border" rows="2" required onchange="scrubForm(event)"></textarea><label class="w3-text-blue">transaction JSON (<a href='../docs/ledgers.js-rendered-docs/index.html#createtransaction' target='_blank'>see docs</a>)</label>
+          </p></form>
+          <p><button class="w3-btn w3-blue w3-left-align w3-block" onclick="createTransaction()">run createTransaction()</button></p>
+        </div>
+
+
+      </div>
+      <div id="panes">
+        <div id="logview">
+          <div id="logviewcontents"></div>
+        </div>
+        <div id="codeview">
+          <iframe id="codeframe" src="ignore/code.html#welcome.txt"></iframe>
+        </div>
+      </div>
+    </div>
+  </body>
+  
+  <script>
+
+    /* =========================================================================
+                                ** Initialization **
+       ========================================================================= */
+
+    var data = {
+      imparterTag: 'ohledger',
+      credentialsOptionsJSON: '{"address":"","secret":""}',
+      networkDetailsJSON:'{"currency":"", "mode":""}',
+      recipientJSON:'{"address":""}',
+      transactionOptionsJSON:'{"message":"", "signature":""}'
+    };
+    fillForms();
+
+    window.onload = function () {
+      showPostScreenSetupLogs(); // ignore above :: logging setup
+    }
+  
+    /* =========================================================================
+                         ** Supporting Methods / Utilities **
+       ========================================================================= */
+
+    /**
+     * Update use-case 'data' (global) with JSON passed in.
+     * 
+     * SIDE EFFECT:  refreshes all forms.
+     */ 
+    function updateData(withWhat) {
+      data = {...data, ...withWhat};
+      fillForms();
+    }
+
+    /**
+     * Scrub form fields of the caller's form into 'data'
+     * 
+     * @param {} event -- event originating from an input within a form to scrub
+     */
+    function scrubForm(event) {
+      var form = event.target.form;
+      var json = {};
+      for (element of form) {
+        json[element.name] = element.value;
+      }
+      updateData(json);
+    }
+
+    /**
+     * Fill form fields from JSON
+     * 
+     * @param {string} formId - element ID of the form to fill
+     * @param {Object} values - object to source values from by keys matching form field 'names'
+     * @param {boolean} disabled - if true, the form is disabled, default, false
+     */
+    function disableForm(formId, disabled) {
+      var form = document.getElementById(formId);
+      for (element of form) {
+        element.disabled = !!disabled;
+      }
+    }
+
+    /**
+     * Go through all forms and fill matching fields with 'data' (data attribut -> field name)
+     */
+    function fillForms() {
+      for (form of document.forms) {
+        for (element of form) {
+          if (element.name in data) {
+            element.value = data[element.name];
+          }
+        }
+      }
+    }
+
+    /* =========================================================================
+                                    ** Events **
+       ========================================================================= */
+
+    /**
+     * Handle events from ledgers.js instance.
+     * 
+     * @param {String} tag -- descriptive tag for remotestorage instance
+     * @param {} rsInstance -- to handle events for
+     */
+
+    oh$.onWalletChange = (imparterTag, isPresent) => {
+      log('onWalletChange called', {imparterTag, isPresent});
+    }
+
+    oh$.onWalletPopup = (imparterTag) => {
+      log('onWalletPopup called', {imparterTag});
+    }
+
+    oh$.onCredentialsUpdate = (imparterTag, newCedentials) => {
+      log('onCredentialsUpdate called', {imparterTag, newCedentials});
+      updateData({
+        address: newCedentials.address,
+        secret: newCedentials.secret
+      });
+    }
+
+    oh$.onNetworkChange = (imparterTag, details) => {
+      log('onNetworkChange called', {imparterTag, details});
+    }
+
+    /* =========================================================================
+                          ** Form Actions / Use Case Functions **
+       ========================================================================= */
+
+    async function getConfig() {
+      log('getConfig :: start');
+      log('getConfig :: getImparterTags()', {result: oh$.getImparterTags()});
+      log('getConfig :: canSetCredentials()', {result: oh$.canSetCredentials(data.imparterTag)});
+      log('getConfig :: canGenerateCredentials()', {result: oh$.canGenerateCredentials(data.imparterTag)});
+      log('getConfig :: canChangeNetwork()', {result: oh$.canChangeNetwork(data.imparterTag)});
+      log('getConfig :: getOverhideRemunerationAPIUri()', { result: oh$.getOverhideRemunerationAPIUri(data.imparterTag)});
+      log('getConfig :: done');
+    }
+
+    async function generateCredentials() {
+      var json = data.generateCredentialsOptionsJSON ? JSON.parse(data.generateCredentialsOptionsJSON) : null;
+      log('generateCredentials :: start', {imparterTag: data.imparterTag, options: json});
+      try {
+        let result = await oh$.generateCredentials(data.imparterTag, json);
+        log('generateCredentials :: result', { result: result });
+      } catch (e) {
+        log('generateCredentials :: error', { error: new String(e) });
+      }      
+      log('generateCredentials :: done');
+    }
+
+    async function setCredentials() {
+      var json = data.credentialsOptionsJSON ? JSON.parse(data.credentialsOptionsJSON) : null;
+      log('setCredentials :: start', {imparterTag: data.imparterTag, options: json});
+      try {
+        let result = await oh$.setCredentials(data.imparterTag, json);
+        log('setCredentials :: result', { result: result });
+      } catch (e) {
+        log('setCredentials :: error', { error: new String(e) });
+      }
+      log('setCredentials :: done');
+    }
+
+    async function setNetwork() {
+      var json = data.networkDetailsJSON ? JSON.parse(data.networkDetailsJSON) : null;
+      log('setNetwork :: start', {imparterTag: data.imparterTag, options: json});
+      try {
+        let result = await oh$.setNetwork(data.imparterTag, json);
+        log('setNetwork :: result', { result: result });
+      } catch (e) {
+        log('setNetwork :: error', { error: new String(e) });
+      }
+      log('setNetwork :: done');
+    }
+
+    async function getTally() {
+      var json = data.recipientJSON ? JSON.parse(data.recipientJSON) : null;
+      log('getTally :: start', {imparterTag: data.imparterTag, recipient: json, since: data.since});
+      try {
+        let result = await oh$.getTally(data.imparterTag, json, new Date(data.since));
+        log('getTally :: result', { result: result });
+      } catch (e) {
+        log('getTally :: error', { error: new String(e) });
+      }
+      log('getTally :: done');
+    }
+
+    async function getTransactions() {
+      var json = data.recipientJSON ? JSON.parse(data.recipientJSON) : null;
+      log('getTransactions :: start', {imparterTag: data.imparterTag, recipient: json, since: data.since});
+      try {
+        let result = await oh$.getTransactions(data.imparterTag, json, new Date(data.since));
+        log('getTransactions :: result', { result: result });
+      } catch (e) {
+        log('getTransactions :: error', { error: new String(e) });
+      }
+      log('getTransactions :: done');
+    }
+
+    async function isOnLedger() {
+      log('isOnLedger :: start', {imparterTag: data.imparterTag});
+      try {
+        let result = await oh$.isOnLedger(data.imparterTag);
+        log('isOnLedger :: result', { result: result });        
+      } catch (e) {
+        log('isOnLedger :: error', { error: new String(e) });
+      }
+      log('isOnLedger :: done');
+    }
+
+    async function sign() {
+      log('sign :: start', {imparterTag: data.imparterTag, message: data.message});
+      try {
+        let result = await oh$.sign(data.imparterTag, data.message);
+        log('sign :: result', { result: result });
+        updateData({
+          signature: result
+        });
+      } catch (e) {
+        log('sign :: error', { error: new String(e) });
+      }
+      log('sign :: done');
+    }
+
+    async function createTransaction() {
+      var json = data.transactionOptionsJSON ? JSON.parse(data.transactionOptionsJSON) : null;
+      log('createTransaction :: start', {imparterTag: data.imparterTag, amount: data.amount, to: data.to, options: json});
+      try {
+        let result = await oh$.createTransaction(data.imparterTag, data.amount, data.to, json);
+        log('createTransaction :: result', { result: result });
+      } catch (e) {
+        log('createTransaction :: error', { error: new String(e) });
+      }
+      log('createTransaction :: done');
+    }
+
+  </script>
+
+</html>

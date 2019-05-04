@@ -2,9 +2,10 @@
             | GETTING STARTED |
             `-----------------'
 
-Ad-hoc test for ledgers.js.
+Ad-hoc API execution for ledgers.js.
 
-The library is all glue code so an ad-hoc integration test made sense instead of mocks with assumptions.
+The library is all glue code so an ad-hoc integration testing application 
+such as this made sense.
 
 To start watching ledgers.js code for changes...
 
@@ -14,11 +15,11 @@ To start watching ledgers.js code for changes...
 
 To run an HTTP server serving the test...
 
-  npm run test
+  npm run play
 
 ... another console, in root folder of repo (one up).
 
-Open browser to http://localhost:8080/test/test.html.
+Open browser to http://localhost:8080/play.
 
 Adjust above port as per port actually opened by http-server if different.
 

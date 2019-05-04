@@ -4,7 +4,23 @@
                   | ABOUT |
                   `-------'
 
-Ad-hoc test for ledgers.js.
+  Ad-hoc test for ledgers.js.
+
+  All Ethereum calls are against the Rinkeby testnet:
+
+    - https://rinkeby.etherscan.io/
+
+
+  All USD calls are against the overhide-ledger test:
+   
+    - https://test.ohledger.com/pay
+
+
+  For USD testing ensure your receiving USD address is
+  setup as provider:
+
+    - https://test.ohledger.com/reap
+
 
                ,--------------.
                | INSTRUCTIONS |
