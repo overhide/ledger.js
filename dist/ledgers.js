@@ -1817,7 +1817,7 @@ module.exports = g;
   _getPrototypeOf = _getPrototypeOf && _getPrototypeOf.hasOwnProperty('default') ? _getPrototypeOf['default'] : _getPrototypeOf;
   _set = _set && _set.hasOwnProperty('default') ? _set['default'] : _set;
   _inherits = _inherits && _inherits.hasOwnProperty('default') ? _inherits['default'] : _inherits;
-  var version = "1.0.0-beta.52";
+  var version = "1.0.0-beta.54";
 
   var Web3 = function (_AbstractWeb3Module) {
     _inherits(Web3, _AbstractWeb3Module);
@@ -2294,7 +2294,7 @@ module.exports = _setPrototypeOf;
       key: "isSameProvider",
       value: function isSameProvider(provider) {
         if (isObject(provider)) {
-          if (this.currentProvider.constructor.name === provider.constructor.name) {
+          if (this.currentProvider && this.currentProvider.constructor.name === provider.constructor.name) {
             return this.currentProvider.host === provider.host;
           }
 
@@ -2472,6 +2472,10 @@ module.exports = isObject;
     _createClass(ProviderResolver, [{
       key: "resolve",
       value: function resolve(provider, net) {
+        if (!provider) {
+          return provider;
+        }
+
         if (typeof provider === 'string') {
           if (/^http(s)?:\/\//i.test(provider)) {
             return this.providersModuleFactory.createHttpProvider(provider);
@@ -2705,7 +2709,7 @@ module.exports = isObject;
       key: "onConnect",
       value: function () {
         var _onConnect = _asyncToGenerator(_regeneratorRuntime.mark(function _callee2() {
-          var subscriptionKeys, subscriptionId, _arr, _i, key;
+          var subscriptionKeys, subscriptionId, _i, _subscriptionKeys, key;
 
           return _regeneratorRuntime.wrap(function _callee2$(_context2) {
             while (1) {
@@ -2714,38 +2718,37 @@ module.exports = isObject;
                   subscriptionKeys = Object.keys(this.subscriptions);
 
                   if (!(subscriptionKeys.length > 0)) {
-                    _context2.next = 14;
+                    _context2.next = 13;
                     break;
                   }
 
-                  _arr = subscriptionKeys;
-                  _i = 0;
+                  _i = 0, _subscriptionKeys = subscriptionKeys;
 
-                case 4:
-                  if (!(_i < _arr.length)) {
-                    _context2.next = 14;
+                case 3:
+                  if (!(_i < _subscriptionKeys.length)) {
+                    _context2.next = 13;
                     break;
                   }
 
-                  key = _arr[_i];
-                  _context2.next = 8;
+                  key = _subscriptionKeys[_i];
+                  _context2.next = 7;
                   return this.subscribe(this.subscriptions[key].subscribeMethod, this.subscriptions[key].parameters[0], this.subscriptions[key].parameters.slice(1));
 
-                case 8:
+                case 7:
                   subscriptionId = _context2.sent;
                   delete this.subscriptions[subscriptionId];
                   this.subscriptions[key].id = subscriptionId;
 
-                case 11:
+                case 10:
                   _i++;
-                  _context2.next = 4;
+                  _context2.next = 3;
                   break;
 
-                case 14:
+                case 13:
                   this.emit(this.SOCKET_CONNECT);
                   this.emit(this.CONNECT);
 
-                case 16:
+                case 15:
                 case "end":
                   return _context2.stop();
               }
@@ -2990,6 +2993,8 @@ module.exports = isObject;
         var _this3 = this;
 
         return new Promise(function (resolve, reject) {
+          _this3.once('error', reject);
+
           if (!_this3.isConnecting()) {
             var timeout, id;
 
@@ -3139,6 +3144,8 @@ module.exports = isObject;
         var _this3 = this;
 
         return new Promise(function (resolve, reject) {
+          _this3.once('error', reject);
+
           if (!_this3.connection.writable) {
             _this3.connection.connect({
               path: _this3.path
@@ -6347,7 +6354,7 @@ module.exports = __webpack_require__(25).version;
 /* 25 */
 /***/ (function(module) {
 
-module.exports = {"_args":[["websocket@1.0.28","C:\\jj\\src\\ledgers.js"]],"_from":"websocket@1.0.28","_id":"websocket@1.0.28","_inBundle":false,"_integrity":"sha512-00y/20/80P7H4bCYkzuuvvfDvh+dgtXi5kzDf3UcZwN6boTYaKvsrtZ5lIYm1Gsg48siMErd9M4zjSYfYFHTrA==","_location":"/websocket","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"websocket@1.0.28","name":"websocket","escapedName":"websocket","rawSpec":"1.0.28","saveSpec":null,"fetchSpec":"1.0.28"},"_requiredBy":["/web3-providers"],"_resolved":"https://registry.npmjs.org/websocket/-/websocket-1.0.28.tgz","_spec":"1.0.28","_where":"C:\\jj\\src\\ledgers.js","author":{"name":"Brian McKelvey","email":"theturtle32@gmail.com","url":"https://github.com/theturtle32"},"browser":"lib/browser.js","bugs":{"url":"https://github.com/theturtle32/WebSocket-Node/issues"},"config":{"verbose":false},"contributors":[{"name":"Iñaki Baz Castillo","email":"ibc@aliax.net","url":"http://dev.sipdoc.net"}],"dependencies":{"debug":"^2.2.0","nan":"^2.11.0","typedarray-to-buffer":"^3.1.5","yaeti":"^0.0.6"},"description":"Websocket Client & Server Library implementing the WebSocket protocol as specified in RFC 6455.","devDependencies":{"buffer-equal":"^1.0.0","faucet":"^0.0.1","gulp":"git+https://github.com/gulpjs/gulp.git#4.0","gulp-jshint":"^2.0.4","jshint":"^2.0.0","jshint-stylish":"^2.2.1","tape":"^4.9.1"},"directories":{"lib":"./lib"},"engines":{"node":">=0.10.0"},"homepage":"https://github.com/theturtle32/WebSocket-Node","keywords":["websocket","websockets","socket","networking","comet","push","RFC-6455","realtime","server","client"],"license":"Apache-2.0","main":"index","name":"websocket","repository":{"type":"git","url":"git+https://github.com/theturtle32/WebSocket-Node.git"},"scripts":{"gulp":"gulp","install":"(node-gyp rebuild 2> builderror.log) || (exit 0)","test":"faucet test/unit"},"version":"1.0.28"};
+module.exports = {"_args":[["websocket@1.0.28","."]],"_from":"websocket@1.0.28","_id":"websocket@1.0.28","_inBundle":false,"_integrity":"sha512-00y/20/80P7H4bCYkzuuvvfDvh+dgtXi5kzDf3UcZwN6boTYaKvsrtZ5lIYm1Gsg48siMErd9M4zjSYfYFHTrA==","_location":"/websocket","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"websocket@1.0.28","name":"websocket","escapedName":"websocket","rawSpec":"1.0.28","saveSpec":null,"fetchSpec":"1.0.28"},"_requiredBy":["/web3-providers"],"_resolved":"https://registry.npmjs.org/websocket/-/websocket-1.0.28.tgz","_spec":"1.0.28","_where":".","author":{"name":"Brian McKelvey","email":"theturtle32@gmail.com","url":"https://github.com/theturtle32"},"browser":"lib/browser.js","bugs":{"url":"https://github.com/theturtle32/WebSocket-Node/issues"},"config":{"verbose":false},"contributors":[{"name":"Iñaki Baz Castillo","email":"ibc@aliax.net","url":"http://dev.sipdoc.net"}],"dependencies":{"debug":"^2.2.0","nan":"^2.11.0","typedarray-to-buffer":"^3.1.5","yaeti":"^0.0.6"},"description":"Websocket Client & Server Library implementing the WebSocket protocol as specified in RFC 6455.","devDependencies":{"buffer-equal":"^1.0.0","faucet":"^0.0.1","gulp":"git+https://github.com/gulpjs/gulp.git#4.0","gulp-jshint":"^2.0.4","jshint":"^2.0.0","jshint-stylish":"^2.2.1","tape":"^4.9.1"},"directories":{"lib":"./lib"},"engines":{"node":">=0.10.0"},"homepage":"https://github.com/theturtle32/WebSocket-Node","keywords":["websocket","websockets","socket","networking","comet","push","RFC-6455","realtime","server","client"],"license":"Apache-2.0","main":"index","name":"websocket","repository":{"type":"git","url":"git+https://github.com/theturtle32/WebSocket-Node.git"},"scripts":{"gulp":"gulp","install":"(node-gyp rebuild 2> builderror.log) || (exit 0)","test":"faucet test/unit"},"version":"1.0.28"};
 
 /***/ }),
 /* 26 */
@@ -15829,7 +15836,7 @@ module.exports = isArray;
       key: "execute",
       value: function () {
         var _execute = _asyncToGenerator(_regeneratorRuntime.mark(function _callee() {
-          var response;
+          var error, response;
           return _regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
               switch (_context.prev = _context.next) {
@@ -15837,46 +15844,67 @@ module.exports = isArray;
                   this.beforeExecution(this.moduleInstance);
 
                   if (!(this.parameters.length !== this.parametersAmount)) {
-                    _context.next = 3;
+                    _context.next = 7;
                     break;
                   }
 
-                  throw new Error("Invalid Arguments length: expected: ".concat(this.parametersAmount, ", given: ").concat(this.parameters.length));
+                  error = new Error("Invalid Arguments length: expected: ".concat(this.parametersAmount, ", given: ").concat(this.parameters.length));
 
-                case 3:
-                  _context.prev = 3;
-                  _context.next = 6;
-                  return this.moduleInstance.currentProvider.send(this.rpcMethod, this.parameters);
+                  if (!this.callback) {
+                    _context.next = 6;
+                    break;
+                  }
+
+                  this.callback(error, null);
+                  return _context.abrupt("return");
 
                 case 6:
+                  throw error;
+
+                case 7:
+                  _context.prev = 7;
+                  _context.next = 10;
+                  return this.moduleInstance.currentProvider.send(this.rpcMethod, this.parameters);
+
+                case 10:
                   response = _context.sent;
 
                   if (response) {
                     response = this.afterExecution(response);
                   }
 
-                  if (this.callback) {
-                    this.callback(false, response);
+                  if (!this.callback) {
+                    _context.next = 15;
+                    break;
                   }
 
+                  this.callback(false, response);
+                  return _context.abrupt("return");
+
+                case 15:
                   return _context.abrupt("return", response);
 
-                case 12:
-                  _context.prev = 12;
-                  _context.t0 = _context["catch"](3);
+                case 18:
+                  _context.prev = 18;
+                  _context.t0 = _context["catch"](7);
 
-                  if (this.callback) {
-                    this.callback(_context.t0, null);
+                  if (!this.callback) {
+                    _context.next = 23;
+                    break;
                   }
 
+                  this.callback(_context.t0, null);
+                  return _context.abrupt("return");
+
+                case 23:
                   throw _context.t0;
 
-                case 16:
+                case 24:
                 case "end":
                   return _context.stop();
               }
             }
-          }, _callee, this, [[3, 12]]);
+          }, _callee, this, [[7, 18]]);
         }));
 
         function execute() {
@@ -16192,7 +16220,7 @@ module.exports = isArray;
                   }
 
                   _context2.next = 12;
-                  return _this3.getBlockByNumber(_this3.increaseBlockNumber(_this3.lastBlock.number));
+                  return _this3.getBlockByNumber(_this3.lastBlock.number + 1);
 
                 case 12:
                   block = _context2.sent;
@@ -16219,8 +16247,8 @@ module.exports = isArray;
 
                 case 21:
                   if (_this3.isConfirmed()) {
-                    clearInterval(interval);
                     observer.complete();
+                    clearInterval(interval);
                   }
 
                 case 22:
@@ -16288,11 +16316,6 @@ module.exports = isArray;
       key: "isTimeoutTimeExceeded",
       value: function isTimeoutTimeExceeded() {
         return this.confirmationChecks === this.timeout;
-      }
-    }, {
-      key: "increaseBlockNumber",
-      value: function increaseBlockNumber(blockNumber) {
-        return '0x' + (parseInt(blockNumber, 16) + 1).toString(16);
       }
     }]);
 
@@ -16632,6 +16655,38 @@ module.exports = isArray;
     return GetWorkMethod;
   }(AbstractMethod);
 
+  var GetProofMethod = function (_AbstractMethod) {
+    _inherits(GetProofMethod, _AbstractMethod);
+
+    function GetProofMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, GetProofMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(GetProofMethod).call(this, 'eth_getProof', 3, utils, formatters, moduleInstance));
+    }
+
+    _createClass(GetProofMethod, [{
+      key: "beforeExecution",
+      value: function beforeExecution(moduleInstance) {
+        this.parameters[0] = this.formatters.inputAddressFormatter(this.parameters[0]);
+        this.parameters[2] = this.formatters.inputDefaultBlockNumberFormatter(this.parameters[2], moduleInstance);
+      }
+    }, {
+      key: "afterExecution",
+      value: function afterExecution(response) {
+        response.nonce = this.utils.toBN(response.nonce).toString(10);
+        response.balance = this.utils.toBN(response.balance).toString(10);
+
+        for (var i = 0; i < response.storageProof.length; i++) {
+          response.storageProof[i].value = this.utils.toBN(response.storageProof[i].value).toString(10);
+        }
+
+        return response;
+      }
+    }]);
+
+    return GetProofMethod;
+  }(AbstractMethod);
+
   var GetAccountsMethod = function (_AbstractMethod) {
     _inherits(GetAccountsMethod, _AbstractMethod);
 
@@ -16948,7 +17003,7 @@ module.exports = isArray;
               return;
             }
 
-            _this2.promiEvent.emit('confirmation', confirmations, _this2.afterExecution(receipt));
+            _this2.promiEvent.emit('confirmation', confirmations, _this2.formatters.outputTransactionFormatter(receipt));
           }, function (error) {
             _this2.handleError(error, receipt, confirmations);
           }, function () {
@@ -17007,6 +17062,11 @@ module.exports = isArray;
       key: "beforeExecution",
       value: function beforeExecution(moduleInstance) {
         this.parameters[0] = this.formatters.inputTransactionFormatter(this.parameters[0], moduleInstance);
+      }
+    }, {
+      key: "afterExecution",
+      value: function afterExecution(response) {
+        return this.formatters.outputTransactionFormatter(response);
       }
     }]);
 
@@ -17189,6 +17249,33 @@ module.exports = isArray;
     return GetTransactionMethod;
   }(AbstractMethod);
 
+  var GetPendingTransactionsMethod = function (_AbstractMethod) {
+    _inherits(GetPendingTransactionsMethod, _AbstractMethod);
+
+    function GetPendingTransactionsMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, GetPendingTransactionsMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(GetPendingTransactionsMethod).call(this, 'eth_pendingTransactions', 0, utils, formatters, moduleInstance));
+    }
+
+    _createClass(GetPendingTransactionsMethod, [{
+      key: "afterExecution",
+      value: function afterExecution(response) {
+        var _this = this;
+
+        if (response) {
+          return response.map(function (item) {
+            return _this.formatters.outputTransactionFormatter(item);
+          });
+        }
+
+        return response;
+      }
+    }]);
+
+    return GetPendingTransactionsMethod;
+  }(AbstractMethod);
+
   var GetTransactionByBlockHashAndIndexMethod = function (_AbstractGetTransacti) {
     _inherits(GetTransactionByBlockHashAndIndexMethod, _AbstractGetTransacti);
 
@@ -17221,6 +17308,13 @@ module.exports = isArray;
 
       return _possibleConstructorReturn(this, _getPrototypeOf(SendRawTransactionMethod).call(this, 'eth_sendRawTransaction', 1, utils, formatters, moduleInstance, transactionObserver));
     }
+
+    _createClass(SendRawTransactionMethod, [{
+      key: "afterExecution",
+      value: function afterExecution(response) {
+        return this.formatters.outputTransactionFormatter(response);
+      }
+    }]);
 
     return SendRawTransactionMethod;
   }(AbstractObservedTransactionMethod);
@@ -17822,6 +17916,643 @@ module.exports = isArray;
     return ShhVersionMethod;
   }(AbstractMethod);
 
+  var BackTraceAtMethod = function (_AbstractMethod) {
+    _inherits(BackTraceAtMethod, _AbstractMethod);
+
+    function BackTraceAtMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, BackTraceAtMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(BackTraceAtMethod).call(this, 'debug_backtraceAt', 1, utils, formatters, moduleInstance));
+    }
+
+    return BackTraceAtMethod;
+  }(AbstractMethod);
+
+  var BlockProfileMethod = function (_AbstractMethod) {
+    _inherits(BlockProfileMethod, _AbstractMethod);
+
+    function BlockProfileMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, BlockProfileMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(BlockProfileMethod).call(this, 'debug_blockProfile', 2, utils, formatters, moduleInstance));
+    }
+
+    _createClass(BlockProfileMethod, [{
+      key: "beforeExecution",
+      value: function beforeExecution(moduleInstance) {
+        this.parameters[1] = this.utils.numberToHex(this.parameters[1]);
+      }
+    }]);
+
+    return BlockProfileMethod;
+  }(AbstractMethod);
+
+  var CpuProfileMethod = function (_AbstractMethod) {
+    _inherits(CpuProfileMethod, _AbstractMethod);
+
+    function CpuProfileMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, CpuProfileMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(CpuProfileMethod).call(this, 'debug_cpuProfile', 2, utils, formatters, moduleInstance));
+    }
+
+    _createClass(CpuProfileMethod, [{
+      key: "beforeExecution",
+      value: function beforeExecution(moduleInstance) {
+        this.parameters[1] = this.utils.numberToHex(this.parameters[1]);
+      }
+    }]);
+
+    return CpuProfileMethod;
+  }(AbstractMethod);
+
+  var DumpBlockMethod = function (_AbstractMethod) {
+    _inherits(DumpBlockMethod, _AbstractMethod);
+
+    function DumpBlockMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, DumpBlockMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(DumpBlockMethod).call(this, 'debug_dumpBlock', 1, utils, formatters, moduleInstance));
+    }
+
+    _createClass(DumpBlockMethod, [{
+      key: "beforeExecution",
+      value: function beforeExecution(moduleInstance) {
+        this.parameters[0] = this.utils.numberToHex(this.parameters[0]);
+      }
+    }]);
+
+    return DumpBlockMethod;
+  }(AbstractMethod);
+
+  var GcStatsMethod = function (_AbstractMethod) {
+    _inherits(GcStatsMethod, _AbstractMethod);
+
+    function GcStatsMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, GcStatsMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(GcStatsMethod).call(this, 'debug_gcStats', 0, utils, formatters, moduleInstance));
+    }
+
+    return GcStatsMethod;
+  }(AbstractMethod);
+
+  var GetBlockRlpMethod = function (_AbstractMethod) {
+    _inherits(GetBlockRlpMethod, _AbstractMethod);
+
+    function GetBlockRlpMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, GetBlockRlpMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(GetBlockRlpMethod).call(this, 'debug_getBlockRlp', 1, utils, formatters, moduleInstance));
+    }
+
+    _createClass(GetBlockRlpMethod, [{
+      key: "beforeExecution",
+      value: function beforeExecution(moduleInstance) {
+        this.parameters[0] = this.utils.numberToHex(this.parameters[0]);
+      }
+    }]);
+
+    return GetBlockRlpMethod;
+  }(AbstractMethod);
+
+  var GoTraceMethod = function (_AbstractMethod) {
+    _inherits(GoTraceMethod, _AbstractMethod);
+
+    function GoTraceMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, GoTraceMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(GoTraceMethod).call(this, 'debug_goTrace', 2, utils, formatters, moduleInstance));
+    }
+
+    _createClass(GoTraceMethod, [{
+      key: "beforeExecution",
+      value: function beforeExecution(moduleInstance) {
+        this.parameters[1] = this.utils.numberToHex(this.parameters[1]);
+      }
+    }]);
+
+    return GoTraceMethod;
+  }(AbstractMethod);
+
+  var MemStatsMethod = function (_AbstractMethod) {
+    _inherits(MemStatsMethod, _AbstractMethod);
+
+    function MemStatsMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, MemStatsMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(MemStatsMethod).call(this, 'debug_memStats', 0, utils, formatters, moduleInstance));
+    }
+
+    return MemStatsMethod;
+  }(AbstractMethod);
+
+  var SeedHashMethod = function (_AbstractMethod) {
+    _inherits(SeedHashMethod, _AbstractMethod);
+
+    function SeedHashMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, SeedHashMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(SeedHashMethod).call(this, 'debug_seedHash', 0, utils, formatters, moduleInstance));
+    }
+
+    _createClass(SeedHashMethod, [{
+      key: "beforeExecution",
+      value: function beforeExecution(moduleInstance) {
+        this.parameters[0] = this.utils.numberToHex(this.parameters[0]);
+      }
+    }]);
+
+    return SeedHashMethod;
+  }(AbstractMethod);
+
+  var SetBlockProfileRateMethod = function (_AbstractMethod) {
+    _inherits(SetBlockProfileRateMethod, _AbstractMethod);
+
+    function SetBlockProfileRateMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, SetBlockProfileRateMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(SetBlockProfileRateMethod).call(this, 'debug_setBlockProfileRate', 1, utils, formatters, moduleInstance));
+    }
+
+    _createClass(SetBlockProfileRateMethod, [{
+      key: "beforeExecution",
+      value: function beforeExecution(moduleInstance) {
+        this.parameters[0] = this.utils.numberToHex(this.parameters[0]);
+      }
+    }]);
+
+    return SetBlockProfileRateMethod;
+  }(AbstractMethod);
+
+  var SetHeadMethod = function (_AbstractMethod) {
+    _inherits(SetHeadMethod, _AbstractMethod);
+
+    function SetHeadMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, SetHeadMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(SetHeadMethod).call(this, 'debug_setHead', 1, utils, formatters, moduleInstance));
+    }
+
+    _createClass(SetHeadMethod, [{
+      key: "beforeExecution",
+      value: function beforeExecution(moduleInstance) {
+        this.parameters[0] = this.utils.numberToHex(this.parameters[0]);
+      }
+    }]);
+
+    return SetHeadMethod;
+  }(AbstractMethod);
+
+  var StacksMethod = function (_AbstractMethod) {
+    _inherits(StacksMethod, _AbstractMethod);
+
+    function StacksMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, StacksMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(StacksMethod).call(this, 'debug_stacks', 0, utils, formatters, moduleInstance));
+    }
+
+    return StacksMethod;
+  }(AbstractMethod);
+
+  var StartCpuProfileMethod = function (_AbstractMethod) {
+    _inherits(StartCpuProfileMethod, _AbstractMethod);
+
+    function StartCpuProfileMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, StartCpuProfileMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(StartCpuProfileMethod).call(this, 'debug_startCPUProfile', 1, utils, formatters, moduleInstance));
+    }
+
+    return StartCpuProfileMethod;
+  }(AbstractMethod);
+
+  var StartGoTraceMethod = function (_AbstractMethod) {
+    _inherits(StartGoTraceMethod, _AbstractMethod);
+
+    function StartGoTraceMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, StartGoTraceMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(StartGoTraceMethod).call(this, 'debug_startGoTrace', 1, utils, formatters, moduleInstance));
+    }
+
+    return StartGoTraceMethod;
+  }(AbstractMethod);
+
+  var StopCpuProfileMethod = function (_AbstractMethod) {
+    _inherits(StopCpuProfileMethod, _AbstractMethod);
+
+    function StopCpuProfileMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, StopCpuProfileMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(StopCpuProfileMethod).call(this, 'debug_stopCPUProfile', 0, utils, formatters, moduleInstance));
+    }
+
+    return StopCpuProfileMethod;
+  }(AbstractMethod);
+
+  var StopGoTraceMethod = function (_AbstractMethod) {
+    _inherits(StopGoTraceMethod, _AbstractMethod);
+
+    function StopGoTraceMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, StopGoTraceMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(StopGoTraceMethod).call(this, 'debug_stopGoTrace', 0, utils, formatters, moduleInstance));
+    }
+
+    return StopGoTraceMethod;
+  }(AbstractMethod);
+
+  var TraceBlockByHashMethod = function (_AbstractMethod) {
+    _inherits(TraceBlockByHashMethod, _AbstractMethod);
+
+    function TraceBlockByHashMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, TraceBlockByHashMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(TraceBlockByHashMethod).call(this, 'debug_traceBlockByHash', 2, utils, formatters, moduleInstance));
+    }
+
+    return TraceBlockByHashMethod;
+  }(AbstractMethod);
+
+  var TraceBlockByNumberMethod = function (_AbstractMethod) {
+    _inherits(TraceBlockByNumberMethod, _AbstractMethod);
+
+    function TraceBlockByNumberMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, TraceBlockByNumberMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(TraceBlockByNumberMethod).call(this, 'debug_traceBlockByNumber', 2, utils, formatters, moduleInstance));
+    }
+
+    _createClass(TraceBlockByNumberMethod, [{
+      key: "beforeExecution",
+      value: function beforeExecution(moduleInstance) {
+        this.parameters[0] = this.utils.numberToHex(this.parameters[0]);
+      }
+    }]);
+
+    return TraceBlockByNumberMethod;
+  }(AbstractMethod);
+
+  var TraceBlockFromFileMethod = function (_AbstractMethod) {
+    _inherits(TraceBlockFromFileMethod, _AbstractMethod);
+
+    function TraceBlockFromFileMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, TraceBlockFromFileMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(TraceBlockFromFileMethod).call(this, 'debug_traceBlockFromFile', 2, utils, formatters, moduleInstance));
+    }
+
+    return TraceBlockFromFileMethod;
+  }(AbstractMethod);
+
+  var TraceBlockMethod = function (_AbstractMethod) {
+    _inherits(TraceBlockMethod, _AbstractMethod);
+
+    function TraceBlockMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, TraceBlockMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(TraceBlockMethod).call(this, 'debug_traceBlock', 2, utils, formatters, moduleInstance));
+    }
+
+    return TraceBlockMethod;
+  }(AbstractMethod);
+
+  var TraceTransactionMethod = function (_AbstractMethod) {
+    _inherits(TraceTransactionMethod, _AbstractMethod);
+
+    function TraceTransactionMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, TraceTransactionMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(TraceTransactionMethod).call(this, 'debug_traceTransaction', 2, utils, formatters, moduleInstance));
+    }
+
+    return TraceTransactionMethod;
+  }(AbstractMethod);
+
+  var VerbosityMethod = function (_AbstractMethod) {
+    _inherits(VerbosityMethod, _AbstractMethod);
+
+    function VerbosityMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, VerbosityMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(VerbosityMethod).call(this, 'debug_verbosity', 1, utils, formatters, moduleInstance));
+    }
+
+    _createClass(VerbosityMethod, [{
+      key: "beforeExecution",
+      value: function beforeExecution(moduleInstance) {
+        this.parameters[0] = this.utils.numberToHex(this.parameters[0]);
+      }
+    }]);
+
+    return VerbosityMethod;
+  }(AbstractMethod);
+
+  var VmoduleMethod = function (_AbstractMethod) {
+    _inherits(VmoduleMethod, _AbstractMethod);
+
+    function VmoduleMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, VmoduleMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(VmoduleMethod).call(this, 'debug_vmodule', 1, utils, formatters, moduleInstance));
+    }
+
+    return VmoduleMethod;
+  }(AbstractMethod);
+
+  var WriteBlockProfileMethod = function (_AbstractMethod) {
+    _inherits(WriteBlockProfileMethod, _AbstractMethod);
+
+    function WriteBlockProfileMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, WriteBlockProfileMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(WriteBlockProfileMethod).call(this, 'debug_writeBlockProfile', 1, utils, formatters, moduleInstance));
+    }
+
+    return WriteBlockProfileMethod;
+  }(AbstractMethod);
+
+  var WriteMemProfileMethod = function (_AbstractMethod) {
+    _inherits(WriteMemProfileMethod, _AbstractMethod);
+
+    function WriteMemProfileMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, WriteMemProfileMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(WriteMemProfileMethod).call(this, 'debug_writeMemProfile', 1, utils, formatters, moduleInstance));
+    }
+
+    return WriteMemProfileMethod;
+  }(AbstractMethod);
+
+  var ContentMethod = function (_AbstractMethod) {
+    _inherits(ContentMethod, _AbstractMethod);
+
+    function ContentMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, ContentMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(ContentMethod).call(this, 'txpool_content', 0, utils, formatters, moduleInstance));
+    }
+
+    return ContentMethod;
+  }(AbstractMethod);
+
+  var InspectMethod = function (_AbstractMethod) {
+    _inherits(InspectMethod, _AbstractMethod);
+
+    function InspectMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, InspectMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(InspectMethod).call(this, 'txpool_inspect', 0, utils, formatters, moduleInstance));
+    }
+
+    return InspectMethod;
+  }(AbstractMethod);
+
+  var StatusMethod = function (_AbstractMethod) {
+    _inherits(StatusMethod, _AbstractMethod);
+
+    function StatusMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, StatusMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(StatusMethod).call(this, 'txpool_status', 0, utils, formatters, moduleInstance));
+    }
+
+    _createClass(StatusMethod, [{
+      key: "afterExecution",
+      value: function afterExecution(response) {
+        if (response) {
+          response.pending = this.utils.hexToNumber(response.pending);
+          response.queued = this.utils.hexToNumber(response.queued);
+        }
+
+        return response;
+      }
+    }]);
+
+    return StatusMethod;
+  }(AbstractMethod);
+
+  var AddPeerMethod = function (_AbstractMethod) {
+    _inherits(AddPeerMethod, _AbstractMethod);
+
+    function AddPeerMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, AddPeerMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(AddPeerMethod).call(this, 'admin_addPeer', 1, utils, formatters, moduleInstance));
+    }
+
+    return AddPeerMethod;
+  }(AbstractMethod);
+
+  var DataDirectoryMethod = function (_AbstractMethod) {
+    _inherits(DataDirectoryMethod, _AbstractMethod);
+
+    function DataDirectoryMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, DataDirectoryMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(DataDirectoryMethod).call(this, 'admin_datadir', 0, utils, formatters, moduleInstance));
+    }
+
+    return DataDirectoryMethod;
+  }(AbstractMethod);
+
+  var NodeInfoMethod = function (_AbstractMethod) {
+    _inherits(NodeInfoMethod, _AbstractMethod);
+
+    function NodeInfoMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, NodeInfoMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(NodeInfoMethod).call(this, 'admin_nodeInfo', 0, utils, formatters, moduleInstance));
+    }
+
+    _createClass(NodeInfoMethod, [{
+      key: "afterExecution",
+      value: function afterExecution(response) {
+        if (response) {
+          response.ports.discovery = this.utils.hexToNumber(response.ports.discovery);
+          response.ports.listener = this.utils.hexToNumber(response.ports.listener);
+        }
+
+        return response;
+      }
+    }]);
+
+    return NodeInfoMethod;
+  }(AbstractMethod);
+
+  var PeersMethod = function (_AbstractMethod) {
+    _inherits(PeersMethod, _AbstractMethod);
+
+    function PeersMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, PeersMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(PeersMethod).call(this, 'admin_peers', 0, utils, formatters, moduleInstance));
+    }
+
+    return PeersMethod;
+  }(AbstractMethod);
+
+  var SetSolcMethod = function (_AbstractMethod) {
+    _inherits(SetSolcMethod, _AbstractMethod);
+
+    function SetSolcMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, SetSolcMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(SetSolcMethod).call(this, 'admin_setSolc', 1, utils, formatters, moduleInstance));
+    }
+
+    return SetSolcMethod;
+  }(AbstractMethod);
+
+  var StartRpcMethod = function (_AbstractMethod) {
+    _inherits(StartRpcMethod, _AbstractMethod);
+
+    function StartRpcMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, StartRpcMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(StartRpcMethod).call(this, 'admin_startRPC', 4, utils, formatters, moduleInstance));
+    }
+
+    _createClass(StartRpcMethod, [{
+      key: "beforeExecution",
+      value: function beforeExecution(moduleInstance) {
+        if (this.parameters[1]) {
+          this.parameters[1] = this.utils.numberToHex(this.parameters[1]);
+        }
+      }
+    }]);
+
+    return StartRpcMethod;
+  }(AbstractMethod);
+
+  var StartWsMethod = function (_AbstractMethod) {
+    _inherits(StartWsMethod, _AbstractMethod);
+
+    function StartWsMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, StartWsMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(StartWsMethod).call(this, 'admin_startWS', 4, utils, formatters, moduleInstance));
+    }
+
+    _createClass(StartWsMethod, [{
+      key: "beforeExecution",
+      value: function beforeExecution(moduleInstance) {
+        if (this.parameters[1]) {
+          this.parameters[1] = this.utils.numberToHex(this.parameters[1]);
+        }
+      }
+    }]);
+
+    return StartWsMethod;
+  }(AbstractMethod);
+
+  var StopRpcMethod = function (_AbstractMethod) {
+    _inherits(StopRpcMethod, _AbstractMethod);
+
+    function StopRpcMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, StopRpcMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(StopRpcMethod).call(this, 'admin_stopRPC', 0, utils, formatters, moduleInstance));
+    }
+
+    return StopRpcMethod;
+  }(AbstractMethod);
+
+  var StopWsMethod = function (_AbstractMethod) {
+    _inherits(StopWsMethod, _AbstractMethod);
+
+    function StopWsMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, StopWsMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(StopWsMethod).call(this, 'admin_stopWS', 0, utils, formatters, moduleInstance));
+    }
+
+    return StopWsMethod;
+  }(AbstractMethod);
+
+  var SetEtherBaseMethod = function (_AbstractMethod) {
+    _inherits(SetEtherBaseMethod, _AbstractMethod);
+
+    function SetEtherBaseMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, SetEtherBaseMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(SetEtherBaseMethod).call(this, 'miner_setEtherbase', 1, utils, formatters, moduleInstance));
+    }
+
+    _createClass(SetEtherBaseMethod, [{
+      key: "beforeExecution",
+      value: function beforeExecution(moduleInstance) {
+        this.parameters[0] = this.formatters.inputAddressFormatter(this.parameters[0]);
+      }
+    }]);
+
+    return SetEtherBaseMethod;
+  }(AbstractMethod);
+
+  var SetExtraMethod = function (_AbstractMethod) {
+    _inherits(SetExtraMethod, _AbstractMethod);
+
+    function SetExtraMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, SetExtraMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(SetExtraMethod).call(this, 'miner_setExtra', 1, utils, formatters, moduleInstance));
+    }
+
+    return SetExtraMethod;
+  }(AbstractMethod);
+
+  var SetGasPriceMethod = function (_AbstractMethod) {
+    _inherits(SetGasPriceMethod, _AbstractMethod);
+
+    function SetGasPriceMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, SetGasPriceMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(SetGasPriceMethod).call(this, 'miner_setGasPrice', 1, utils, formatters, moduleInstance));
+    }
+
+    _createClass(SetGasPriceMethod, [{
+      key: "beforeExecution",
+      value: function beforeExecution(moduleInstance) {
+        this.parameters[0] = this.utils.numberToHex(this.parameters[0]);
+      }
+    }]);
+
+    return SetGasPriceMethod;
+  }(AbstractMethod);
+
+  var StartMinerMethod = function (_AbstractMethod) {
+    _inherits(StartMinerMethod, _AbstractMethod);
+
+    function StartMinerMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, StartMinerMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(StartMinerMethod).call(this, 'miner_start', 1, utils, formatters, moduleInstance));
+    }
+
+    _createClass(StartMinerMethod, [{
+      key: "beforeExecution",
+      value: function beforeExecution(moduleInstance) {
+        this.parameters[0] = this.utils.numberToHex(this.parameters[0]);
+      }
+    }]);
+
+    return StartMinerMethod;
+  }(AbstractMethod);
+
+  var StopMinerMethod = function (_AbstractMethod) {
+    _inherits(StopMinerMethod, _AbstractMethod);
+
+    function StopMinerMethod(utils, formatters, moduleInstance) {
+      _classCallCheck(this, StopMinerMethod);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(StopMinerMethod).call(this, 'miner_stop', 0, utils, formatters, moduleInstance));
+    }
+
+    return StopMinerMethod;
+  }(AbstractMethod);
+
   exports.AbstractGetBlockMethod = AbstractGetBlockMethod;
   exports.AbstractGetBlockTransactionCountMethod = AbstractGetBlockTransactionCountMethod;
   exports.AbstractGetBlockUncleCountMethod = AbstractGetBlockUncleCountMethod;
@@ -17830,22 +18561,31 @@ module.exports = isArray;
   exports.AbstractMethod = AbstractMethod;
   exports.AbstractMethodFactory = AbstractMethodFactory;
   exports.AbstractObservedTransactionMethod = AbstractObservedTransactionMethod;
+  exports.AddPeerMethod = AddPeerMethod;
   exports.AddPrivateKeyMethod = AddPrivateKeyMethod;
   exports.AddSymKeyMethod = AddSymKeyMethod;
+  exports.BackTraceAtMethod = BackTraceAtMethod;
+  exports.BlockProfileMethod = BlockProfileMethod;
   exports.CallMethod = CallMethod;
   exports.ChainIdMethod = ChainIdMethod;
+  exports.ContentMethod = ContentMethod;
+  exports.CpuProfileMethod = CpuProfileMethod;
+  exports.DataDirectoryMethod = DataDirectoryMethod;
   exports.DeleteKeyPairMethod = DeleteKeyPairMethod;
   exports.DeleteMessageFilterMethod = DeleteMessageFilterMethod;
   exports.DeleteSymKeyMethod = DeleteSymKeyMethod;
+  exports.DumpBlockMethod = DumpBlockMethod;
   exports.EcRecoverMethod = EcRecoverMethod;
   exports.EstimateGasMethod = EstimateGasMethod;
   exports.EthSendTransactionMethod = EthSendTransactionMethod;
+  exports.GcStatsMethod = GcStatsMethod;
   exports.GenerateSymKeyFromPasswordMethod = GenerateSymKeyFromPasswordMethod;
   exports.GetAccountsMethod = GetAccountsMethod;
   exports.GetBalanceMethod = GetBalanceMethod;
   exports.GetBlockByHashMethod = GetBlockByHashMethod;
   exports.GetBlockByNumberMethod = GetBlockByNumberMethod;
   exports.GetBlockNumberMethod = GetBlockNumberMethod;
+  exports.GetBlockRlpMethod = GetBlockRlpMethod;
   exports.GetBlockTransactionCountByHashMethod = GetBlockTransactionCountByHashMethod;
   exports.GetBlockTransactionCountByNumberMethod = GetBlockTransactionCountByNumberMethod;
   exports.GetBlockUncleCountByBlockHashMethod = GetBlockUncleCountByBlockHashMethod;
@@ -17858,7 +18598,9 @@ module.exports = isArray;
   exports.GetInfoMethod = GetInfoMethod;
   exports.GetNodeInfoMethod = GetNodeInfoMethod;
   exports.GetPastLogsMethod = GetPastLogsMethod;
+  exports.GetPendingTransactionsMethod = GetPendingTransactionsMethod;
   exports.GetPrivateKeyMethod = GetPrivateKeyMethod;
+  exports.GetProofMethod = GetProofMethod;
   exports.GetProtocolVersionMethod = GetProtocolVersionMethod;
   exports.GetPublicKeyMethod = GetPublicKeyMethod;
   exports.GetStorageAtMethod = GetStorageAtMethod;
@@ -17871,38 +18613,71 @@ module.exports = isArray;
   exports.GetUncleByBlockHashAndIndexMethod = GetUncleByBlockHashAndIndexMethod;
   exports.GetUncleByBlockNumberAndIndexMethod = GetUncleByBlockNumberAndIndexMethod;
   exports.GetWorkMethod = GetWorkMethod;
+  exports.GoTraceMethod = GoTraceMethod;
   exports.HasKeyPairMethod = HasKeyPairMethod;
   exports.HasSymKeyMethod = HasSymKeyMethod;
   exports.ImportRawKeyMethod = ImportRawKeyMethod;
+  exports.InspectMethod = InspectMethod;
   exports.IsMiningMethod = IsMiningMethod;
   exports.IsSyncingMethod = IsSyncingMethod;
   exports.ListAccountsMethod = ListAccountsMethod;
   exports.ListeningMethod = ListeningMethod;
   exports.LockAccountMethod = LockAccountMethod;
   exports.MarkTrustedPeerMethod = MarkTrustedPeerMethod;
+  exports.MemStatsMethod = MemStatsMethod;
   exports.MethodProxy = MethodProxy;
   exports.NewAccountMethod = NewAccountMethod;
   exports.NewKeyPairMethod = NewKeyPairMethod;
   exports.NewMessageFilterMethod = NewMessageFilterMethod;
   exports.NewSymKeyMethod = NewSymKeyMethod;
+  exports.NodeInfoMethod = NodeInfoMethod;
   exports.PeerCountMethod = PeerCountMethod;
+  exports.PeersMethod = PeersMethod;
   exports.PersonalSendTransactionMethod = PersonalSendTransactionMethod;
   exports.PersonalSignMethod = PersonalSignMethod;
   exports.PersonalSignTransactionMethod = PersonalSignTransactionMethod;
   exports.PostMethod = PostMethod;
   exports.PromiEvent = PromiEvent;
   exports.RequestAccountsMethod = RequestAccountsMethod;
+  exports.SeedHashMethod = SeedHashMethod;
   exports.SendRawTransactionMethod = SendRawTransactionMethod;
   exports.SendTransactionMethod = SendTransactionMethod;
+  exports.SetBlockProfileRateMethod = SetBlockProfileRateMethod;
+  exports.SetEtherBaseMethod = SetEtherBaseMethod;
+  exports.SetExtraMethod = SetExtraMethod;
+  exports.SetGasPriceMethod = SetGasPriceMethod;
+  exports.SetHeadMethod = SetHeadMethod;
   exports.SetMaxMessageSizeMethod = SetMaxMessageSizeMethod;
   exports.SetMinPoWMethod = SetMinPoWMethod;
+  exports.SetSolcMethod = SetSolcMethod;
   exports.ShhVersionMethod = ShhVersionMethod;
   exports.SignMethod = SignMethod;
   exports.SignTransactionMethod = SignTransactionMethod;
+  exports.StacksMethod = StacksMethod;
+  exports.StartCpuProfileMethod = StartCpuProfileMethod;
+  exports.StartGoTraceMethod = StartGoTraceMethod;
+  exports.StartMinerMethod = StartMinerMethod;
+  exports.StartRpcMethod = StartRpcMethod;
+  exports.StartWsMethod = StartWsMethod;
+  exports.StatusMethod = StatusMethod;
+  exports.StopCpuProfileMethod = StopCpuProfileMethod;
+  exports.StopGoTraceMethod = StopGoTraceMethod;
+  exports.StopMinerMethod = StopMinerMethod;
+  exports.StopRpcMethod = StopRpcMethod;
+  exports.StopWsMethod = StopWsMethod;
   exports.SubmitWorkMethod = SubmitWorkMethod;
+  exports.TraceBlockByHashMethod = TraceBlockByHashMethod;
+  exports.TraceBlockByNumberMethod = TraceBlockByNumberMethod;
+  exports.TraceBlockFromFileMethod = TraceBlockFromFileMethod;
+  exports.TraceBlockMethod = TraceBlockMethod;
+  exports.TraceTransactionMethod = TraceTransactionMethod;
   exports.TransactionObserver = TransactionObserver;
   exports.UnlockAccountMethod = UnlockAccountMethod;
+  exports.VerbosityMethod = VerbosityMethod;
   exports.VersionMethod = VersionMethod;
+  exports.VmoduleMethod = VmoduleMethod;
+  exports.WriteBlockProfileMethod = WriteBlockProfileMethod;
+  exports.WriteMemProfileMethod = WriteMemProfileMethod;
   Object.defineProperty(exports, '__esModule', {
     value: true
   });
@@ -17929,15 +18704,20 @@ module.exports = isArray;
   var AbstractSubscription = function (_EventEmitter) {
     _inherits(AbstractSubscription, _EventEmitter);
 
-    function AbstractSubscription(type, method, options, utils, formatters, moduleInstance) {
+    function AbstractSubscription(type, method) {
       var _this;
+
+      var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+      var utils = arguments.length > 3 ? arguments[3] : undefined;
+      var formatters = arguments.length > 4 ? arguments[4] : undefined;
+      var moduleInstance = arguments.length > 5 ? arguments[5] : undefined;
 
       _classCallCheck(this, AbstractSubscription);
 
       _this = _possibleConstructorReturn(this, _getPrototypeOf(AbstractSubscription).call(this));
       _this.type = type;
       _this.method = method;
-      _this.options = options || null;
+      _this.options = options;
       _this.utils = utils;
       _this.formatters = formatters;
       _this.moduleInstance = moduleInstance;
@@ -17968,21 +18748,38 @@ module.exports = isArray;
         this.moduleInstance.currentProvider.subscribe(this.type, this.method, subscriptionParameters).then(function (subscriptionId) {
           _this2.id = subscriptionId;
 
+          _this2.moduleInstance.currentProvider.once('error', function (error) {
+            _this2.moduleInstance.currentProvider.removeAllListeners(_this2.id);
+
+            if (isFunction(callback)) {
+              callback(error, false);
+              return;
+            }
+
+            _this2.emit('error', error);
+
+            _this2.removeAllListeners();
+          });
+
           _this2.moduleInstance.currentProvider.on(_this2.id, function (response) {
             var formattedOutput = _this2.onNewSubscriptionItem(response.result);
 
-            _this2.emit('data', formattedOutput);
-
             if (isFunction(callback)) {
               callback(false, formattedOutput);
+              return;
             }
+
+            _this2.emit('data', formattedOutput);
           });
         }).catch(function (error) {
-          _this2.emit('error', error);
-
           if (isFunction(callback)) {
             callback(error, null);
+            return;
           }
+
+          _this2.emit('error', error);
+
+          _this2.removeAllListeners();
         });
         return this;
       }
@@ -18068,7 +18865,13 @@ module.exports = isArray;
     }, {
       key: "onNewSubscriptionItem",
       value: function onNewSubscriptionItem(subscriptionItem) {
-        return this.formatters.outputLogFormatter(subscriptionItem);
+        var log = this.formatters.outputLogFormatter(subscriptionItem);
+
+        if (log.removed) {
+          this.emit('changed', log);
+        }
+
+        return log;
       }
     }]);
 
@@ -27939,21 +28742,31 @@ function (_super) {
   };
 
   var isAddress = function isAddress(address) {
+    var chainId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
     if (!/^(0x)?[0-9a-f]{40}$/i.test(address)) {
       return false;
     } else if (/^(0x|0X)?[0-9a-f]{40}$/.test(address) || /^(0x|0X)?[0-9A-F]{40}$/.test(address)) {
       return true;
     } else {
-      return checkAddressChecksum(address);
+      return checkAddressChecksum(address, chainId);
     }
   };
 
-  var checkAddressChecksum = function checkAddressChecksum(address) {
-    address = address.replace(/^0x/i, '');
-    var addressHash = sha3(address.toLowerCase()).replace(/^0x/i, '');
+  var stripHexPrefix = function stripHexPrefix(string) {
+    return string.slice(0, 2) === '0x' ? string.slice(2) : string;
+  };
 
-    for (var i = 0; i < 40; i++) {
-      if (parseInt(addressHash[i], 16) > 7 && address[i].toUpperCase() !== address[i] || parseInt(addressHash[i], 16) <= 7 && address[i].toLowerCase() !== address[i]) {
+  var checkAddressChecksum = function checkAddressChecksum(address) {
+    var chainId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+    var stripAddress = stripHexPrefix(address).toLowerCase();
+    var prefix = chainId != null ? chainId.toString() + '0x' : '';
+    var keccakHash = Hash.keccak256(prefix + stripAddress).toString('hex').replace(/^0x/i, '');
+
+    for (var i = 0; i < stripAddress.length; i++) {
+      var output = parseInt(keccakHash[i], 16) >= 8 ? stripAddress[i].toUpperCase() : stripAddress[i];
+
+      if (stripHexPrefix(address)[i] !== output) {
         return false;
       }
     }
@@ -28121,23 +28934,23 @@ function (_super) {
     return false;
   };
 
-  var SHA3_NULL_S = '0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470';
+  var KECCAK256_NULL_S = '0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470';
 
-  var sha3 = function sha3(value) {
+  var keccak256 = function keccak256(value) {
     if (isHexStrict(value) && /^0x/i.test(value.toString())) {
       value = hexToBytes(value);
     }
 
     var returnValue = Hash.keccak256(value);
 
-    if (returnValue === SHA3_NULL_S) {
+    if (returnValue === KECCAK256_NULL_S) {
       return null;
     } else {
       return returnValue;
     }
   };
 
-  sha3._Hash = Hash;
+  keccak256._Hash = Hash;
 
   var getSignatureParameters = function getSignatureParameters(signature) {
     if (!isHexStrict(signature)) {
@@ -28155,6 +28968,34 @@ function (_super) {
       v: v
     };
   };
+
+  var utils =
+  /*#__PURE__*/
+  Object.freeze({
+    isBN: isBN,
+    isBigNumber: isBigNumber,
+    toBN: toBN,
+    toTwosComplement: toTwosComplement,
+    isAddress: isAddress,
+    stripHexPrefix: stripHexPrefix,
+    checkAddressChecksum: checkAddressChecksum,
+    leftPad: leftPad,
+    rightPad: rightPad,
+    utf8ToHex: utf8ToHex,
+    hexToUtf8: hexToUtf8,
+    hexToNumber: hexToNumber,
+    hexToNumberString: hexToNumberString,
+    numberToHex: numberToHex,
+    bytesToHex: bytesToHex,
+    hexToBytes: hexToBytes,
+    toHex: toHex,
+    isHexStrict: isHexStrict,
+    isHex: isHex,
+    isBloom: isBloom,
+    isTopic: isTopic,
+    keccak256: keccak256,
+    getSignatureParameters: getSignatureParameters
+  });
 
   var _elementaryName = function _elementaryName(name) {
     if (name.startsWith('int[')) {
@@ -28352,7 +29193,7 @@ function (_super) {
   var soliditySha3 = function soliditySha3() {
     var arguments_ = Array.prototype.slice.call(arguments);
     var hexArguments = map(arguments_, _processSoliditySha3Arguments);
-    return sha3("0x".concat(hexArguments.join('')));
+    return keccak256("0x".concat(hexArguments.join('')));
   };
 
   var jsonInterfaceMethodToString = function jsonInterfaceMethodToString(json) {
@@ -28439,7 +29280,7 @@ function (_super) {
     unit = getUnitValue(unit);
 
     if (!isBN(number) && !isString(number)) {
-      throw new Error('Please pass numbers as strings or BigNumber objects to avoid precision errors.');
+      throw new Error('Please pass numbers as strings or BN objects to avoid precision errors.');
     }
 
     return isBN(number) ? ethjsUnit.fromWei(number, unit) : ethjsUnit.fromWei(number, unit).toString(10);
@@ -28449,32 +29290,34 @@ function (_super) {
     unit = getUnitValue(unit);
 
     if (!isBN(number) && !isString(number)) {
-      throw new Error('Please pass numbers as strings or BigNumber objects to avoid precision errors.');
+      throw new Error('Please pass numbers as strings or BN objects to avoid precision errors.');
     }
 
     return isBN(number) ? ethjsUnit.toWei(number, unit) : ethjsUnit.toWei(number, unit).toString(10);
   };
 
   var toChecksumAddress = function toChecksumAddress(address) {
-    if (typeof address === 'undefined') return '';
+    var chainId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+    if (typeof address !== 'string') {
+      return '';
+    }
+
     if (!/^(0x)?[0-9a-f]{40}$/i.test(address)) throw new Error("Given address \"".concat(address, "\" is not a valid Ethereum address."));
-    address = address.toLowerCase().replace(/^0x/i, '');
-    var addressHash = sha3(address).replace(/^0x/i, '');
+    var stripAddress = stripHexPrefix$1(address).toLowerCase();
+    var prefix = chainId != null ? chainId.toString() + '0x' : '';
+    var keccakHash = Hash.keccak256(prefix + stripAddress).toString('hex').replace(/^0x/i, '');
     var checksumAddress = '0x';
 
-    for (var i = 0; i < address.length; i++) {
-      if (parseInt(addressHash[i], 16) > 7) {
-        checksumAddress += address[i].toUpperCase();
-      } else {
-        checksumAddress += address[i];
-      }
+    for (var i = 0; i < stripAddress.length; i++) {
+      checksumAddress += parseInt(keccakHash[i], 16) >= 8 ? stripAddress[i].toUpperCase() : stripAddress[i];
     }
 
     return checksumAddress;
   };
 
-  var keccak256 = sha3;
-  var sha3$1 = sha3;
+  var keccak256$1 = keccak256;
+  var sha3 = keccak256;
   var toDecimal = hexToNumber;
   var hexToNumber$1 = hexToNumber;
   var fromDecimal = numberToHex;
@@ -28503,6 +29346,8 @@ function (_super) {
   var isTopic$1 = isTopic;
   var bytesToHex$1 = bytesToHex;
   var hexToBytes$1 = hexToBytes;
+  var stripHexPrefix$1 = stripHexPrefix;
+  exports.BN = BN;
   exports.randomHex = randomhex;
   exports.asciiToHex = asciiToHex;
   exports.bytesToHex = bytesToHex$1;
@@ -28526,13 +29371,14 @@ function (_super) {
   exports.isHexStrict = isHexStrict$1;
   exports.isTopic = isTopic$1;
   exports.jsonInterfaceMethodToString = jsonInterfaceMethodToString;
-  exports.keccak256 = keccak256;
+  exports.keccak256 = keccak256$1;
   exports.numberToHex = numberToHex$1;
   exports.padLeft = padLeft;
   exports.padRight = padRight;
-  exports.sha3 = sha3$1;
+  exports.sha3 = sha3;
   exports.soliditySha3 = soliditySha3;
   exports.stringToHex = stringToHex;
+  exports.stripHexPrefix = stripHexPrefix$1;
   exports.toAscii = toAscii;
   exports.toBN = toBN$1;
   exports.toChecksumAddress = toChecksumAddress;
@@ -41750,7 +42596,7 @@ module.exports = window.crypto;
       key: "sign",
       value: function () {
         var _sign = _asyncToGenerator(_regeneratorRuntime.mark(function _callee(transaction, privateKey) {
-          var ethTx, validationResult, rlpEncoded, rawTransaction;
+          var ethTx, validationResult, rlpEncoded, rawTransaction, transactionHash;
           return _regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
               switch (_context.prev = _context.next) {
@@ -41781,20 +42627,22 @@ module.exports = window.crypto;
                 case 8:
                   rlpEncoded = ethTx.serialize().toString('hex');
                   rawTransaction = '0x' + rlpEncoded;
+                  transactionHash = this.utils.keccak256(rawTransaction);
                   return _context.abrupt("return", {
                     messageHash: Buffer.from(ethTx.hash(false)).toString('hex'),
                     v: '0x' + Buffer.from(ethTx.v).toString('hex'),
                     r: '0x' + Buffer.from(ethTx.r).toString('hex'),
                     s: '0x' + Buffer.from(ethTx.s).toString('hex'),
-                    rawTransaction: rawTransaction
+                    rawTransaction: rawTransaction,
+                    transactionHash: transactionHash
                   });
 
-                case 11:
+                case 12:
                 case "end":
                   return _context.stop();
               }
             }
-          }, _callee);
+          }, _callee, this);
         }));
 
         function sign(_x, _x2) {
@@ -41991,28 +42839,38 @@ module.exports = window.crypto;
                   this.beforeExecution(this.moduleInstance);
                   signedMessage = this.moduleInstance.accounts.sign(this.parameters[1], this.moduleInstance.accounts.wallet[this.parameters[0]].privateKey);
 
-                  if (this.callback) {
-                    this.callback(false, signedMessage);
+                  if (!this.callback) {
+                    _context.next = 6;
+                    break;
                   }
 
+                  this.callback(false, signedMessage);
+                  return _context.abrupt("return");
+
+                case 6:
                   return _context.abrupt("return", signedMessage);
 
-                case 7:
-                  _context.prev = 7;
+                case 9:
+                  _context.prev = 9;
                   _context.t0 = _context["catch"](0);
 
-                  if (this.callback) {
-                    this.callback(_context.t0, null);
+                  if (!this.callback) {
+                    _context.next = 14;
+                    break;
                   }
 
+                  this.callback(_context.t0, null);
+                  return _context.abrupt("return");
+
+                case 14:
                   throw _context.t0;
 
-                case 11:
+                case 15:
                 case "end":
                   return _context.stop();
               }
             }
-          }, _callee, this, [[0, 7]]);
+          }, _callee, this, [[0, 9]]);
         }));
 
         function signLocally() {
@@ -42082,6 +42940,7 @@ module.exports = window.crypto;
         getBlockTransactionCount: GetBlockTransactionCountMethod,
         getBlockUncleCount: GetBlockUncleCountMethod,
         getTransaction: web3CoreMethod.GetTransactionMethod,
+        getPendingTransactions: web3CoreMethod.GetPendingTransactionsMethod,
         getTransactionFromBlock: GetTransactionFromBlockMethod,
         getTransactionReceipt: web3CoreMethod.GetTransactionReceiptMethod,
         getTransactionCount: web3CoreMethod.GetTransactionCountMethod,
@@ -42096,7 +42955,8 @@ module.exports = window.crypto;
         getPastLogs: web3CoreMethod.GetPastLogsMethod,
         requestAccounts: web3CoreMethod.RequestAccountsMethod,
         getId: web3CoreMethod.VersionMethod,
-        getChainId: web3CoreMethod.ChainIdMethod
+        getChainId: web3CoreMethod.ChainIdMethod,
+        getProof: web3CoreMethod.GetProofMethod
       };
       return _this;
     }
@@ -42527,7 +43387,10 @@ module.exports = window.crypto;
     block.gasLimit = Utils.hexToNumber(block.gasLimit);
     block.gasUsed = Utils.hexToNumber(block.gasUsed);
     block.size = Utils.hexToNumber(block.size);
-    block.timestamp = Utils.hexToNumber(block.timestamp);
+
+    if (block.timestamp !== null) {
+      block.timestamp = Utils.hexToNumber(block.timestamp);
+    }
 
     if (block.number !== null) {
       block.number = Utils.hexToNumber(block.number);
@@ -42598,7 +43461,7 @@ module.exports = window.crypto;
 
   var outputLogFormatter = function outputLogFormatter(log) {
     if (typeof log.blockHash === 'string' && typeof log.transactionHash === 'string' && typeof log.logIndex === 'string') {
-      var shaId = Utils.sha3(log.blockHash.replace('0x', '') + log.transactionHash.replace('0x', '') + log.logIndex.replace('0x', ''));
+      var shaId = Utils.keccak256(log.blockHash.replace('0x', '') + log.transactionHash.replace('0x', '') + log.logIndex.replace('0x', ''));
       shaId.replace('0x', '').substr(0, 8);
       log.id = "log_".concat(shaId);
     } else if (!log.id) {
@@ -43006,7 +43869,7 @@ module.exports = window.crypto;
         }
 
         var ciphertext = Buffer.concat([cipher.update(Buffer.from(this.privateKey.replace('0x', ''), 'hex')), cipher.final()]);
-        var mac = Utils.sha3(Buffer.concat([derivedKey.slice(16, 32), Buffer.from(ciphertext, 'hex')])).replace('0x', '');
+        var mac = Utils.keccak256(Buffer.concat([derivedKey.slice(16, 32), Buffer.from(ciphertext, 'hex')])).replace('0x', '');
         return {
           version: 3,
           id: uuid.v4({
@@ -43072,7 +43935,7 @@ module.exports = window.crypto;
         }
 
         var ciphertext = Buffer.from(json.crypto.ciphertext, 'hex');
-        var mac = Utils.sha3(Buffer.concat([derivedKey.slice(16, 32), ciphertext])).replace('0x', '');
+        var mac = Utils.keccak256(Buffer.concat([derivedKey.slice(16, 32), ciphertext])).replace('0x', '');
 
         if (mac !== json.crypto.mac) {
           throw new Error('Key derivation failed - possibly wrong password');
@@ -43323,7 +44186,7 @@ module.exports = window.crypto;
                   tx.gasPrice = _context.sent;
 
                 case 10:
-                  if (tx.nonce) {
+                  if (!(!tx.nonce && tx.nonce !== 0)) {
                     _context.next = 14;
                     break;
                   }
@@ -48967,7 +49830,7 @@ elliptic.eddsa = __webpack_require__(458);
 /* 432 */
 /***/ (function(module) {
 
-module.exports = {"_args":[["elliptic@6.4.1","C:\\jj\\src\\ledgers.js"]],"_from":"elliptic@6.4.1","_id":"elliptic@6.4.1","_inBundle":false,"_integrity":"sha512-BsXLz5sqX8OHcsh7CqBMztyXARmGQ3LWPtGjJi6DiJHq5C/qvi9P3OqgswKSDftbu8+IoI/QDTAm2fFnQ9SZSQ==","_location":"/elliptic","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"elliptic@6.4.1","name":"elliptic","escapedName":"elliptic","rawSpec":"6.4.1","saveSpec":null,"fetchSpec":"6.4.1"},"_requiredBy":["/browserify-sign","/create-ecdh","/eth-lib","/secp256k1","/web3-eth-accounts/eth-lib","/web3-utils/eth-lib"],"_resolved":"https://registry.npmjs.org/elliptic/-/elliptic-6.4.1.tgz","_spec":"6.4.1","_where":"C:\\jj\\src\\ledgers.js","author":{"name":"Fedor Indutny","email":"fedor@indutny.com"},"bugs":{"url":"https://github.com/indutny/elliptic/issues"},"dependencies":{"bn.js":"^4.4.0","brorand":"^1.0.1","hash.js":"^1.0.0","hmac-drbg":"^1.0.0","inherits":"^2.0.1","minimalistic-assert":"^1.0.0","minimalistic-crypto-utils":"^1.0.0"},"description":"EC cryptography","devDependencies":{"brfs":"^1.4.3","coveralls":"^2.11.3","grunt":"^0.4.5","grunt-browserify":"^5.0.0","grunt-cli":"^1.2.0","grunt-contrib-connect":"^1.0.0","grunt-contrib-copy":"^1.0.0","grunt-contrib-uglify":"^1.0.1","grunt-mocha-istanbul":"^3.0.1","grunt-saucelabs":"^8.6.2","istanbul":"^0.4.2","jscs":"^2.9.0","jshint":"^2.6.0","mocha":"^2.1.0"},"files":["lib"],"homepage":"https://github.com/indutny/elliptic","keywords":["EC","Elliptic","curve","Cryptography"],"license":"MIT","main":"lib/elliptic.js","name":"elliptic","repository":{"type":"git","url":"git+ssh://git@github.com/indutny/elliptic.git"},"scripts":{"jscs":"jscs benchmarks/*.js lib/*.js lib/**/*.js lib/**/**/*.js test/index.js","jshint":"jscs benchmarks/*.js lib/*.js lib/**/*.js lib/**/**/*.js test/index.js","lint":"npm run jscs && npm run jshint","test":"npm run lint && npm run unit","unit":"istanbul test _mocha --reporter=spec test/index.js","version":"grunt dist && git add dist/"},"version":"6.4.1"};
+module.exports = {"_args":[["elliptic@6.4.1","."]],"_from":"elliptic@6.4.1","_id":"elliptic@6.4.1","_inBundle":false,"_integrity":"sha512-BsXLz5sqX8OHcsh7CqBMztyXARmGQ3LWPtGjJi6DiJHq5C/qvi9P3OqgswKSDftbu8+IoI/QDTAm2fFnQ9SZSQ==","_location":"/elliptic","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"elliptic@6.4.1","name":"elliptic","escapedName":"elliptic","rawSpec":"6.4.1","saveSpec":null,"fetchSpec":"6.4.1"},"_requiredBy":["/browserify-sign","/create-ecdh","/eth-lib","/secp256k1","/web3-eth-accounts/eth-lib","/web3-utils/eth-lib"],"_resolved":"https://registry.npmjs.org/elliptic/-/elliptic-6.4.1.tgz","_spec":"6.4.1","_where":".","author":{"name":"Fedor Indutny","email":"fedor@indutny.com"},"bugs":{"url":"https://github.com/indutny/elliptic/issues"},"dependencies":{"bn.js":"^4.4.0","brorand":"^1.0.1","hash.js":"^1.0.0","hmac-drbg":"^1.0.0","inherits":"^2.0.1","minimalistic-assert":"^1.0.0","minimalistic-crypto-utils":"^1.0.0"},"description":"EC cryptography","devDependencies":{"brfs":"^1.4.3","coveralls":"^2.11.3","grunt":"^0.4.5","grunt-browserify":"^5.0.0","grunt-cli":"^1.2.0","grunt-contrib-connect":"^1.0.0","grunt-contrib-copy":"^1.0.0","grunt-contrib-uglify":"^1.0.1","grunt-mocha-istanbul":"^3.0.1","grunt-saucelabs":"^8.6.2","istanbul":"^0.4.2","jscs":"^2.9.0","jshint":"^2.6.0","mocha":"^2.1.0"},"files":["lib"],"homepage":"https://github.com/indutny/elliptic","keywords":["EC","Elliptic","curve","Cryptography"],"license":"MIT","main":"lib/elliptic.js","name":"elliptic","repository":{"type":"git","url":"git+ssh://git@github.com/indutny/elliptic.git"},"scripts":{"jscs":"jscs benchmarks/*.js lib/*.js lib/**/*.js lib/**/**/*.js test/index.js","jshint":"jscs benchmarks/*.js lib/*.js lib/**/*.js lib/**/**/*.js test/index.js","lint":"npm run jscs && npm run jshint","test":"npm run lint && npm run unit","unit":"istanbul test _mocha --reporter=spec test/index.js","version":"grunt dist && git add dist/"},"version":"6.4.1"};
 
 /***/ }),
 /* 433 */
@@ -58138,7 +59001,7 @@ module.exports = v4;
           delete response.logs;
         }
 
-        return response;
+        return _get(_getPrototypeOf(SendContractMethod.prototype), "afterExecution", this).call(this, response);
       }
     }]);
 
@@ -58252,7 +59115,7 @@ module.exports = v4;
         clonedContract.address = response.contractAddress;
 
         if (this.promiEvent.listenerCount('receipt') > 0) {
-          this.promiEvent.emit('receipt', response);
+          this.promiEvent.emit('receipt', _get(_getPrototypeOf(ContractDeployMethod.prototype), "afterExecution", this).call(this, response));
           this.promiEvent.removeAllListeners('receipt');
         }
 
@@ -58721,7 +59584,7 @@ module.exports = v4;
   }();
 
   function Contract(provider, abi, accounts, address, options) {
-    return new ContractModuleFactory(Utils, web3CoreHelpers.formatters, new web3EthAbi.AbiCoder(), accounts).createContract(provider, accounts, abi, address, options);
+    return new ContractModuleFactory(Utils, web3CoreHelpers.formatters, new web3EthAbi.AbiCoder()).createContract(provider, accounts, abi, address, options);
   }
 
   exports.AbstractContract = AbstractContract;
@@ -58761,7 +59624,7 @@ module.exports = v4;
           functionName = this.utils.jsonInterfaceMethodToString(functionName);
         }
 
-        return this.utils.sha3(functionName).slice(0, 10);
+        return this.utils.keccak256(functionName).slice(0, 10);
       }
     }, {
       key: "encodeEventSignature",
@@ -58770,7 +59633,7 @@ module.exports = v4;
           functionName = this.utils.jsonInterfaceMethodToString(functionName);
         }
 
-        return this.utils.sha3(functionName);
+        return this.utils.keccak256(functionName);
       }
     }, {
       key: "encodeParameter",

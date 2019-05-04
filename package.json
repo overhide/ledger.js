@@ -1,7 +1,7 @@
 {
   "name": "ledgers.js",
   "version": "1.1.1",
-  "description": "Overhide remuneration API JavaScript library :: abstracting different ledgers to be used in an application's authentication and authorization workflows.",
+  "description": "JavaScript library for ledger-based authorizations :: abstracting different ledgers to be used in an application's authentication and authorization workflows.",
   "main": "dist/ledgers.js",
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/overhide/ledgers.js#readme",
   "dependencies": {
-    "web3": "^1.0.0-beta.52"
+    "web3": "^1.0.0-beta.54"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
@@ -38,12 +38,8 @@
   },
   "scripts": {
     "docs": "documentation build src/ledgers.js --project-name \"ledgers.js :: overhide remuneration library for browser use\" --project-version \"$npm_package_version\" --project-homepage \"https://www.npmjs.com/package/ledgers.js\" --shallow true --format html --output docs/ledgers.js-rendered-docs",
-    "copy:demo": "copyfiles demo/** docs",
-    "pack:ledgers.js": "webpack --module-bind js=babel-loader",
-    "copy:ledgers.js": "copyfiles --flat dist/** docs/demo",
-    "copy": "npm run copy:demo & npm run pack:ledgers.js & npm run copy:ledgers.js",
-    "all": "npm run docs & npm run copy",
-    "watch": "watch \"npm run copy\" ./src ./demo",
-    "dev": "http-server ./docs/demo"
+    "pack": "webpack --module-bind js=babel-loader",
+    "all": "npm run docs & npm run pack",
+    "watch": "watch \"npm run copy\" ./src ./demo"
   }
 }
