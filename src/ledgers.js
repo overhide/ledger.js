@@ -181,7 +181,7 @@ const oh$ = (function() {
    *
    *   The new credentials object will conform to the following:
    *
-   *   | imparter tag | credentials object |
+   *   | imparter tag | network details object |
    *   | --- | --- |
    *   | eth-web3 | `{name:('main'|'rinkeby'|'kovan').., uri:..}` |
    *   | ohledger | `{currency:'USD',mode:('prod'|'test'), uri:..}` |
@@ -312,7 +312,7 @@ const oh$ = (function() {
      * 
      *   The network details objects are as follows:
      * 
-     *   | imparter tag | credentials object |
+     *   | imparter tag | network details object |
      *   | --- | --- |
      *   | eth-web3 | N/A |
      *   | ohledger | `{currency:'USD', mode:'prod'|'test'}` |
@@ -331,6 +331,36 @@ const oh$ = (function() {
      * @returns {string} the URI.
      */
     getOverhideRemunerationAPIUri: getOverhideRemunerationAPIUri,
+
+    /**
+     * @namespace oh$
+     * @function getCredentials
+     * @description
+     *   Retrieves current credentials for an imparterTag.
+     * @param {string} imparterTag
+     * @returns {Object} details - an object describing current credentials, imparterTag dependant:
+     *   | imparter tag | credentials object |
+     *   | --- | --- |
+     *   | eth-web3 | `{address:..}` |
+     *   | ohledger | `{address:..,secret:..}` |
+     *   | ohledger-web3 | `{address:..}` |
+     */
+    getCredentials: getCredentials,
+
+    /**
+     * @namespace oh$
+     * @function getNetwork
+     * @description
+     *   Retrieves current network for an imparterTag.
+     * @param {string} imparterTag
+     * @returns {Object} details - an object describing current network, imparterTag dependant:
+     *   | imparter tag | network details object |
+     *   | --- | --- |
+     *   | eth-web3 | `{name:('main'|'rinkeby'|'kovan').., uri:..}` |
+     *   | ohledger | `{currency:'USD',mode:('prod'|'test'), uri:..}` |
+     *   | ohledger-web3 | `{currency:'USD',mode:('prod'|'test'), uri:..}` |
+     */
+    getNetwork: getNetwork,
 
     /**
      * @namespace oh$
@@ -581,6 +611,19 @@ const oh$ = (function() {
     }
   }
 
+  function getCredentials(imparterTag) {
+    switch (imparterTag) {
+      case OHLEDGER_IMPARTER_TAG:        
+        return {"address":data.OHLEDGER_IMPARTER_TAG.address, "secret":data.OHLEDGER_IMPARTER_TAG.secret};
+      case OHLEDGER_WEB3_IMPARTER_TAG:
+        return {"address":data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress};
+      case ETH_WEB3_IMPARTER_TAG:
+        return {"address":data.ETH_WEB3_IMPARTER_TAG.walletAddress};
+      default:
+        throw new Error("invalid imparterTag");
+    }
+  }
+
   async function generateCredentials(imparterTag, options) {
     switch (imparterTag) {
       case OHLEDGER_IMPARTER_TAG:
@@ -613,6 +656,19 @@ const oh$ = (function() {
         return true;
       default:
         return false;
+    }
+  }
+
+  function getNetwork(imparterTag) {
+    switch (imparterTag) {
+      case OHLEDGER_IMPARTER_TAG:        
+        return { "currency": "USD", "mode": data.OHLEDGER_WEB3_IMPARTER_TAG.mode, "uri": data.OHLEDGER_WEB3_IMPARTER_TAG.remuneration_uri[data.OHLEDGER_WEB3_IMPARTER_TAG.mode]};
+      case OHLEDGER_WEB3_IMPARTER_TAG:
+        return { "currency": "USD", "mode": data.OHLEDGER_IMPARTER_TAG.mode, "uri": data.OHLEDGER_IMPARTER_TAG.remuneration_uri[data.OHLEDGER_IMPARTER_TAG.mode]};
+      case ETH_WEB3_IMPARTER_TAG:
+        return { "name": data.ETH_WEB3_IMPARTER_TAG.network, "uri": data.ETH_WEB3_IMPARTER_TAG.remuneration_uri[data.ETH_WEB3_IMPARTER_TAG.network]};
+      default:
+        throw new Error("invalid imparterTag");
     }
   }
 
