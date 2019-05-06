@@ -125,21 +125,6 @@ function _objectSpread(target) {
   return target;
 }
 
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
   try {
     var info = gen[key](arg);
@@ -174,6 +159,142 @@ function _asyncToGenerator(fn) {
       _next(undefined);
     });
   };
+}
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (call && (_typeof(call) === "object" || typeof call === "function")) {
+    return call;
+  }
+
+  return _assertThisInitialized(self);
+}
+
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function");
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) _setPrototypeOf(subClass, superClass);
+}
+
+function _wrapNativeSuper(Class) {
+  var _cache = typeof Map === "function" ? new Map() : undefined;
+
+  _wrapNativeSuper = function _wrapNativeSuper(Class) {
+    if (Class === null || !_isNativeFunction(Class)) return Class;
+
+    if (typeof Class !== "function") {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+
+    if (typeof _cache !== "undefined") {
+      if (_cache.has(Class)) return _cache.get(Class);
+
+      _cache.set(Class, Wrapper);
+    }
+
+    function Wrapper() {
+      return _construct(Class, arguments, _getPrototypeOf(this).constructor);
+    }
+
+    Wrapper.prototype = Object.create(Class.prototype, {
+      constructor: {
+        value: Wrapper,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+    return _setPrototypeOf(Wrapper, Class);
+  };
+
+  return _wrapNativeSuper(Class);
+}
+
+function isNativeReflectConstruct() {
+  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+  if (Reflect.construct.sham) return false;
+  if (typeof Proxy === "function") return true;
+
+  try {
+    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function _construct(Parent, args, Class) {
+  if (isNativeReflectConstruct()) {
+    _construct = Reflect.construct;
+  } else {
+    _construct = function _construct(Parent, args, Class) {
+      var a = [null];
+      a.push.apply(a, args);
+      var Constructor = Function.bind.apply(Parent, a);
+      var instance = new Constructor();
+      if (Class) _setPrototypeOf(instance, Class.prototype);
+      return instance;
+    };
+  }
+
+  return _construct.apply(null, arguments);
+}
+
+function _isNativeFunction(fn) {
+  return Function.toString.call(fn).indexOf("[native code]") !== -1;
+}
+
+function _setPrototypeOf(o, p) {
+  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+
+  return _setPrototypeOf(o, p);
+}
+
+function _getPrototypeOf(o) {
+  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
+  };
+  return _getPrototypeOf(o);
+}
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
 }
 
 function _typeof(obj) {
@@ -224,7 +345,7 @@ function _typeof(obj) {
  * 
  * ```
  * import oh$ from "ledgers.js";
- * oh$.onWalletChange = ...
+ * oh$.addEventListener('onWalletChange', (e) => {...});
  * ```
  * 
  * Once bundled with its dependencies--the library can be loaded straight into your HTML and accessed by its `oh$` 
@@ -233,7 +354,7 @@ function _typeof(obj) {
  * ```
  * <script src="./dist/ledgers.js"></script>
  * <script>
- *   oh$.onWalletChange = ...
+ *   oh$.addEventListener('onWalletChange', (e) => {...});
  * </script>
  * ```
  * 
@@ -296,356 +417,62 @@ function _typeof(obj) {
  */
 
 var oh$ = function () {
+  var _temp;
+
   var root = (typeof self === "undefined" ? "undefined" : _typeof(self)) == 'object' && self.self === self && self || (typeof global === "undefined" ? "undefined" : _typeof(global)) == 'object' && global.global === global && global || this || {};
-  root.oh$ = {
-    /**
-     * @property {function(string,boolean)} onWalletChange 
-     * @description
-     *   Handler registered by user; called when wallets' state changes.
-     * 
-     *   The library passes in the imparter tag undergoing change and a boolean indicating 'true' if wallet available
-     *   or 'false.
-     * 
-     *   In user code:
-     * 
-     *   ```
-     *   oh$.onWalletChange = (imparterTag, isPresent) => console.log(`wallet for ${imparterTag} is available:${isPresent}`);
-     *   ```
-     */
-    onWalletChange: null,
+  root.oh$ = new (_temp =
+  /*#__PURE__*/
+  function (_EventTarget) {
+    _inherits(_temp, _EventTarget);
 
-    /**
-     * @property {function(string,boolean)} onWalletPopup
-     * @description
-     *   Handler registered by user; called when wallet is expected to popup.  Useful in case user wants to react to popup in UI.
-     * 
-     *   The library passes in the imparter tag causing the popup.
-     * 
-     *   In user code:
-     * 
-     *   ```
-     *   oh$.onWalletPopup = (imparterTag) => console.log(`wallet for ${imparterTag} popped`);
-     *   ```
-     */
-    onWalletPopup: null,
+    function _temp() {
+      var _getPrototypeOf2;
 
-    /**
-     * @property {function(string,Object)} onCredentialsUpdate
-     * @description
-     *   Handler registered by user; called when an credentials change for one of the tracked imparters.
-     * 
-     *   Only called when credentials are valid as per imparter: ready to be used for signing, transacting.
-     *
-     *   First string is the imparter tag, second object are the new credentials: imparter currency specific.
-     * 
-     *   The new credentials object will conform to the following:
-     * 
-     *   | imparter tag | credentials object |
-     *   | --- | --- |
-     *   | eth-web3 | `{address:..}` |
-     *   | ohledger | `{address:..,secret:..}` |
-     *   | ohledger-web3 | `{address:..}` |
-     *
-     *   In user code:
-     *
-     *   ```
-     *   oh$.onAddressUpdate = (imparterTag, creds) => {
-     *     if (imparterTag === 'eth-web3') console.log(`new address for ${imparterTag} is:${creds.address}`);
-     *   }
-     *   ```
-     */
-    onCredentialsUpdate: null,
+      var _this;
 
-    /**
-     * @property {function(string,Object)} onNetworkChange
-     * @description
-     *   Handler registered by user; called when the network changes for a particular imparter tag.
-     * 
-     *   For example for "eth0" the network could changed from "main" to "rinkeby".  
-     * 
-     *   The first string is the imparter tag, second object is the new network details: imparter currency specific.
-     *
-     *   The new credentials object will conform to the following:
-     *
-     *   | imparter tag | network details object |
-     *   | --- | --- |
-     *   | eth-web3 | `{name:('main'|'rinkeby'|'kovan').., uri:..}` |
-     *   | ohledger | `{currency:'USD',mode:('prod'|'test'), uri:..}` |
-     *   | ohledger-web3 | `{currency:'USD',mode:('prod'|'test'), uri:..}` |
-     *
-     *   In user code:
-     *
-     *   ```
-     *   oh$.onNetworkChange = (imparterTag, details) => {
-     *     if (imparterTag === 'eth-web3') console.log(`new network selected for ${imparterTag} is:${details.name}`);
-     *     if (imparterTag === /ohledger/.test(imparterTag)) console.log(`working in currency: ${details.currency}`);
-     *   }
-     *   ```
-     */
-    onNetworkChange: null,
+      _classCallCheck(this, _temp);
 
-    /**
-     * @namespace oh$
-     * @function getImparterTags
-     * @description
-     *   Retrieves all imparter tags injected by wallets and statically available from the library.
-     * @returns {Array} of strings: the imparter tags available
-     */
-    getImparterTags: getImparterTags,
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
 
-    /**
-     * @namespace oh$
-     * @function canSetCredentials
-     * @description
-     *   Interrogate whether the imparter tag can have credentials set by the user: or does the wallet control it
-     *   exclusively.
-     * 
-     *   Only the following imparter(s) will return 'true':
-     * 
-     *   - ohledger
-     * 
-     * @param {string} imparterTag
-     * @returns {boolean} 'true' if particular imparter tag can have credentials set.
-     */
-    canSetCredentials: canSetCredentials,
+      _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(_temp)).call.apply(_getPrototypeOf2, [this].concat(args)));
 
-    /**
-     * @namespace oh$
-     * @function canGenerateCredentials
-     * @description
-     *   Interrogate whether the imparter tag can have credentials generated by the user: or does the wallet control it
-     *   exclusively.
-     *
-     *   Only the following imparter(s) will return 'true':
-     *
-     *   - ohledger
-     *
-     * @param {string} imparterTag
-     * @returns {boolean} 'true' if particular imparter tag can have credentials generated.
-     */
-    canGenerateCredentials: canGenerateCredentials,
+      _defineProperty(_assertThisInitialized(_this), "getImparterTags", getImparterTags);
 
-    /**
-     * @namespace oh$
-     * @function canChangeNetwork
-     * @description
-     *   Interrogate whether the imparter tag can have network changed by the user via oh$: or does the wallet control it
-     *   exclusively.
-     *
-     *   Only the following imparter(s) will return 'true':
-     *
-     *   - ohledger
-     *   - ohledger-web3
-     *
-     * @param {string} imparterTag
-     * @returns {boolean} 'true' if particular imparter tag can have networks changed via oh$.
-     */
-    canChangeNetwork: canChangeNetwork,
+      _defineProperty(_assertThisInitialized(_this), "canSetCredentials", canSetCredentials);
 
-    /**
-     * @namespace oh$
-     * @function generateCredentials
-     * @description
-     *   For imparters that can have credentials generated, generates them.  
-     * 
-     *   This setter calls `oh$.onCredentialsUpdate` when successful.
-     * @param {string} imparterTag
-     * @param {Object} options - imparter specific generation options, if any.
-     * 
-     *   The options objects are as follows:
-     * 
-     *   | imparter tag | credentials object |
-     *   | --- | --- |
-     *   | eth-web3 | N/A |
-     *   | ohledger | null |
-     *   | ohledger-web3 | N/A |
-     *
-     * @returns {Promise} representing a 'true' if success else 'false'; also calls `oh$.onCredentialsUpdate` on success
-     */
-    generateCredentials: generateCredentials,
+      _defineProperty(_assertThisInitialized(_this), "canGenerateCredentials", canGenerateCredentials);
 
-    /**
-     * @namespace oh$
-     * @function setCredentials
-     * @description
-     *   For imparters that can have credentials set, sets them.  
-     * 
-     *   This setter calls `oh$.onCredentialsUpdate` when successful.
-     * @param {string} imparterTag
-     * @param {Object} credentials - credentials object of imparter specific parameters to set.
-     * 
-     *   The credentials objects are as follows:
-     * 
-     *   | imparter tag | credentials object |
-     *   | --- | --- |
-     *   | eth-web3 | N/A |
-     *   | ohledger | `{address:..,secret:..}` |
-     *   | ohledger-web3 | N/A |
-     *
-     * @returns {Promise} representing a 'true' if success else 'false'; also calls `oh$.onCredentialsUpdate` on success
-     */
-    setCredentials: setCredentials,
+      _defineProperty(_assertThisInitialized(_this), "canChangeNetwork", canChangeNetwork);
 
-    /**
-     * @namespace oh$
-     * @function setNetwork
-     * @description
-     *   For imparters that can have networks changed via oh$, changes it.  
-     * 
-     *   This setter calls `oh$.onNetworkChange` when successful.
-     * @param {string} imparterTag
-     * @param {Object} details - network details object of imparter specific parameters to set.
-     * 
-     *   The network details objects are as follows:
-     * 
-     *   | imparter tag | network details object |
-     *   | --- | --- |
-     *   | eth-web3 | N/A |
-     *   | ohledger | `{currency:'USD', mode:'prod'|'test'}` |
-     *   | ohledger-web3 | `{currency:'USD', mode:'prod'|'test'}` |
-     *
-     * @returns {Promise} representing a 'true' if success else 'false'; also calls `oh$.onNetworkChange` on success
-     */
-    setNetwork: setNetwork,
+      _defineProperty(_assertThisInitialized(_this), "generateCredentials", generateCredentials);
 
-    /**
-     * @namespace oh$
-     * @function getOverhideRemunerationAPIUri
-     * @description
-     *   Based on current network set returns the *overhide* remuneration API URI configured in the library.
-     * @param {string} imparterTag
-     * @returns {string} the URI.
-     */
-    getOverhideRemunerationAPIUri: getOverhideRemunerationAPIUri,
+      _defineProperty(_assertThisInitialized(_this), "setCredentials", setCredentials);
 
-    /**
-     * @namespace oh$
-     * @function getCredentials
-     * @description
-     *   Retrieves current credentials for an imparterTag.
-     * @param {string} imparterTag
-     * @returns {Object} details - an object describing current credentials, imparterTag dependant:
-     *   | imparter tag | credentials object |
-     *   | --- | --- |
-     *   | eth-web3 | `{address:..}` |
-     *   | ohledger | `{address:..,secret:..}` |
-     *   | ohledger-web3 | `{address:..}` |
-     */
-    getCredentials: getCredentials,
+      _defineProperty(_assertThisInitialized(_this), "setNetwork", setNetwork);
 
-    /**
-     * @namespace oh$
-     * @function getNetwork
-     * @description
-     *   Retrieves current network for an imparterTag.
-     * @param {string} imparterTag
-     * @returns {Object} details - an object describing current network, imparterTag dependant:
-     *   | imparter tag | network details object |
-     *   | --- | --- |
-     *   | eth-web3 | `{name:('main'|'rinkeby'|'kovan').., uri:..}` |
-     *   | ohledger | `{currency:'USD',mode:('prod'|'test'), uri:..}` |
-     *   | ohledger-web3 | `{currency:'USD',mode:('prod'|'test'), uri:..}` |
-     */
-    getNetwork: getNetwork,
+      _defineProperty(_assertThisInitialized(_this), "getOverhideRemunerationAPIUri", getOverhideRemunerationAPIUri);
 
-    /**
-     * @namespace oh$
-     * @function getTally
-     * @description
-     *   Retrieve a tally of all transactions on the imparter's ledger--perhaps within a date range.
-     * @param {string} imparterTag
-     * @param {Object} recepient - imparter specific object describing recipient of transactions to tally for.
-     *
-     *   Recipient objects are as per:
-     *
-     *   | imparter tag | recipient object |
-     *   | --- | --- |
-     *   | eth-web3 | `{address:..}` |
-     *   | ohledger | `{address:..}` |
-     *   | ohledger-web3 | `{address:..}` |
-     *
-     * @param {Date} since - date to start tally since: date of oldest transaction to include.  No restriction if 'null'.
-     * @returns {Promise} with the tally value in imparter specific currency
-     */
-    getTally: getTally,
+      _defineProperty(_assertThisInitialized(_this), "getCredentials", getCredentials);
 
-    /**
-     * @namespace oh$
-     * @function getTransactions
-     * @description
-     *   Retrieve transactions on the imparter's ledger, perhaps within a date range, from credentials set against 
-     *   imparter to a recipient
-     * @param {string} imparterTag
-     * @param {Date} since - date to start tally since: date of oldest transaction to include.  No restriction if 'null'.
-     * @param {Object} recepient - imparter specific object describing recipient of transactions to tally for.
-     *
-     *   Recipient objects are as per:
-     *
-     *   | imparter tag | recipient object |
-     *   | --- | --- |
-     *   | eth-web3 | `{address:..}` |
-     *   | ohledger | `{address:..}` |
-     *   | ohledger-web3 | `{address:..}` |
-     *
-     * @returns {Promise} with the transactions: `[{"transaction-value":..,"transaction-date":..},..]`
-     */
-    getTransactions: getTransactions,
+      _defineProperty(_assertThisInitialized(_this), "getNetwork", getNetwork);
 
-    /**
-     * @namespace oh$
-     * @function isOnLedger
-     * @description
-     *   Determine if current credentials have some transaction on the imparter's ledger: transaction can be to anyone.
-     * 
-     *   Intent is to validate beyond just a valid address.  To validate the address has been used.
-     * 
-     *   Call may trigger `oh$.onWalletPopup`.
-     * @param {string} imparterTag
-     * @returns {Promise} with 'true' or 'false'; may call `oh$.onWalletPopup`
-     */
-    isOnLedger: isOnLedger,
+      _defineProperty(_assertThisInitialized(_this), "getTally", getTally);
 
-    /**
-     * @namespace oh$
-     * @function sign
-     * @description
-     *   Sign using the provided message using the credentials set against the specific imparter.
-     * 
-     *   Note: wallet might pop up a dialog upon this call, consider that in your UX flow.
-     * 
-     *   Call may trigger `oh$.onWalletPopup`.
-     * @param {string} imparterTag
-     * @param {string} message - to sign
-     * @returns {Promise} with the signature; may call `oh$.onWalletPopup`
-     */
-    sign: sign,
+      _defineProperty(_assertThisInitialized(_this), "getTransactions", getTransactions);
 
-    /**
-     * @namespace oh$
-     * @function createTransaction
-     * @description
-     *   Create a transaction on the imparter's ledger.
-     * 
-     *   Call may trigger `oh$.onWalletPopup`; wallet might pop up a dialog upon this call, consider that in your UX flow.
-     * @param {string} imparterTag
-     * @param {number} amount
-     * @param {string} to - address of recipient
-     * @param {Object} options - other options required for the specific imparter.
-     * 
-     *   The options objects are as follows:
-     *
-     *   | imparter tag | credentials object |
-     *   | --- | --- |
-     *   | eth-web3 | null |
-     *   | ohledger | {message:.., signature:..} |
-     *   | ohledger-web3 | {message:.., signature:..} |
-     * 
-     *   If *message* and *signature* are provided they are used instead of oh$ asking for wallet to resign message.
-     *
-     * @returns {Promise} of a 'true' for success or an Error; may call `oh$.onWalletPopup`
-     */
-    createTransaction: createTransaction
-  };
+      _defineProperty(_assertThisInitialized(_this), "isOnLedger", isOnLedger);
+
+      _defineProperty(_assertThisInitialized(_this), "sign", sign);
+
+      _defineProperty(_assertThisInitialized(_this), "createTransaction", createTransaction);
+
+      return _this;
+    }
+
+    return _temp;
+  }(_wrapNativeSuper(EventTarget)), _temp)();
   var WALLET_CHECK_INTERVAL_MS = 500;
   var ETH_WEB3_IMPARTER_TAG = 'eth-web3';
   var OHLEDGER_IMPARTER_TAG = 'ohledger';
@@ -690,12 +517,30 @@ var oh$ = function () {
   createPopup();
   detectWeb3Wallet();
   /**
+   * Function to fire events.
+   * 
+   * @param {string} which - event name to fire
+   * @param {Object} params - to copy to event
+   */
+
+  function fire(which, params) {
+    var event = document.createEvent("Event");
+    event.initEvent(which, true, true);
+
+    for (var param in params) {
+      event[param] = params[param];
+    }
+
+    oh$.dispatchEvent(event);
+  }
+  /**
    * Setup window.web3 to be the wallet's if available or offline if not (just for signing).
    * 
    * Sets up a timer to check for wallet being logged in and address changes.
    * 
    * @ignore
    */
+
 
   function detectWeb3Wallet() {
     if (!window.ethereum) return; // Modern dapp browsers...
@@ -786,13 +631,11 @@ var oh$ = function () {
               case 12:
                 if (currentNetwork !== data.ETH_WEB3_IMPARTER_TAG.network) {
                   data.ETH_WEB3_IMPARTER_TAG.network = currentNetwork;
-
-                  if (root.oh$.onNetworkChange) {
-                    root.oh$.onNetworkChange(ETH_WEB3_IMPARTER_TAG, {
-                      name: currentNetwork,
-                      uri: data.ETH_WEB3_IMPARTER_TAG.remuneration_uri[currentNetwork]
-                    });
-                  }
+                  fire('onNetworkChange', {
+                    imparterTag: ETH_WEB3_IMPARTER_TAG,
+                    name: currentNetwork,
+                    uri: data.ETH_WEB3_IMPARTER_TAG.remuneration_uri[currentNetwork]
+                  });
                 }
 
                 if (currentAddress !== data.ETH_WEB3_IMPARTER_TAG.walletAddress) {
@@ -809,17 +652,22 @@ var oh$ = function () {
 
                   data.ETH_WEB3_IMPARTER_TAG.walletAddress = currentAddress;
                   data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress = currentAddress;
+                  fire('onWalletChange', {
+                    imparterTag: ETH_WEB3_IMPARTER_TAG,
+                    isPresent: !!currentAddress
+                  });
+                  fire('onWalletChange', {
+                    imparterTag: OHLEDGER_WEB3_IMPARTER_TAG,
+                    isPresent: !!currentAddress
+                  });
 
-                  if (root.oh$.onWalletChange) {
-                    root.oh$.onWalletChange(ETH_WEB3_IMPARTER_TAG, !!currentAddress);
-                    root.oh$.onWalletChange(OHLEDGER_WEB3_IMPARTER_TAG, !!currentAddress);
-                  }
-
-                  if (root.oh$.onCredentialsUpdate && currentAddress) {
-                    root.oh$.onCredentialsUpdate(ETH_WEB3_IMPARTER_TAG, {
+                  if (currentAddress) {
+                    fire('onCredentialsUpdate', {
+                      imparterTag: ETH_WEB3_IMPARTER_TAG,
                       address: currentAddress
                     });
-                    root.oh$.onCredentialsUpdate(OHLEDGER_WEB3_IMPARTER_TAG, {
+                    fire('onCredentialsUpdate', {
+                      imparterTag: OHLEDGER_WEB3_IMPARTER_TAG,
                       address: currentAddress
                     });
                   }
@@ -916,7 +764,8 @@ var oh$ = function () {
               throw new Error("'secret' not valid for 'address");
 
             case 17:
-              if (root.oh$.onCredentialsUpdate) root.oh$.onCredentialsUpdate(OHLEDGER_IMPARTER_TAG, {
+              fire('onCredentialsUpdate', {
+                imparterTag: OHLEDGER_IMPARTER_TAG,
                 address: credentials.address,
                 secret: credentials.secret
               });
@@ -979,7 +828,8 @@ var oh$ = function () {
               res = eth_accounts.create();
               data.OHLEDGER_IMPARTER_TAG.address = res.address;
               data.OHLEDGER_IMPARTER_TAG.secret = res.privateKey;
-              if (root.oh$.onCredentialsUpdate) root.oh$.onCredentialsUpdate(OHLEDGER_IMPARTER_TAG, {
+              fire('onCredentialsUpdate', {
+                imparterTag: OHLEDGER_IMPARTER_TAG,
                 address: res.address,
                 secret: res.privateKey
               });
@@ -1059,7 +909,8 @@ var oh$ = function () {
 
             case 15:
               data.OHLEDGER_IMPARTER_TAG.mode = details.mode;
-              if (root.oh$.onNetworkChange) root.oh$.onNetworkChange(OHLEDGER_IMPARTER_TAG, {
+              fire('onNetworkChange', {
+                imparterTag: OHLEDGER_IMPARTER_TAG,
                 currency: 'USD',
                 mode: details.mode,
                 uri: data.OHLEDGER_IMPARTER_TAG.remuneration_uri[details.mode]
@@ -1068,7 +919,8 @@ var oh$ = function () {
 
             case 18:
               data.OHLEDGER_WEB3_IMPARTER_TAG.mode = details.mode;
-              if (root.oh$.onNetworkChange) root.oh$.onNetworkChange(OHLEDGER_WEB3_IMPARTER_TAG, {
+              fire('onNetworkChange', {
+                imparterTag: OHLEDGER_WEB3_IMPARTER_TAG,
                 currency: 'USD',
                 mode: details.mode,
                 uri: data.OHLEDGER_WEB3_IMPARTER_TAG.remuneration_uri[details.mode]
@@ -1515,7 +1367,9 @@ var oh$ = function () {
               throw new Error("imparter ".concat(OHLEDGER_WEB3_IMPARTER_TAG, " not active"));
 
             case 8:
-              if (root.oh$.onWalletPopup) root.oh$.onWalletPopup(OHLEDGER_WEB3_IMPARTER_TAG);
+              fire('onWalletPopup', {
+                imparterTag: OHLEDGER_WEB3_IMPARTER_TAG
+              });
               _context11.next = 11;
               return window.web3.eth.personal.sign(message, data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress, '');
 
@@ -1531,7 +1385,9 @@ var oh$ = function () {
               throw new Error("imparter ".concat(ETH_WEB3_IMPARTER_TAG, " not active"));
 
             case 14:
-              if (root.oh$.onWalletPopup) root.oh$.onWalletPopup(ETH_WEB3_IMPARTER_TAG);
+              fire('onWalletPopup', {
+                imparterTag: ETH_WEB3_IMPARTER_TAG
+              });
               _context11.next = 17;
               return window.web3.eth.personal.sign(message, data.ETH_WEB3_IMPARTER_TAG.walletAddress, '');
 
@@ -1695,7 +1551,9 @@ var oh$ = function () {
               return _context12.abrupt("break", 54);
 
             case 49:
-              if (root.oh$.onWalletPopup) root.oh$.onWalletPopup(ETH_WEB3_IMPARTER_TAG);
+              fire('onWalletPopup', {
+                imparterTag: ETH_WEB3_IMPARTER_TAG
+              });
               _context12.next = 52;
               return new Promise(function (resolve, reject) {
                 web3.eth.sendTransaction({

@@ -284,25 +284,25 @@
      * @param {} rsInstance -- to handle events for
      */
 
-    oh$.onWalletChange = (imparterTag, isPresent) => {
-      log('onWalletChange called', {imparterTag, isPresent});
-    }
+    oh$.addEventListener('onWalletChange', function (e) {
+      log('onWalletChange called', {imparterTag: e.imparterTag, isPresent: e.isPresent});
+    });
 
-    oh$.onWalletPopup = (imparterTag) => {
-      log('onWalletPopup called', {imparterTag});
-    }
+    oh$.addEventListener('onCredentialsUpdate', function (e) {
+      log('onWalletPopup called', {imparterTag: e.imparterTag});
+    });
 
-    oh$.onCredentialsUpdate = (imparterTag, newCedentials) => {
-      log('onCredentialsUpdate called', {imparterTag, newCedentials});
+    oh$.addEventListener('onCredentialsUpdate', function (e) {
+      log('onCredentialsUpdate called', {imparterTag: e.imparterTag, address: e.address, secret: e.secret});
       updateData({
-        address: newCedentials.address,
-        secret: newCedentials.secret
+        address: e.address,
+        secret: e.secret
       });
-    }
+    });
 
-    oh$.onNetworkChange = (imparterTag, details) => {
-      log('onNetworkChange called', {imparterTag, details});
-    }
+    oh$.addEventListener('onNetworkChange', function (e) {
+      log('onNetworkChange called', { imparterTag: e.imparterTag, name: e.name, uri: e.uri });
+    });
 
     /* =========================================================================
                           ** Form Actions / Use Case Functions **
