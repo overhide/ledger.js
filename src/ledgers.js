@@ -371,6 +371,7 @@ const oh$ = (function() {
      *   Retrieves current credentials for an imparterTag.
      * @param {string} imparterTag
      * @returns {Object} details - an object describing current credentials, imparterTag dependant:
+     * 
      *   | imparter tag | credentials object |
      *   | --- | --- |
      *   | eth-web3 | `{address:..}` |
@@ -386,6 +387,7 @@ const oh$ = (function() {
      *   Retrieves current network for an imparterTag.
      * @param {string} imparterTag
      * @returns {Object} details - an object describing current network, imparterTag dependant:
+     * 
      *   | imparter tag | network details object |
      *   | --- | --- |
      *   | eth-web3 | `{name:('main'|'rinkeby'|'kovan').., uri:..}` |

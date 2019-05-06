@@ -1423,17 +1423,28 @@ exclusively.</p>
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code>:
         details - an object describing current credentials, imparterTag dependant:
-| imparter tag | credentials object |
-| --- | --- |
-| eth-web3 | 
-<code>{address:..}</code>
- |
-| ohledger | 
-<code>{address:..,secret:..}</code>
- |
-| ohledger-web3 | 
-<code>{address:..}</code>
- |
+<table>
+<thead>
+<tr>
+<th>imparter tag</th>
+<th>credentials object</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>eth-web3</td>
+<td><code>{address:..}</code></td>
+</tr>
+<tr>
+<td>ohledger</td>
+<td><code>{address:..,secret:..}</code></td>
+</tr>
+<tr>
+<td>ohledger-web3</td>
+<td><code>{address:..}</code></td>
+</tr>
+</tbody>
+</table>
 
       
     
@@ -1503,17 +1514,28 @@ exclusively.</p>
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code>:
         details - an object describing current network, imparterTag dependant:
-| imparter tag | network details object |
-| --- | --- |
-| eth-web3 | 
-<code>{name:('main'|'rinkeby'|'kovan').., uri:..}</code>
- |
-| ohledger | 
-<code>{currency:'USD',mode:('prod'|'test'), uri:..}</code>
- |
-| ohledger-web3 | 
-<code>{currency:'USD',mode:('prod'|'test'), uri:..}</code>
- |
+<table>
+<thead>
+<tr>
+<th>imparter tag</th>
+<th>network details object</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>eth-web3</td>
+<td><code>{name:('main'|'rinkeby'|'kovan').., uri:..}</code></td>
+</tr>
+<tr>
+<td>ohledger</td>
+<td><code>{currency:'USD',mode:('prod'|'test'), uri:..}</code></td>
+</tr>
+<tr>
+<td>ohledger-web3</td>
+<td><code>{currency:'USD',mode:('prod'|'test'), uri:..}</code></td>
+</tr>
+</tbody>
+</table>
 
       
     
