@@ -137,13 +137,13 @@ With reference to figure 3 above, note that:
 * authentication and authorization don't need a browser: simple HTTP API can be called from any software stack
 * authentication and authorization can be abstracted for most ledgers; keeping the core app code the same despite ledger in use
 
-### [Demo](https://github.com/overhide/ledgers.js)
+### [Demo](https://github.com/overhide/ledgers.js-demo)
 
-Before diving any deeper into describing [*overhide-ledger*](https://ohledger.com), the concepts just described may become more tangible through a [demo](https://github.com/overhide/ledgers.js) meant to help developers see the approach in a "real" application.
+Before diving any deeper into describing [*overhide-ledger*](https://ohledger.com), the concepts just described may become more tangible through a [demo](https://github.com/overhide/ledgers.js-demo) meant to help developers see the approach in a "real" application.
 
-We have a functioning [demo "game"](https://github.com/overhide/ledgers.js) with a sample login page.  The login page allows either a free account login or value-add pay-for tiers.  Payments in this game can be made using either ether or dollars.
+We have a functioning [demo "game"](https://github.com/overhide/ledgers.js-demo) with a sample login page.  The login page allows either a free account login or value-add pay-for tiers.  Payments in this game can be made using either ether or dollars.
 
-Go check the demo out at [https://github.com/overhide/ledgers.js](https://github.com/overhide/ledgers.js).
+Go check the demo out at [https://github.com/overhide/ledgers.js-demo](https://github.com/overhide/ledgers.js-demo).
 
 ## [*overhide-ledger*](https://ohledger.com)
 
@@ -155,7 +155,7 @@ We've motivated the ledger-based authorization flow and mentioned that [*overhid
 
 The ledger sits in the cloud as indicated by the bold arrows.  
 
-The [ledgers.js library](https://www.npmjs.com/package/ledgers.js) sits in the browser.  It is used by your browser's JavaScript in the same abstracted fashion regardless of remuneration provider.  The linked [demo](https://github.com/overhide/ledgers.js) shows this in action.
+The [ledgers.js library](https://www.npmjs.com/package/ledgers.js) sits in the browser.  It is used by your browser's JavaScript in the same abstracted fashion regardless of remuneration provider.  The linked [demo](https://github.com/overhide/ledgers.js-demo) shows this in action.
 
 [ledgers.js](https://www.npmjs.com/package/ledgers.js) and [*overhide-ledger*](https://ohledger.com) comprise a tool-set to aid developers in leveraging ledgers for authorization; while providing a "lubricant" to app users' transition from paying for services in dollars to paying in cryptos:  showcasing the benefits of cryptos such as pseudonimity and lower transaction cost.
 
@@ -245,7 +245,7 @@ At this point as app and service developers we have:
 * a closed source implementation of the [*overhide* remuneration API for dollars](https://ohledger.com/swagger.html) ([or test cluster](https://test.ohledger.com/swagger.html))
 * an [*overhide* ledger Web app](https://ohledger.com/) ([or test cluster](https://test.ohledger.com/))
 * an open source [ledgers.js](https://www.npmjs.com/package/ledgers.js) library to help suport login pages
-* an open source [demo application](https://overhide.github.io/ledgers.js/demo/login.html) showing everything integrated ([repo](https://github.com/overhide/ledgers.js)) ([walkthrough](https://github.com/overhide/ledgers.js#getting-started))
+* an open source [demo application](https://overhide.github.io/ledgers.js-demo/demo/login.html) showing everything integrated ([repo](https://github.com/overhide/ledgers.js-demo)) ([walkthrough](https://github.com/overhide/ledgers.js-demo#play-by-play-run-through-of-a-demo-source-session))
 
 We'd want the ecosystem to grow and for that we need to implement more remuneration providers: more implementations of the [*overhide* remuneration API](https://ethereum.overhide.io/swagger.html).
 
