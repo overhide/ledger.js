@@ -3,6 +3,7 @@
 # ledgers.js
 
 [![npm version](https://badge.fury.io/js/ledgers.js.svg)](https://badge.fury.io/js/ledgers.js)
+[![CircleCI](https://circleci.com/gh/overhide/ledgers.js.svg?style=svg)](https://circleci.com/gh/overhide/ledgers.js)
 
 [This repository](https://github.com/overhide/ledgers.js) is the [distribution](https://www.npmjs.com/package/ledgers.js) of the *ledgers.js* library ([source](https://github.com/overhide/ledgers.js/blob/master/src/ledgers.js))([API](https://overhide.github.io/ledgers.js/ledgers.js-rendered-docs/index.html)) in support of [ledger-based authorization](https://github.com/overhide/ledgers.js/blob/master/why/why.md).
 
