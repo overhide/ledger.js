@@ -1,16 +1,16 @@
 > This is also published on [Medium.com](https://medium.com/@jakub.ner/introduction-to-overhide-ledger-and-motivation-for-why-its-useful-f9c987f2205f?source=friends_link&sk=18f6e8a90efbbc4ac28df50ab50833de)
 
-# Introduction to [*overhide-ledger*](https://ohledger.com) and Motivation for Why it's Useful.
+# Introduction to [*overhide-ledger*](https://ledger.overhide.io) and Motivation for Why it's Useful.
 
-I'd like to introduce [*overhide-ledger*](https://ohledger.com): a centralized Web 2.0 ledger of dollar transactions exposed through a minimal API.
+I'd like to introduce [*overhide-ledger*](https://ledger.overhide.io): a centralized Web 2.0 ledger of dollar transactions exposed through a minimal API.
 
 The intent of the ledger is to enable a simple authorization workflow that's useful today for dollars and tomorrow for cryptos.
 
-The [*overhide-ledger*](https://ohledger.com) interface and APIs allow payees and payers to log their credit card transactions on a publicly visible ledger.  The payees and payers appear on the ledger as Ethereum addresses: 42 character hexadecimal strings.  These obscure identifiers are conjoined with dollar amounts and timestamps to complete respective entries.
+The [*overhide-ledger*](https://ledger.overhide.io) interface and APIs allow payees and payers to log their credit card transactions on a publicly visible ledger.  The payees and payers appear on the ledger as Ethereum addresses: 42 character hexadecimal strings.  These obscure identifiers are conjoined with dollar amounts and timestamps to complete respective entries.
 
 ## Workflows
 
-The question of why such a ledger is useful needs to be considered in the context of workflows it's improving.  We will see that [*overhide-ledger*](https://ohledger.com) improves software authorization workflows involving fiat money to match significant value-adds of authorization workflows possible with public key infrastructure from decentralized ledgers such as Ethereum and Bitcoin.
+The question of why such a ledger is useful needs to be considered in the context of workflows it's improving.  We will see that [*overhide-ledger*](https://ledger.overhide.io) improves software authorization workflows involving fiat money to match significant value-adds of authorization workflows possible with public key infrastructure from decentralized ledgers such as Ethereum and Bitcoin.
 
 Before we get into discussing this "ledger-based authorization workflow" and contrast it with current Web 2.0 approaches; we need to understand some concepts from the decentralized Web.  For this discussion we need to understand the simple concepts of a ledger and it's respective public key infrastructure.  
 
@@ -30,7 +30,7 @@ For the needs of ledger-based authorization we'll replace all the names with pub
 | 0xD32317b5651d9f9D636032aaD100D9d30F74481d | 0x41340dF846177A02D5a16995E2Faf4917251d0dc | $10 | Yesterday |
 | 0xF00450C4cC9b46E837fb4feffE9e4FEdAAb94347 | 0xF60c97206C2DA2cad37B6Fd0B29BA33e043E2897 | $2 | 2 hours ago |
 
-Fred from the first ledger is replaced in the second ledger by his pseudonymous Ehtereum address, the 42 character hexadecimal string: 0xD32317b5651d9f9D636032aaD100D9d30F74481d.  This is Fred's public address in the ledger.  It is an Ethereum compliant address, but the fact that it's generated with Ethereum libraries is immaterial.  It's not limited to the Ethereum blockchain, we can use this address in other ledgers following Ethereum public key conventions--and we do, [*overhide-ledger*](https://ohledger.com) uses Ethereum public key infrastructure.
+Fred from the first ledger is replaced in the second ledger by his pseudonymous Ehtereum address, the 42 character hexadecimal string: 0xD32317b5651d9f9D636032aaD100D9d30F74481d.  This is Fred's public address in the ledger.  It is an Ethereum compliant address, but the fact that it's generated with Ethereum libraries is immaterial.  It's not limited to the Ethereum blockchain, we can use this address in other ledgers following Ethereum public key conventions--and we do, [*overhide-ledger*](https://ledger.overhide.io) uses Ethereum public key infrastructure.
 
 Fred can prove he owns that address by having its corresponding secret key: e398cc1f41b6e00c88b7c625b81858aa89f6e1dea753203186ffa4c886497ee9.  This is a 60 character hexadecimal string that is cryptographically tied to Fred's address.  Fred never discloses this secret key.  Fred only uses this secret key to prove he owns his address and therefore that it is him who made the $10 payment to whomever is 0x41340dF846177A02D5a16995E2Faf4917251d0dc (we know it's Acme Co.).  To make this proof, Fred would use cryptography to "sign" some message--for example today's date--into a "signature" with his secret key.  Through cleverness of cryptography, anyone with whom Fred shares his address, this signature, and the original message--today's date--can verify the signature's validity for the address; hence Fred's posession of the secret key, hence Fred's ownership of the ledger address.
 
@@ -65,7 +65,7 @@ There is a reduction of coupling between the a service and its login client.
 
 It can be reasoned about simply at a high level: if you have an address on ledger, you can authenticate; if you have money paid on the ledger, you can authorize for higher access tiers.
 
-But the main benefit is suggested with the green blurb on the right of the diagram: the mention of how *overhide* remuneration APIs can abstract any ledger to enable this authorization flow.  The significance here: a single implementation in code can leverage any currency.  Any cryptocurrency--and with [*overhide-ledger*](https://ohledger.com)--dollars.  
+But the main benefit is suggested with the green blurb on the right of the diagram: the mention of how *overhide* remuneration APIs can abstract any ledger to enable this authorization flow.  The significance here: a single implementation in code can leverage any currency.  Any cryptocurrency--and with [*overhide-ledger*](https://ledger.overhide.io)--dollars.  
 
 And regarding fiat currencies? The *overhide* remuneration API is covered in detail in a section below.  We'll get to that after we have a brief look at a typical Web 2.0 fiat authorization workflow, to contrast with what we just saw.
 
@@ -101,7 +101,7 @@ The model below shows where the *overhide* remuneration API sits in reference to
 
 As the note on the *service code* suggests, only availability of HTTP is necessary to provide our preferred authorization flow for the service. 
 
-Each ledger--Bitcoin, Ethereum, or [*overhide-ledger*](https://ohledger.com) for dollars--expose their own identical API: they have a proxy implementing the same identical interface.  The login page need merely indicate the user's address from one of the supported ledgers and the corresponding API URL.  The service code need necessarily lookup a different fees schedule for each currency supported, but other than that, these are the only variables in an otherwise common flow.
+Each ledger--Bitcoin, Ethereum, or [*overhide-ledger*](https://ledger.overhide.io) for dollars--expose their own identical API: they have a proxy implementing the same identical interface.  The login page need merely indicate the user's address from one of the supported ledgers and the corresponding API URL.  The service code need necessarily lookup a different fees schedule for each currency supported, but other than that, these are the only variables in an otherwise common flow.
 
 There are only two methods in this API:
 
@@ -114,12 +114,12 @@ The APIs for dollars are made available by the [*overhide-ledger* remuneration p
 
 Bitcoin, tether, EOS, and others are yet to be implemented, hopefully more with community help: these APIs can be implemented for any cryptocurrency.
 
-Similarly, [*overhide-ledger*](https://ohledger.com) could be stood up for other fiat currencies other than dollars.
+Similarly, [*overhide-ledger*](https://ledger.overhide.io) could be stood up for other fiat currencies other than dollars.
 
-Making this API abstraction available for fiat currencies and enabling ledger-based authorization with either type of currency is the whole purpose of [*overhide-ledger*](https://ohledger.com).
+Making this API abstraction available for fiat currencies and enabling ledger-based authorization with either type of currency is the whole purpose of [*overhide-ledger*](https://ledger.overhide.io).
 
 >
-> Making this API abstraction available for fiat currencies and enabling ledger-based authorization with either type of currency is the whole purpose of [*overhide-ledger*](https://ohledger.com).
+> Making this API abstraction available for fiat currencies and enabling ledger-based authorization with either type of currency is the whole purpose of [*overhide-ledger*](https://ledger.overhide.io).
 >
 
 ### From Login client to Service Business End
@@ -139,15 +139,15 @@ With reference to figure 3 above, note that:
 
 ### [Demo](https://github.com/overhide/ledgers.js-demo)
 
-Before diving any deeper into describing [*overhide-ledger*](https://ohledger.com), the concepts just described may become more tangible through a [demo](https://github.com/overhide/ledgers.js-demo) meant to help developers see the approach in a "real" application.
+Before diving any deeper into describing [*overhide-ledger*](https://ledger.overhide.io), the concepts just described may become more tangible through a [demo](https://github.com/overhide/ledgers.js-demo) meant to help developers see the approach in a "real" application.
 
 We have a functioning [demo "game"](https://github.com/overhide/ledgers.js-demo) with a sample login page.  The login page allows either a free account login or value-add pay-for tiers.  Payments in this game can be made using either ether or dollars.
 
 Go check the demo out at [https://github.com/overhide/ledgers.js-demo](https://github.com/overhide/ledgers.js-demo).
 
-## [*overhide-ledger*](https://ohledger.com)
+## [*overhide-ledger*](https://ledger.overhide.io)
 
-We've motivated the ledger-based authorization flow and mentioned that [*overhide-ledger*](https://ohledger.com) enables it for dollars.
+We've motivated the ledger-based authorization flow and mentioned that [*overhide-ledger*](https://ledger.overhide.io) enables it for dollars.
 
 ![](overview-ledger-why.png)
 
@@ -157,16 +157,16 @@ The ledger sits in the cloud as indicated by the bold arrows.
 
 The [ledgers.js library](https://www.npmjs.com/package/ledgers.js) sits in the browser.  It is used by your browser's JavaScript in the same abstracted fashion regardless of remuneration provider.  The linked [demo](https://github.com/overhide/ledgers.js-demo) shows this in action.
 
-[ledgers.js](https://www.npmjs.com/package/ledgers.js) and [*overhide-ledger*](https://ohledger.com) comprise a tool-set to aid developers in leveraging ledgers for authorization; while providing a "lubricant" to app users' transition from paying for services in dollars to paying in cryptos:  showcasing the benefits of cryptos such as pseudonimity and lower transaction cost.
+[ledgers.js](https://www.npmjs.com/package/ledgers.js) and [*overhide-ledger*](https://ledger.overhide.io) comprise a tool-set to aid developers in leveraging ledgers for authorization; while providing a "lubricant" to app users' transition from paying for services in dollars to paying in cryptos:  showcasing the benefits of cryptos such as pseudonimity and lower transaction cost.
 
-By using [ledgers.js](https://www.npmjs.com/package/ledgers.js) and [*overhide-ledger*](https://ohledger.com); developers future-proof their code.
+By using [ledgers.js](https://www.npmjs.com/package/ledgers.js) and [*overhide-ledger*](https://ledger.overhide.io); developers future-proof their code.
 
 
-### What Does [*overhide-ledger*](https://ohledger.com) Do?
+### What Does [*overhide-ledger*](https://ledger.overhide.io) Do?
 
-We have covered enough about the why, let's get into the how--how [*overhide-ledger*](https://ohledger.com) creates its ledger.
+We have covered enough about the why, let's get into the how--how [*overhide-ledger*](https://ledger.overhide.io) creates its ledger.
 
-To understand what [*overhide-ledger*](https://ohledger.com) does let's compare how transactions are added using a dollar payment-gateway versus a decentralized ledger like Ethereum.  The [*overhide-ledger*](https://ohledger.com) approach borrows from both.
+To understand what [*overhide-ledger*](https://ledger.overhide.io) does let's compare how transactions are added using a dollar payment-gateway versus a decentralized ledger like Ethereum.  The [*overhide-ledger*](https://ledger.overhide.io) approach borrows from both.
 
 ![](payment-gateway-tx.png)
 
@@ -176,12 +176,12 @@ Figure 5 shows two related flows.  The top flow is a service provider registerin
 
 The bottom flow in figure 5 is a user making a payment.  The payment process uses the service provider's *account ID* to receive a requested *amount*.  The payment-gateway is a black-box taking care of a lot of the heavy lifting with card issuers and banks.  After a little data entry on the user's side, the service provider receives their fee and the user gets a confirmation.
 
-All the steps in figure 5 are abstracted by [*overhide-ledger*](https://ohledger.com) and furnished by [*ledgers.js*](https://www.npmjs.com/package/ledgers.js) so that the developer doesn't need to implement them.  The [*overhide-ledger*](https://ohledger.com) necessarily handles these bits as it needs to inject itself into the process so as to capture the values in green:
+All the steps in figure 5 are abstracted by [*overhide-ledger*](https://ledger.overhide.io) and furnished by [*ledgers.js*](https://www.npmjs.com/package/ledgers.js) so that the developer doesn't need to implement them.  The [*overhide-ledger*](https://ledger.overhide.io) necessarily handles these bits as it needs to inject itself into the process so as to capture the values in green:
 
 * *account ID* 
 * *amount* 
 
-The values in green--*account ID* and *amount*--are retrieved from the payment-gateway workflow and used with additional cryptographic bits from a blockchain-like transaction workflow to comprise a complete [*overhide-ledger*](https://ohledger.com) entry.
+The values in green--*account ID* and *amount*--are retrieved from the payment-gateway workflow and used with additional cryptographic bits from a blockchain-like transaction workflow to comprise a complete [*overhide-ledger*](https://ledger.overhide.io) entry.
 
 ![](ledger-tx.png)
 
@@ -189,13 +189,13 @@ The values in green--*account ID* and *amount*--are retrieved from the payment-g
 
 Before we get to deep into this workflow, consider that the *account ID* and *amount* from figure 5 are shown being injected from the upper right corner.
 
-The top flow in figure 6 is once again part of service provider registration.  When using the [*overhide-ledger*](https://ohledger.com) this top flow and the top flow in figure 5 are done behind the scenes at the same time.  Here the flow furnishes a *provider address* from either an Ethereum wallet or freshly minted from an Ethereum library.  
+The top flow in figure 6 is once again part of service provider registration.  When using the [*overhide-ledger*](https://ledger.overhide.io) this top flow and the top flow in figure 5 are done behind the scenes at the same time.  Here the flow furnishes a *provider address* from either an Ethereum wallet or freshly minted from an Ethereum library.  
 
 The bottom flow is a user transacting on the ledger.  The last green attribute results from this flow, the *user address*.  
 
 Consider for a moment that figure 6 actually represents a decentralized blockchain transaction.  If you ignore the injection of *account ID* and *amount* from the top right, and consider the crossed out bits in red, you actually have a model of a transaction being signed and sent to an Ethereum node.
 
-But since this isn't a blockchain transaction, it's an [*overhide-ledger*](https://ohledger.com) transaction, it's not a blockchain-node that processes a transaction from the user to the service provider, making funds available as unspent transaction outputs or ledger account balances. Instead it's a centralized [*overhide-ledger*](https://ohledger.com) that uses most of the same process until it's time to write to the ledger. At that time, it only uses the addresses and the signing from the flows in figure 6.  The ledger doesn't have decentralized nodes, leave those bits crossed out in red.  The four attributes in green from figures 5 and 6, in addition to a timestamp, constitute a complete ledger entry:
+But since this isn't a blockchain transaction, it's an [*overhide-ledger*](https://ledger.overhide.io) transaction, it's not a blockchain-node that processes a transaction from the user to the service provider, making funds available as unspent transaction outputs or ledger account balances. Instead it's a centralized [*overhide-ledger*](https://ledger.overhide.io) that uses most of the same process until it's time to write to the ledger. At that time, it only uses the addresses and the signing from the flows in figure 6.  The ledger doesn't have decentralized nodes, leave those bits crossed out in red.  The four attributes in green from figures 5 and 6, in addition to a timestamp, constitute a complete ledger entry:
 
 * *provider address* 
 * *user address* 
@@ -210,26 +210,26 @@ The ledger does necessarily store the payment-gateway *account ID* of the servic
 
 There is no anonymity or decentralization here, but we've enabled ledger-based authorization with dollars.
 
-> Please be aware that the [*overhide-ledger*](https://ohledger.com) functionality discussed above in this section is closed source and has a pending US PTO application (No. 62817820) "PSEUDONYMOUS FIAT CURRENCY TRANSACTION LOGGER SYSTEM AND METHOD FOR PAYMENT GATEWAYS".
+> Please be aware that the [*overhide-ledger*](https://ledger.overhide.io) functionality discussed above in this section is closed source and has a pending US PTO application (No. 62817820) "PSEUDONYMOUS FIAT CURRENCY TRANSACTION LOGGER SYSTEM AND METHOD FOR PAYMENT GATEWAYS".
 
 ### Differences From Blockchain
 
-For completeness let's enumerate some obvious differences between [*overhide-ledger*](https://ohledger.com) and blockchain ledgers.
+For completeness let's enumerate some obvious differences between [*overhide-ledger*](https://ledger.overhide.io) and blockchain ledgers.
 
-First, there is no pseudonimity between the payee and the payer: they know more details about each-other.  The [*overhide-ledger*](https://ohledger.com) doesn't get involved with those personal details, they are relegated to the payment-gateway.  But the two entities do interact.
+First, there is no pseudonimity between the payee and the payer: they know more details about each-other.  The [*overhide-ledger*](https://ledger.overhide.io) doesn't get involved with those personal details, they are relegated to the payment-gateway.  But the two entities do interact.
 
 Although pseudonimity is reduced for the parties involved in a transaction; the public at large still just sees a ledger with hashes.
 
-It might have been more appealing to have [*overhide-ledger*](https://ohledger.com) be an abstraction between the payee and the payer, have each deal solely with [*overhide-ledger*](https://ohledger.com) segregated from each-other.  Although with that approach the ledger would know more about the entities, the entities would be more pseudonymous to each-other.  Unfortunately--since we're not dealing with cryptos where a transaction is the final word--this would open the ledger to risks of chargebacks, returns, and other problems. 
+It might have been more appealing to have [*overhide-ledger*](https://ledger.overhide.io) be an abstraction between the payee and the payer, have each deal solely with [*overhide-ledger*](https://ledger.overhide.io) segregated from each-other.  Although with that approach the ledger would know more about the entities, the entities would be more pseudonymous to each-other.  Unfortunately--since we're not dealing with cryptos where a transaction is the final word--this would open the ledger to risks of chargebacks, returns, and other problems. 
 
 Further, because of the possibility of chargebacks and refunds, the service provider necessarily needs the ability to mark transactions "marked as void by provider":  flagging a transaction on the ledger as no longer valid.  The transaction is not removed from the history, but it is flagged as void.
 
-While we're at it--since we already removed quite a few value-adds of blockchains to make the ledger compatible with the world of fiat money transfers; we might as well provide a pseudo password-reset.  Since the [*overhide-ledger*](https://ohledger.com) hashes email addresses of users, it can--provided said email from said user--allow a user to rewrite a transaction to appear from a new cryptographic key-pair.  A password-reset if you will.
+While we're at it--since we already removed quite a few value-adds of blockchains to make the ledger compatible with the world of fiat money transfers; we might as well provide a pseudo password-reset.  Since the [*overhide-ledger*](https://ledger.overhide.io) hashes email addresses of users, it can--provided said email from said user--allow a user to rewrite a transaction to appear from a new cryptographic key-pair.  A password-reset if you will.
 
-So in the end who knows what in [*overhide-ledger*](https://ohledger.com)?
+So in the end who knows what in [*overhide-ledger*](https://ledger.overhide.io)?
 
 * Stripe knows both parties intimately
-* [*overhide-ledger*](https://ohledger.com) knows *of* both parties
+* [*overhide-ledger*](https://ledger.overhide.io) knows *of* both parties
 * payer can prove ownership of her public address
 * payee can prove ownership of her private address
 * everyone knows the pseudonymous payment was made for all time

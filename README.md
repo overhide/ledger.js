@@ -89,7 +89,7 @@ These API methods are used by the *ledgers.js* library and explicitly called by 
 
 #### Test Environment APIs
 
-For testing the library interacts with the *Rinkeby* *Ethereum* testnet and the [overhide-ledger test environment](https://test.ohledger.com).   
+For testing the library interacts with the *Rinkeby* *Ethereum* testnet and the [overhide-ledger test environment](https://test.ledger.overhide.io).   
 
 The respective API instances used are the following test network nodes:
 
