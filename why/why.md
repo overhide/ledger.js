@@ -243,7 +243,7 @@ At this point as app and service developers we have:
 * an open source implementation of the [*overhide* remuneration API for Ethereum](https://ethereum.overhide.io/swagger.html) ([or Rinkeby testnet](https://rinkeby.ethereum.overhide.io/swagger.html))
 * [wallets](https://metamask.io/) and [browsers](https://www.opera.com) to work with addresses and secrets 
 * a closed source implementation of the [*overhide* remuneration API for dollars](https://ohledger.com/swagger.html) ([or test cluster](https://test.ohledger.com/swagger.html))
-* an [*overhide* ledger Web app](https://ohledger.com/) ([or test cluster](https://test.ohledger.com/))
+* an [*overhide* ledger Web app](https://ledger.overhide.io) ([or test cluster](https://test.ledger.overhide.io))
 * an open source [ledgers.js](https://www.npmjs.com/package/ledgers.js) library to help suport login pages
 * an open source [demo application](https://overhide.github.io/ledgers.js-demo/demo/login.html) showing everything integrated ([repo](https://github.com/overhide/ledgers.js-demo)) ([walkthrough](https://github.com/overhide/ledgers.js-demo#play-by-play-run-through-of-a-demo-source-session))
 
