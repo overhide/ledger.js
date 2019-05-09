@@ -6,7 +6,7 @@ var isScreenSetup = false;
 var logsPostScreenSetup = [];
 
 function log(message, params, fileName) {
-  fileName = fileName || 'test.html';
+  fileName = fileName || 'index.html';
   var prefix = `[${(new Date()).toLocaleTimeString()}] (${fileName}) :: `;
   var msg = params ? prefix + message + " : {\n" + fixupParamsOutput(prefix.length, JSON.stringify(params, null, 2)) + "\n" : prefix + message + "\n";
   msg = "<pre class='clickable' onclick='setCodeToMessage(\"" + fileName + "\",\"" + message + "\")'>" + msg + "</pre>";
