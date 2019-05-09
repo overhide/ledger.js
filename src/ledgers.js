@@ -322,11 +322,11 @@ const oh$ = (function() {
      * 
      *   The credentials objects are as follows:
      * 
-     *   | imparter tag | credentials object |
-     *   | --- | --- |
-     *   | eth-web3 | N/A |
-     *   | ohledger | `{address:..,secret:..}` |
-     *   | ohledger-web3 | N/A |
+     *   | imparter tag | credentials object | comments |
+     *   | --- | --- | --- |
+     *   | eth-web3 | N/A | |
+     *   | ohledger | `{address:..,secret:..}` | `address` is optional, if not set will be extracted from `secret` |
+     *   | ohledger-web3 | N/A | |
      *
      * @returns {Promise} representing a 'true' if success else 'false'; also fires [onCredentialsUpdate](#eventoncredentialsupdate) event against `oh$`
      */
@@ -638,18 +638,21 @@ const oh$ = (function() {
   async function setCredentials(imparterTag, credentials) {
     switch (imparterTag) {
       case OHLEDGER_IMPARTER_TAG:
-        if (!('address' in credentials)) throw new Error("'address' must be passed in");
         if (!('secret' in credentials)) throw new Error("'secret' must be passed in");
-        data.OHLEDGER_IMPARTER_TAG.address = credentials.address;
+        if ('address' in credentials && credentials.address) {
+          data.OHLEDGER_IMPARTER_TAG.address = credentials.address.toLowerCase();
+        } else {
+          data.OHLEDGER_IMPARTER_TAG.address = eth_accounts.privateKeyToAccount(credentials.secret).address.toLowerCase();
+        }
         data.OHLEDGER_IMPARTER_TAG.secret = credentials.secret;
         try {
-          if (!(eth_accounts.recover(eth_accounts.sign('test message', credentials.secret)).toLowerCase() == credentials.address.toLowerCase())) {
+          if (!(eth_accounts.recover(eth_accounts.sign('test message', data.OHLEDGER_IMPARTER_TAG.secret)).toLowerCase() == data.OHLEDGER_IMPARTER_TAG.address)) {
             throw new Error("'secret' not valid for 'address");
           }
         } catch (err) {
           throw new Error("'secret' not valid for 'address");
         }        
-        fire('onCredentialsUpdate', { imparterTag: OHLEDGER_IMPARTER_TAG, address: credentials.address, secret: credentials.secret});
+        fire('onCredentialsUpdate', { imparterTag: OHLEDGER_IMPARTER_TAG, address: data.OHLEDGER_IMPARTER_TAG.address, secret: data.OHLEDGER_IMPARTER_TAG.secret});
         return true;
       default:
         return false;
@@ -673,9 +676,9 @@ const oh$ = (function() {
     switch (imparterTag) {
       case OHLEDGER_IMPARTER_TAG:
         let res = eth_accounts.create();
-        data.OHLEDGER_IMPARTER_TAG.address = res.address;
+        data.OHLEDGER_IMPARTER_TAG.address = res.address.toLowerCase();
         data.OHLEDGER_IMPARTER_TAG.secret = res.privateKey;
-        fire('onCredentialsUpdate', { imparterTag: OHLEDGER_IMPARTER_TAG, address: res.address, secret: res.privateKey});
+        fire('onCredentialsUpdate', { imparterTag: OHLEDGER_IMPARTER_TAG, address: data.OHLEDGER_IMPARTER_TAG.address, secret: data.OHLEDGER_IMPARTER_TAG.secret});
         return true;
       default:
         return false;

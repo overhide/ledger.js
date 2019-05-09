@@ -723,63 +723,60 @@ var oh$ = function () {
           switch (_context4.prev = _context4.next) {
             case 0:
               _context4.t0 = imparterTag;
-              _context4.next = _context4.t0 === OHLEDGER_IMPARTER_TAG ? 3 : 19;
+              _context4.next = _context4.t0 === OHLEDGER_IMPARTER_TAG ? 3 : 17;
               break;
 
             case 3:
-              if ('address' in credentials) {
-                _context4.next = 5;
-                break;
-              }
-
-              throw new Error("'address' must be passed in");
-
-            case 5:
               if ('secret' in credentials) {
-                _context4.next = 7;
+                _context4.next = 5;
                 break;
               }
 
               throw new Error("'secret' must be passed in");
 
-            case 7:
-              data.OHLEDGER_IMPARTER_TAG.address = credentials.address;
-              data.OHLEDGER_IMPARTER_TAG.secret = credentials.secret;
-              _context4.prev = 9;
+            case 5:
+              if ('address' in credentials && credentials.address) {
+                data.OHLEDGER_IMPARTER_TAG.address = credentials.address.toLowerCase();
+              } else {
+                data.OHLEDGER_IMPARTER_TAG.address = eth_accounts.privateKeyToAccount(credentials.secret).address.toLowerCase();
+              }
 
-              if (eth_accounts.recover(eth_accounts.sign('test message', credentials.secret)).toLowerCase() == credentials.address.toLowerCase()) {
-                _context4.next = 12;
+              data.OHLEDGER_IMPARTER_TAG.secret = credentials.secret;
+              _context4.prev = 7;
+
+              if (eth_accounts.recover(eth_accounts.sign('test message', data.OHLEDGER_IMPARTER_TAG.secret)).toLowerCase() == data.OHLEDGER_IMPARTER_TAG.address) {
+                _context4.next = 10;
                 break;
               }
 
               throw new Error("'secret' not valid for 'address");
 
-            case 12:
-              _context4.next = 17;
+            case 10:
+              _context4.next = 15;
               break;
 
-            case 14:
-              _context4.prev = 14;
-              _context4.t1 = _context4["catch"](9);
+            case 12:
+              _context4.prev = 12;
+              _context4.t1 = _context4["catch"](7);
               throw new Error("'secret' not valid for 'address");
 
-            case 17:
+            case 15:
               fire('onCredentialsUpdate', {
                 imparterTag: OHLEDGER_IMPARTER_TAG,
-                address: credentials.address,
-                secret: credentials.secret
+                address: data.OHLEDGER_IMPARTER_TAG.address,
+                secret: data.OHLEDGER_IMPARTER_TAG.secret
               });
               return _context4.abrupt("return", true);
 
-            case 19:
+            case 17:
               return _context4.abrupt("return", false);
 
-            case 20:
+            case 18:
             case "end":
               return _context4.stop();
           }
         }
-      }, _callee4, null, [[9, 14]]);
+      }, _callee4, null, [[7, 12]]);
     }));
     return _setCredentials.apply(this, arguments);
   }
@@ -826,12 +823,12 @@ var oh$ = function () {
 
             case 3:
               res = eth_accounts.create();
-              data.OHLEDGER_IMPARTER_TAG.address = res.address;
+              data.OHLEDGER_IMPARTER_TAG.address = res.address.toLowerCase();
               data.OHLEDGER_IMPARTER_TAG.secret = res.privateKey;
               fire('onCredentialsUpdate', {
                 imparterTag: OHLEDGER_IMPARTER_TAG,
-                address: res.address,
-                secret: res.privateKey
+                address: data.OHLEDGER_IMPARTER_TAG.address,
+                secret: data.OHLEDGER_IMPARTER_TAG.secret
               });
               return _context5.abrupt("return", true);
 

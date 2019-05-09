@@ -61,6 +61,25 @@ describe('ledgers.js smoke', function() {
     });
   });
 
+  it('can setCredentials() on ohledger from secret only', async () => {
+    await go(async () => {
+      var done = false;
+      oh$.addEventListener('onCredentialsUpdate', (event) => {
+        try {
+          if (done) return;
+          chai.assert(event.imparterTag == 'ohledger');
+          chai.assert(event.address == '0x968A1386f3ce3623a32908cC7Ec3dd6F72E74c36'.toLowerCase());
+          chai.assert(event.secret == '0x1b16186f7cf0aa09f561c7547d0e8ec88fb81fcf573cb8887a7d2aa9b9c284ff');
+          chai.assert(event.address == oh$.getCredentials('ohledger').address);
+          chai.assert(event.secret == oh$.getCredentials('ohledger').secret);
+        } finally {
+          done = true;
+        }
+      });
+      oh$.setCredentials('ohledger', { secret: '0x1b16186f7cf0aa09f561c7547d0e8ec88fb81fcf573cb8887a7d2aa9b9c284ff' });
+    });
+  });
+
   it('can setNetwork() on ohledger and getOverhideRemunerationAPIUri', async () => {
     await go(async () => {
       var done = false;
