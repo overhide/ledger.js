@@ -116,15 +116,15 @@ const oh$ = (function() {
    * @event onWalletChange
    * @param {Object} event object - the event object passed in will have additional attributes
    *
-   *   The new event object will conform to the following:
-   *
-   *   | imparter tag | event object attributes |
-   *   | --- | --- |
-   *   | * | `{imparterTag:..,isPresent:..}` |
-   * 
-   *   *imparterTag* - causing the event
-   * 
-   *   *isPresent* - if wallet is present for imparter
+   *  > The new event object will conform to the following:
+   *  >
+   *  > | imparter tag | event object attributes |
+   *  > | --- | --- |
+   *  > | * | `{imparterTag:..,isPresent:..}` |
+   *  >
+   *  > *imparterTag* - causing the event
+   *  >
+   *  > *isPresent* - if wallet is present for imparter
    *
    * @description
    *   Event called when wallets' state changes.
@@ -140,13 +140,13 @@ const oh$ = (function() {
    * @event onWalletPopup
    * @param {Object} event object - the event object passed in will have additional attributes
    *
-   *   The new event object will conform to the following:
-   *
-   *   | imparter tag | event object attributes |
-   *   | --- | --- |
-   *   | * | `{imparterTag:..}` |
-   *
-   *   *imparterTag* - causing the pop-up
+   *  > The new event object will conform to the following:
+   *  >
+   *  > | imparter tag | event object attributes |
+   *  > | --- | --- |
+   *  > | * | `{imparterTag:..}` |
+   *  >
+   *  > *imparterTag* - causing the pop-up
    *
    * @description
    *   Event called when wallet is expected to popup.  Useful in case user wants to react to popup in UI.
@@ -175,19 +175,19 @@ const oh$ = (function() {
    *   ```
    * @param {Object} event object - the event object passed in will have additional attributes
    * 
-   *   The new event object will conform to the following:
-   * 
-   *   | imparter tag | event object attributes |
-   *   | --- | --- |
-   *   | eth-web3 | `{imparterTag:..,address:..}` |
-   *   | ohledger | `{imparterTag:..,address:..,secret:..}` |
-   *   | ohledger-web3 | `{imparterTag:..,address:..}` |
-   * 
-   *   *imparterTag* - causing the event
-   * 
-   *   *address* - ledger public address of credential set for imparter
-   * 
-   *   *secret* - ledger PKI private secret for credential set for imparter
+   *  > The new event object will conform to the following:
+   *  >
+   *  > | imparter tag | event object attributes |
+   *  > | --- | --- |
+   *  > | eth-web3 | `{imparterTag:..,address:..}` |
+   *  > | ohledger | `{imparterTag:..,address:..,secret:..}` |
+   *  > | ohledger-web3 | `{imparterTag:..,address:..}` |
+   *  >
+   *  > *imparterTag* - causing the event
+   *  >
+   *  > *address* - ledger public address of credential set for imparter
+   *  >
+   *  > *secret* - ledger PKI private secret for credential set for imparter
    *
    */
 
@@ -209,23 +209,23 @@ const oh$ = (function() {
    *   ```
    * @param {Object} event object - the event object passed in will have additional attributes
    *
-   *   The new credentials object will conform to the following:
-   *
-   *   | imparter tag | event object attributes |
-   *   | --- | --- |
-   *   | eth-web3 | `{imparterTag:..,name:('main'|'rinkeby'|'kovan').., uri:..}` |
-   *   | ohledger | `{imparterTag:..,currency:'USD',mode:('prod'|'test'), uri:..}` |
-   *   | ohledger-web3 | `{imparterTag:..,currency:'USD',mode:('prod'|'test'), uri:..}` |
-   * 
-   *   *imparterTag* - causing the event
-   * 
-   *   *name* - of network
-   * 
-   *   *currency* - represented by network
-   * 
-   *   *mode* - production or test network
-   * 
-   *   *uri* - remuneration API URI for network
+   *  > The new credentials object will conform to the following:
+   *  >
+   *  > | imparter tag | event object attributes |
+   *  > | --- | --- |
+   *  > | eth-web3 | `{imparterTag:..,name:('main'|'rinkeby'|'kovan').., uri:..}` |
+   *  > | ohledger | `{imparterTag:..,currency:'USD',mode:('prod'|'test'), uri:..}` |
+   *  > | ohledger-web3 | `{imparterTag:..,currency:'USD',mode:('prod'|'test'), uri:..}` |
+   *  >
+   *  > *imparterTag* - causing the event
+   *  >
+   *  > *name* - of network
+   *  >
+   *  > *currency* - represented by network
+   *  >
+   *  > *mode* - production or test network
+   *  >
+   *  > *uri* - remuneration API URI for network
    *
    */
 
@@ -297,13 +297,13 @@ const oh$ = (function() {
      * @param {string} imparterTag
      * @param {Object} options - imparter specific generation options, if any.
      * 
-     *   The options objects are as follows:
-     * 
-     *   | imparter tag | credentials object |
-     *   | --- | --- |
-     *   | eth-web3 | N/A |
-     *   | ohledger | null |
-     *   | ohledger-web3 | N/A |
+     *  > The options objects are as follows:
+     *  >
+     *  > | imparter tag | credentials object |
+     *  > | --- | --- |
+     *  > | eth-web3 | N/A |
+     *  > | ohledger | null |
+     *  > | ohledger-web3 | N/A |
      *
      * @returns {Promise} representing a 'true' if success else 'false'; also fires [onCredentialsUpdate](#eventoncredentialsupdate) event against `oh$`
 
@@ -320,13 +320,13 @@ const oh$ = (function() {
      * @param {string} imparterTag
      * @param {Object} credentials - credentials object of imparter specific parameters to set
      * 
-     *   The credentials objects are as follows:
-     * 
-     *   | imparter tag | credentials object | comments |
-     *   | --- | --- | --- |
-     *   | eth-web3 | N/A | |
-     *   | ohledger | `{address:..,secret:..}` | `address` is optional, if not set will be extracted from `secret` |
-     *   | ohledger-web3 | N/A | |
+     *  > The credentials objects are as follows:
+     *  >
+     *  > | imparter tag | credentials object | comments |
+     *  > | --- | --- | --- |
+     *  > | eth-web3 | N/A | |
+     *  > | ohledger | `{address:..,secret:..}` | `address` is optional, if not set will be extracted from `secret` |
+     *  > | ohledger-web3 | N/A | |
      *
      * @returns {Promise} representing a 'true' if success else 'false'; also fires [onCredentialsUpdate](#eventoncredentialsupdate) event against `oh$`
      */
@@ -342,13 +342,13 @@ const oh$ = (function() {
      * @param {string} imparterTag
      * @param {Object} details - network details object of imparter specific parameters to set.
      * 
-     *   The network details objects are as follows:
-     * 
-     *   | imparter tag | network details object |
-     *   | --- | --- |
-     *   | eth-web3 | N/A |
-     *   | ohledger | `{currency:'USD', mode:'prod'|'test'}` |
-     *   | ohledger-web3 | `{currency:'USD', mode:'prod'|'test'}` |
+     *  > The network details objects are as follows:
+     *  >
+     *  > | imparter tag | network details object |
+     *  > | --- | --- |
+     *  > | eth-web3 | N/A |
+     *  > | ohledger | `{currency:'USD', mode:'prod'|'test'}` |
+     *  > | ohledger-web3 | `{currency:'USD', mode:'prod'|'test'}` |
      *
      * @returns {Promise} representing a 'true' if success else 'false'; also fires [onNetworkChange](#eventonnetworkchange) event against `oh$`
      */
@@ -372,11 +372,11 @@ const oh$ = (function() {
      * @param {string} imparterTag
      * @returns {Object} details - an object describing current credentials, imparterTag dependant:
      * 
-     *   | imparter tag | credentials object |
-     *   | --- | --- |
-     *   | eth-web3 | `{address:..}` |
-     *   | ohledger | `{address:..,secret:..}` |
-     *   | ohledger-web3 | `{address:..}` |
+     *  > | imparter tag | credentials object |
+     *  > | --- | --- |
+     *  > | eth-web3 | `{address:..}` |
+     *  > | ohledger | `{address:..,secret:..}` |
+     *  > | ohledger-web3 | `{address:..}` |
      */
     getCredentials = getCredentials;
 
@@ -388,11 +388,11 @@ const oh$ = (function() {
      * @param {string} imparterTag
      * @returns {Object} details - an object describing current network, imparterTag dependant:
      * 
-     *   | imparter tag | network details object |
-     *   | --- | --- |
-     *   | eth-web3 | `{name:('main'|'rinkeby'|'kovan').., uri:..}` |
-     *   | ohledger | `{currency:'USD',mode:('prod'|'test'), uri:..}` |
-     *   | ohledger-web3 | `{currency:'USD',mode:('prod'|'test'), uri:..}` |
+     *  > | imparter tag | network details object |
+     *  > | --- | --- |
+     *  > | eth-web3 | `{name:('main'|'rinkeby'|'kovan').., uri:..}` |
+     *  > | ohledger | `{currency:'USD',mode:('prod'|'test'), uri:..}` |
+     *  > | ohledger-web3 | `{currency:'USD',mode:('prod'|'test'), uri:..}` |
      */
     getNetwork = getNetwork;
 
@@ -404,13 +404,13 @@ const oh$ = (function() {
      * @param {string} imparterTag
      * @param {Object} recepient - imparter specific object describing recipient of transactions to tally for.
      *
-     *   Recipient objects are as per:
-     *
-     *   | imparter tag | recipient object |
-     *   | --- | --- |
-     *   | eth-web3 | `{address:..}` |
-     *   | ohledger | `{address:..}` |
-     *   | ohledger-web3 | `{address:..}` |
+     *  > Recipient objects are as per:
+     *  >
+     *  > | imparter tag | recipient object |
+     *  > | --- | --- |
+     *  > | eth-web3 | `{address:..}` |
+     *  > | ohledger | `{address:..}` |
+     *  > | ohledger-web3 | `{address:..}` |
      *
      * @param {Date} since - date to start tally since: date of oldest transaction to include.  No restriction if 'null'.
      * @returns {Promise} with the tally value in imparter specific currency
@@ -427,13 +427,13 @@ const oh$ = (function() {
      * @param {Date} since - date to start tally since: date of oldest transaction to include.  No restriction if 'null'.
      * @param {Object} recepient - imparter specific object describing recipient of transactions to tally for.
      *
-     *   Recipient objects are as per:
-     *
-     *   | imparter tag | recipient object |
-     *   | --- | --- |
-     *   | eth-web3 | `{address:..}` |
-     *   | ohledger | `{address:..}` |
-     *   | ohledger-web3 | `{address:..}` |
+     *  > Recipient objects are as per:
+     *  >
+     *  > | imparter tag | recipient object |
+     *  > | --- | --- |
+     *  > | eth-web3 | `{address:..}` |
+     *  > | ohledger | `{address:..}` |
+     *  > | ohledger-web3 | `{address:..}` |
      *
      * @returns {Promise} with the transactions: `[{"transaction-value":..,"transaction-date":..},..]`
      */
@@ -478,17 +478,21 @@ const oh$ = (function() {
      * @param {string} imparterTag
      * @param {number} amount
      * @param {string} to - address of recipient
+     * 
+     *  > $0 (*amount*) transactions against *ohledger* or *ohledger-web* *imparters* use the current credential 
+     *  > as the *to* address, not the specified *to* address.
+     *  
      * @param {Object} options - other options required for the specific imparter.
      * 
-     *   The options objects are as follows:
-     *
-     *   | imparter tag | credentials object |
-     *   | --- | --- |
-     *   | eth-web3 | null |
-     *   | ohledger | {message:.., signature:..} |
-     *   | ohledger-web3 | {message:.., signature:..} |
-     * 
-     *   If *message* and *signature* are provided they are used instead of oh$ asking for wallet to resign message.
+     *  > The options objects are as follows:
+     *  > 
+     *  > | imparter tag | credentials object |
+     *  > | --- | --- |
+     *  > | eth-web3 | null |
+     *  > | ohledger | {message:.., signature:..} |
+     *  > | ohledger-web3 | {message:.., signature:..} |
+     *  > 
+     *  > If *message* and *signature* are provided they are used instead of oh$ asking for wallet to resign message.
      *
      * @returns {Promise} of a 'true' for success or an Error; may fire [onWalletPopup](#eventonwalletpopup) event against `oh$`
      */
@@ -745,7 +749,7 @@ const oh$ = (function() {
 
   async function getTxs(imparterTag, recipient, date, tallyOnly) {
     if (date && !(date instanceof Date)) throw new Error("'date' must be a Date is passed in");
-    if (!('address' in recipient)) throw new Error("'address' required in recipient");
+    if (!('address' in recipient) || !recipient.address) throw new Error("'address' required in recipient");
     let to = recipient.address;
     let uri = getOverhideRemunerationAPIUri(imparterTag);
     switch (imparterTag) {
@@ -867,11 +871,6 @@ const oh$ = (function() {
   }
 
   async function createTransaction(imparterTag, amount, to, options) {
-    if (amount == 0) {
-      if (await isOnLedger(imparterTag)) {
-        return true;
-      }
-    }
     switch (imparterTag) {
       case OHLEDGER_IMPARTER_TAG:
         if (!data.OHLEDGER_IMPARTER_TAG.mode) throw new Error("network 'mode' must be set, use setNetwork");
@@ -895,9 +894,9 @@ const oh$ = (function() {
       case OHLEDGER_IMPARTER_TAG:
       case OHLEDGER_WEB3_IMPARTER_TAG:
         if (amount == 0) {
-          if ('message' in options && 'signature' in options) {
-            message = options.message;
-            signature = options.signature;
+          if ('message' in options && options.message && 'signature' in options && options.signature) {
+            var message = options.message;
+            var signature = options.signature;
           } else {
             var message = `verify ownership of address by signing on ${new Date().toLocaleString()}`;
             var signature = await sign(imparterTag, message);
