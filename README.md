@@ -39,6 +39,8 @@ You can see *ledgers.js* embedded in one of several "learning" tools:
 
 ## Getting Started
 
+### Webpack
+
 The *ledgers.js* library ['dist' folder](https://github.com/overhide/ledgers.js/blob/master/dist) contains the distributable artifact.
 
 You'll likely want to use [webpack](https://webpack.js.org/) to pull this library in, along with its dependencies ([web3.js](https://github.com/ethereum/web3.js/)).
@@ -54,12 +56,21 @@ import oh$ from "ledgers.js";
 oh$.onWalletChange = ...
 ```
 
-Alternativelly--once bundled with its dependencies--the library can be loaded straight into your HTML and accessed by its `oh$` property from the browser's `window` object:
+### CDN
+
+You can include *ledgers.js* via CDN:
+
+* `https://cdn.jsdelivr.net/npm/ledgers.js/ledgers.js`
+* `https://cdn.jsdelivr.net/npm/ledgers.js/ledgers.min.js`
+
+For a specific version, e.g. version *2.1.4*: `https://cdn.jsdelivr.net/npm/ledgers.js@2.1.4/ledgers.min.js`
+
+The library can be loaded straight into your HTML and accessed by its `oh$` property in the globals:
 
 ```
 <script src="./dist/ledgers.js"></script>
 <script>
-  oh$.onWalletChange = ...
+  oh$.addEventListener('onWalletChange', ...);
 </script>
 ```
 
