@@ -15,7 +15,6 @@ module.exports = {
     umdNamedDefine: true    
   },
   devtool: 'source-map',
-  mode: "none",
   plugins: [
     new HardSourceWebpackPlugin()
   ],   
