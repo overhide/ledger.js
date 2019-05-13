@@ -598,13 +598,17 @@ const oh$ = (function() {
         fire('onNetworkChange',{imparterTag: ETH_WEB3_IMPARTER_TAG, name:currentNetwork, uri: data.ETH_WEB3_IMPARTER_TAG.remuneration_uri[currentNetwork]});
       }
       if (currentAddress !== data.ETH_WEB3_IMPARTER_TAG.walletAddress) {
-        let imparterTagIndex = imparterTags.findIndex(v => v === ETH_WEB3_IMPARTER_TAG);
-        if (imparterTagIndex && !currentAddress) {
-          imparterTags.splice(imparterTagIndex,1);
-        } else if (!imparterTagIndex && currentAddress) {
-          imparterTags.push(ETH_WEB3_IMPARTER_TAG);
-          imparterTags.push(OHLEDGER_WEB3_IMPARTER_TAG);
-        }
+        if (currentAddress) { /* add imparters */
+          let imparterTagIndex = imparterTags.findIndex(v => v === ETH_WEB3_IMPARTER_TAG);
+          if (imparterTagIndex == -1) imparterTags.push(ETH_WEB3_IMPARTER_TAG);
+          imparterTagIndex = imparterTags.findIndex(v => v === OHLEDGER_WEB3_IMPARTER_TAG);
+          if (imparterTagIndex == -1) imparterTags.push(OHLEDGER_WEB3_IMPARTER_TAG);
+        } else { /* remove imparters */
+          let imparterTagIndex = imparterTags.findIndex(v => v === ETH_WEB3_IMPARTER_TAG);
+          if (imparterTagIndex > -1) imparterTags.splice(imparterTagIndex, 1);
+          imparterTagIndex = imparterTags.findIndex(v => v === OHLEDGER_WEB3_IMPARTER_TAG);
+          if (imparterTagIndex > -1) imparterTags.splice(imparterTagIndex, 1);
+        } 
         data.ETH_WEB3_IMPARTER_TAG.walletAddress = currentAddress;
         data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress = currentAddress;
         fire('onWalletChange', { imparterTag: ETH_WEB3_IMPARTER_TAG, isPresent: !!currentAddress });
