@@ -39,6 +39,20 @@ You can see *ledgers.js* embedded in one of several "learning" tools:
 
 ## Getting Started
 
+### Onboard
+
+This *ledgers.js* library is client-side and abstracts ledgers (see figure above).  Before using *ledgers.js* in your product, ensure to onboard with the ledgers.
+
+#### *overhide-ledger* (dollars)
+
+* register through [live app](https://ledger.overhide.io) for production
+* register through [test app](https://test.ledger.overhide.io) for development and testing
+
+#### Ethereum (ethers)
+
+* generate a PKI pair on mainnet for production
+* generate a PKI pair on Rinkeby testnet for development and testing
+
 ### Webpack
 
 The *ledgers.js* library ['dist' folder](https://github.com/overhide/ledgers.js/blob/master/dist) contains the distributable artifact.
