@@ -21,7 +21,7 @@ jobs:
           command: docker exec app /bin/sh -c 'cd /app; npm install'
       - run:
           shell: /bin/sh
-          command: docker exec app /bin/sh -c 'cd /app; nohup npm run all'
+          command: docker exec -d app /bin/sh -c 'cd /app; nohup npm run all'
       - run:
           shell: /bin/sh
           command: sleep 10
