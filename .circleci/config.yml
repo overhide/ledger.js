@@ -18,6 +18,11 @@ jobs:
           command: docker exec app /bin/sh -c 'cd /app; npm install -g npm@latest'
       - run:
           shell: /bin/sh
+          command: |
+            apt-get -y update
+            apt-get -y install build-essential
+      - run:
+          shell: /bin/sh
           command: docker exec app /bin/sh -c 'cd /app; npm install'
       - run:
           shell: /bin/sh
