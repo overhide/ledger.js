@@ -1,15 +1,15 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/overhide-ethereum
+    working_directory: ~/ledgers.js
     machine:
       image: ubuntu-2004:202010-01
     steps:
       - checkout
       - run:
-        shell: /bin/sh
-        command: |
-          docker run -d -v ./:/app -t app node:10.13.0
+          shell: /bin/sh
+          command: |
+            docker run -d -v ./:/app -t app node:10.13.0
       - run:
           shell: /bin/sh
           command: sleep 10
