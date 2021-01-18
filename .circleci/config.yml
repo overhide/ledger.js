@@ -9,7 +9,7 @@ jobs:
       - run:
           shell: /bin/sh
           command: |
-            docker run -d -v ~/ledgers.js/:/app --name=app node:10.13.0 /bin/sh -c 'sleep 999'
+            docker run -d -v ~/ledgers.js/:/app --name=app buildkite/puppeteer:v1.10.0 /bin/sh -c 'sleep 999'
       - run:
           shell: /bin/sh
           command: sleep 10
@@ -19,6 +19,9 @@ jobs:
       - run:
           shell: /bin/sh
           command: docker exec app /bin/sh -c 'cd /app; npm install'
+      - run:
+          shell: /bin/sh
+          command: docker exec app /bin/sh -c 'cd /app; npm install puppeteer --unsafe-perm=true --allow-root'
       - run:
           shell: /bin/sh
           command: docker exec app /bin/sh -c 'cd /app; npm run all'
