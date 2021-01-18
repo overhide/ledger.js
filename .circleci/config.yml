@@ -9,7 +9,7 @@ jobs:
       - run:
           shell: /bin/sh
           command: |
-            docker run -d -v ./:/app --name=app node:10.13.0
+            docker run -d -v ~/ledgers.js/:/app --name=app node:10.13.0
       - run:
           shell: /bin/sh
           command: sleep 10
