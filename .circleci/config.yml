@@ -15,19 +15,19 @@ jobs:
           command: sleep 10
       - run:
           shell: /bin/sh
-          command: docker exec `docker ps -q --filter name="app"` bash -c 'cd /app; sudo npm install -g npm@latest'
+          command: docker exec app /bin/sh -c 'cd /app; sudo npm install -g npm@latest'
       - run:
           shell: /bin/sh
-          command: docker exec `docker ps -q --filter name="app"` bash -c 'cd /app; npm install'
+          command: docker exec app /bin/sh -c 'cd /app; npm install'
       - run:
           shell: /bin/sh
-          command: docker exec `docker ps -q --filter name="app"` bash -c 'cd /app; npm run all'
+          command: docker exec app /bin/sh -c 'cd /app; npm run all'
       - run:
           shell: /bin/sh
           command: sleep 10
       - run:
           shell: /bin/sh
-          command: docker exec `docker ps -q --filter name="app"` bash -c 'cd /app; npm run test-report'
+          command: docker exec app /bin/sh -c 'cd /app; npm run test-report'
       - store_test_results:
           path: ./test-report
       - store_artifacts:
