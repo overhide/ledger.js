@@ -74,10 +74,10 @@ oh$.onWalletChange = ...
 
 You can include *ledgers.js* via CDN:
 
-* `https://cdn.jsdelivr.net/npm/ledgers.js/ledgers.js`
-* `https://cdn.jsdelivr.net/npm/ledgers.js/ledgers.min.js`
+* `https://cdn.jsdelivr.net/npm/ledgers.js/dist/ledgers.js`
+* `https://cdn.jsdelivr.net/npm/ledgers.js/dist/ledgers.min.js`
 
-For a specific version, e.g. version *2.1.4*: `https://cdn.jsdelivr.net/npm/ledgers.js@2.1.4/ledgers.min.js`
+For a specific version, e.g. version *2.1.4*: `https://cdn.jsdelivr.net/npm/ledgers.js@2.1.4/dist/ledgers.min.js`
 
 The library can be loaded straight into your HTML and accessed by its `oh$` property in the globals:
 
@@ -139,3 +139,7 @@ For *production instances* of both APIs see:
 #### Additional Notes on APIs
 
 The *overhide-ledger* [Swagger documentation](https://test.ohledger.com/swagger.html) discusses some additional *HTML*/*js* getter endpoints particular to *overhide-ledger* and not part of the generic remuneration API.  The *ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/src/ledgers.js))([API](https://overhide.github.io/ledgers.js/docs/ledgers.js-rendered-docs/index.html))  leverages these additional endpoints when it calls on *overhide-ledger* functionality.  This is similar to how *ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/src/ledgers.js))([API](https://overhide.github.io/ledgers.js/docs/ledgers.js-rendered-docs/index.html)) leverages the [web3.js](https://github.com/ethereum/web3.js/) library when working with ether.
+
+
+
+> build notes: see [./build.txt](./build.txt)

@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/overhide/ledgers.js#readme",
   "dependencies": {
-    "web3": "^1.0.0-beta.54"
+    "web3": "1.0.0-beta.55"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",

@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>ledgers.js :: overhide remuneration library for browser use 2.1.9 | Documentation</title>
+  <title>ledgers.js :: overhide remuneration library for browser use $npm_package_version | Documentation</title>
   <meta name='description' content='JavaScript library for ledger-based authorizations :: abstracting different ledgers to be used in an application&#39;s authentication and authorization workflows.'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet' />
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>ledgers.js :: overhide remuneration library for browser use</h3>
-          <div class='mb1'><code>2.1.9</code></div>
+          <div class='mb1'><code>$npm_package_version</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -46,6 +46,16 @@
               
                 
                 <li><a
+                  href='#eventonwalletpopup'
+                  class="">
+                  onWalletPopup
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#eventoncredentialsupdate'
                   class="">
                   onCredentialsUpdate
@@ -69,16 +79,6 @@
                   href='#getimpartertags'
                   class="">
                   getImparterTags
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#eventonwalletpopup'
-                  class="">
-                  onWalletPopup
                   
                 </a>
                 
@@ -445,6 +445,89 @@ other than USD come online, we'll revisit this.</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='eventonwalletpopup'>
+      onWalletPopup
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Event called when wallet is expected to popup.  Useful in case user wants to react to popup in UI.</p>
+<p>  In user code:</p>
+<pre><code>oh$.addEventListener('onWalletPopup', (e) => console.log(`wallet for ${e.imparterTag} popped`));
+</code></pre>
+
+    <div class='pre p1 fill-light mt0'>onWalletPopup</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>event</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    object - the event object passed in will have additional attributes
+<blockquote>
+<p>The new event object will conform to the following:</p>
+<table>
+<thead>
+<tr>
+<th>imparter tag</th>
+<th>event object attributes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>*</td>
+<td><code>{imparterTag:..}</code></td>
+</tr>
+</tbody>
+</table>
+<p><em>imparterTag</em> - causing the pop-up</p>
+</blockquote>
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='eventoncredentialsupdate'>
       onCredentialsUpdate
     </h3>
@@ -675,89 +758,6 @@ other than USD come online, we'll revisit this.</p>
 
       
     
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='eventonwalletpopup'>
-      onWalletPopup
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Event called when wallet is expected to popup.  Useful in case user wants to react to popup in UI.</p>
-<p>  In user code:</p>
-<pre><code>oh$.addEventListener('onWalletPopup', (e) => console.log(`wallet for ${e.imparterTag} popped`));
-</code></pre>
-
-    <div class='pre p1 fill-light mt0'>onWalletPopup</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>event</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
-	    object - the event object passed in will have additional attributes
-<blockquote>
-<p>The new event object will conform to the following:</p>
-<table>
-<thead>
-<tr>
-<th>imparter tag</th>
-<th>event object attributes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>*</td>
-<td><code>{imparterTag:..}</code></td>
-</tr>
-</tbody>
-</table>
-<p><em>imparterTag</em> - causing the pop-up</p>
-</blockquote>
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
   
 
   
