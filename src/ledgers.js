@@ -1,5 +1,4 @@
 import Web3 from 'web3';
-import {Accounts} from 'web3-eth-accounts';
 
 //     ledgers.js 
 //     https://ohledger.com
@@ -543,7 +542,7 @@ const oh$ = (function() {
     }
   }
 
-  var eth_accounts = new Accounts('http://localhost:8545');
+  var eth_accounts = (new Web3('http://localhost:8545')).eth.accounts;
 
   createPopup();
   detectWeb3Wallet();

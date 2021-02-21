@@ -53,17 +53,17 @@ This *ledgers.js* library is client-side and abstracts ledgers (see figure above
 * generate a PKI pair on mainnet for production
 * generate a PKI pair on Rinkeby testnet for development and testing
 
-### Webpack
+### Distributable
 
 The *ledgers.js* library ['dist' folder](https://github.com/overhide/ledgers.js/blob/master/dist) contains the distributable artifact.
 
-You'll likely want to use [webpack](https://webpack.js.org/) to pull this library in, along with its dependencies ([web3.js](https://github.com/ethereum/web3.js/)).
+You'll likely want to [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) the library along with its dependencies ([web3.js](https://github.com/ethereum/web3.js/)).
 
 Within your front-end projects; using *npm* simply:  `npm install ledgers.js --save-prod`.
 
 The *ledgers.js* library exports the `oh$` object--it also sets a global `oh$` object on `window`.
 
-To bring in the `oh$` object into your code using [webpack](https://webpack.js.org/):
+To bring in the `oh$` object into your code using [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import):
 
 ```
 import oh$ from "ledgers.js";
@@ -79,10 +79,15 @@ You can include *ledgers.js* via CDN:
 
 For a specific version, e.g. version *2.1.4*: `https://cdn.jsdelivr.net/npm/ledgers.js@2.1.4/dist/ledgers.min.js`
 
+> The library depends on [web3.js](https://github.com/ethereum/web3.js/), as such you must include the dependency (see first line in example below).
+
 The library can be loaded straight into your HTML and accessed by its `oh$` property in the globals:
 
 ```
-<script src="./dist/ledgers.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.4/web3.min.js" integrity="sha512-TTGImODeszogiro9DUvleC9NJVnxO6M0+69nbM3YE9SYcVe4wZp2XYpELtcikuFZO9vjXNPyeoHAhS5DHzX1ZQ==" crossorigin="anonymous"></script>
+
+<script src="`https://cdn.jsdelivr.net/npm/ledgers.js/dist/ledgers.min.js`"></script>
+
 <script>
   oh$.addEventListener('onWalletChange', ...);
 </script>
