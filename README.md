@@ -124,7 +124,7 @@ For testing the library interacts with the *Rinkeby* *Ethereum* testnet and the 
 The respective API instances used are the following test network nodes:
 
 * ether:  [*overhide* Remuneration API for Ethereum](https://rinkeby.ethereum.overhide.io/swagger.html) 
-* dollars:  [*overhide-ledger*--the renmuneration provider for US dollars](https://test.ohledger.com/swagger.html)
+* dollars:  [*overhide-ledger*--the renmuneration provider for US dollars](https://test.ledger.overhide.io/swagger.html)
 
 Use a [Rinkeby](https://faucet.rinkeby.io/) faucet to get "test" Ether for playing around with the library.
 
@@ -134,16 +134,16 @@ Use [Stripe's "test" credit cards](https://stripe.com/docs/testing#cards) to pla
 
 To interact with the Ethereum *mainnet*, user your wallet.
 
-To interact with the production *overhide-ledger*, visit https://ohledger.com.
+To interact with the production *overhide-ledger*, visit https://ledger.overhide.io.
 
 For *production instances* of both APIs see:
 
 * [*mainnet* *Ethereum* APIs](https://ethereum.overhide.io/swagger.html)
-* [*Production* *overhide-ledger*](https://ohledger.com/swagger.html)
+* [*Production* *overhide-ledger*](https://ledger.overhide.io/swagger.html)
 
 #### Additional Notes on APIs
 
-The *overhide-ledger* [Swagger documentation](https://test.ohledger.com/swagger.html) discusses some additional *HTML*/*js* getter endpoints particular to *overhide-ledger* and not part of the generic remuneration API.  The *ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/src/ledgers.js))([API](https://overhide.github.io/ledgers.js/docs/ledgers.js-rendered-docs/index.html))  leverages these additional endpoints when it calls on *overhide-ledger* functionality.  This is similar to how *ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/src/ledgers.js))([API](https://overhide.github.io/ledgers.js/docs/ledgers.js-rendered-docs/index.html)) leverages the [web3.js](https://github.com/ethereum/web3.js/) library when working with ether.
+The *overhide-ledger* [Swagger documentation](https://test.ledger.overhide.io/swagger.html) discusses some additional *HTML*/*js* getter endpoints particular to *overhide-ledger* and not part of the generic remuneration API.  The *ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/src/ledgers.js))([API](https://overhide.github.io/ledgers.js/docs/ledgers.js-rendered-docs/index.html))  leverages these additional endpoints when it calls on *overhide-ledger* functionality.  This is similar to how *ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/src/ledgers.js))([API](https://overhide.github.io/ledgers.js/docs/ledgers.js-rendered-docs/index.html)) leverages the [web3.js](https://github.com/ethereum/web3.js/) library when working with ether.
 
 
 

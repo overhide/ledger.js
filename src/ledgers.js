@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 
 //     ledgers.js 
-//     https://ohledger.com
+//     https://ledger.overhide.io
 //     (c) 2019 Overhide LLC, Wyoming, USA
 //     ledgers.js may be freely distributed under the MIT license.
 
@@ -11,7 +11,7 @@ import Web3 from 'web3';
  * 
  * #### REFERENCES
  * 
- * Library code: https://github.com/overhide/ledgers.js/blob/master/ledgers.js.
+ * Library code: https://github.com/overhide/ledgers.js/blob/master/dist/ledgers.js.
  *
  * Repository for this library is https://github.com/overhide/ledgers.js.
  * 
@@ -524,8 +524,8 @@ const oh$ = (function() {
       secret: null,
       mode: 'test',
       remuneration_uri: {
-        'prod': 'https://ohledger.com/v1',
-        'test': 'https://test.ohledger.com/v1'
+        'prod': 'https://ledger.overhide.io/v1',
+        'test': 'https://test.ledger.overhide.io/v1'
       }
     },
     OHLEDGER_WEB3_IMPARTER_TAG: {
@@ -536,8 +536,8 @@ const oh$ = (function() {
       walletAddress: null,
       mode: 'test',
       remuneration_uri: {
-        'prod': 'https://ohledger.com/v1',
-        'test': 'https://test.ohledger.com/v1'
+        'prod': 'https://ledger.overhide.io/v1',
+        'test': 'https://test.ledger.overhide.io/v1'
       }
     }
   }
