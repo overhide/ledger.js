@@ -13,13 +13,13 @@
 
   All USD calls are against the overhide-ledger test:
    
-    - https://test.ohledger.com/pay
+    - https://test.ledger.overhide.io/pay
 
 
   For USD testing ensure your receiving USD address is
   setup as provider:
 
-    - https://test.ohledger.com/reap
+    - https://test.ledger.overhide.io/reap
 
 
                ,--------------.

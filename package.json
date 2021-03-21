@@ -1,6 +1,6 @@
 {
   "name": "ledgers.js",
-  "version": "2.1.9",
+  "version": "4.0.0",
   "description": "JavaScript library for ledger-based authorizations :: abstracting different ledgers to be used in an application's authentication and authorization workflows.",
   "engines": {
     "node": ">=10.13.0"
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/overhide/ledgers.js#readme",
   "dependencies": {
-    "web3": "^1.0.0-beta.54"
+    "web3": "1.3.4"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",

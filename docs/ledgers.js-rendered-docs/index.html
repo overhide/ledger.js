@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>ledgers.js :: overhide remuneration library for browser use 2.1.9 | Documentation</title>
+  <title>ledgers.js :: overhide remuneration library for browser use $npm_package_version | Documentation</title>
   <meta name='description' content='JavaScript library for ledger-based authorizations :: abstracting different ledgers to be used in an application&#39;s authentication and authorization workflows.'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet' />
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>ledgers.js :: overhide remuneration library for browser use</h3>
-          <div class='mb1'><code>2.1.9</code></div>
+          <div class='mb1'><code>$npm_package_version</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -46,6 +46,16 @@
               
                 
                 <li><a
+                  href='#eventonwalletpopup'
+                  class="">
+                  onWalletPopup
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#eventoncredentialsupdate'
                   class="">
                   onCredentialsUpdate
@@ -66,9 +76,9 @@
               
                 
                 <li><a
-                  href='#getimpartertags'
+                  href='#enable'
                   class="">
-                  getImparterTags
+                  enable
                   
                 </a>
                 
@@ -76,9 +86,9 @@
               
                 
                 <li><a
-                  href='#eventonwalletpopup'
+                  href='#getimpartertags'
                   class="">
-                  onWalletPopup
+                  getImparterTags
                   
                 </a>
                 
@@ -258,7 +268,7 @@
   
 
   <h4>REFERENCES</h4>
-<p>Library code: <a href="https://github.com/overhide/ledgers.js/blob/master/ledgers.js">https://github.com/overhide/ledgers.js/blob/master/ledgers.js</a>.</p>
+<p>Library code: <a href="https://github.com/overhide/ledgers.js/blob/master/dist/ledgers.js">https://github.com/overhide/ledgers.js/blob/master/dist/ledgers.js</a>.</p>
 <p>Repository for this library is <a href="https://github.com/overhide/ledgers.js">https://github.com/overhide/ledgers.js</a>.</p>
 <p>The repository contains a demo app of this library working in conjunction with the <em>overhide</em> Ethereum remuneration
 provider (Rinkeby testnet -- <a href="https://rinkeby.ethereum.overhide.io">https://rinkeby.ethereum.overhide.io</a>) and the <em>overhide-ledger</em> (test environment -- <a href="https://test.ledger.overhide.io">https://test.ledger.overhide.io</a>)</p>
@@ -271,12 +281,20 @@ authentication (I am who I say) and authorization (paid access tiers).</p>
 (without wallets) where it cannot.</p>
 <p>The library exports the <code>oh$</code> object for use as a module when bundling.</p>
 <pre><code>import oh$ from "ledgers.js";
+oh$.enable(token);
 oh$.addEventListener('onWalletChange', (e) => {...});
 </code></pre>
-<p>Once bundled with its dependencies--the library can be loaded straight into your HTML and accessed by its <code>oh$</code>
-property from the browser's <code>window</code> object:</p>
-<pre><code>&#x3C;script src="./dist/ledgers.js">&#x3C;/script>
+<blockquote>
+<p>APIs abstracted by <em>ledgers.js</em> require a bearer-token.  The <code>token</code> (above) is passed in to <code>enable</code> the rest of the library's
+functionality.  <code>oh$.enable(..)</code> can be called every so often with a refreshed token.</p>
+<p> A token can be retrieved with a <code>GET /token</code> call (see <a href="https://token.overhide.io/swagger.html">https://token.overhide.io/swagger.html</a>).</p>
+<p>To retrieve tokens please first register for your own API key at <a href="https://token.overhide.io/register">https://token.overhide.io/register</a>.</p>
+</blockquote>
+<p>The library can be loaded straight into your HTML (along with pre-requisite <code>web3.min.js</code>) and accessed by its <code>oh$</code> property from the browser's <code>window</code> object:</p>
+<pre><code>&#x3C;script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.4/web3.min.js" integrity="sha512-TTGImODeszogiro9DUvleC9NJVnxO6M0+69nbM3YE9SYcVe4wZp2XYpELtcikuFZO9vjXNPyeoHAhS5DHzX1ZQ==" crossorigin="anonymous">&#x3C;/script>
+&#x3C;script src="./dist/ledgers.js">&#x3C;/script>
 &#x3C;script>
+  oh$.enable(token);
   oh$.addEventListener('onWalletChange', (e) => {...});
 &#x3C;/script>
 </code></pre>
@@ -411,6 +429,89 @@ other than USD come online, we'll revisit this.</p>
 </table>
 <p><em>imparterTag</em> - causing the event</p>
 <p><em>isPresent</em> - if wallet is present for imparter</p>
+</blockquote>
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='eventonwalletpopup'>
+      onWalletPopup
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Event called when wallet is expected to popup.  Useful in case user wants to react to popup in UI.</p>
+<p>  In user code:</p>
+<pre><code>oh$.addEventListener('onWalletPopup', (e) => console.log(`wallet for ${e.imparterTag} popped`));
+</code></pre>
+
+    <div class='pre p1 fill-light mt0'>onWalletPopup</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>event</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    object - the event object passed in will have additional attributes
+<blockquote>
+<p>The new event object will conform to the following:</p>
+<table>
+<thead>
+<tr>
+<th>imparter tag</th>
+<th>event object attributes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>*</td>
+<td><code>{imparterTag:..}</code></td>
+</tr>
+</tbody>
+</table>
+<p><em>imparterTag</em> - causing the pop-up</p>
 </blockquote>
 
           </div>
@@ -642,6 +743,69 @@ other than USD come online, we'll revisit this.</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='enable'>
+      enable
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Enable <code>oh$</code> by instrumenting with token for ledger access.</p>
+<p>  A token can be retrieved with a <code>GET /token</code> call (see <a href="https://token.overhide.io/swagger.html">https://token.overhide.io/swagger.html</a>).</p>
+<p>  To retrieve tokens please first register for your own API key at <a href="https://token.overhide.io/register">https://token.overhide.io/register</a>.</p>
+
+    <div class='pre p1 fill-light mt0'>enable(token: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>token</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='getimpartertags'>
       getImparterTags
     </h3>
@@ -675,89 +839,6 @@ other than USD come online, we'll revisit this.</p>
 
       
     
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='eventonwalletpopup'>
-      onWalletPopup
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Event called when wallet is expected to popup.  Useful in case user wants to react to popup in UI.</p>
-<p>  In user code:</p>
-<pre><code>oh$.addEventListener('onWalletPopup', (e) => console.log(`wallet for ${e.imparterTag} popped`));
-</code></pre>
-
-    <div class='pre p1 fill-light mt0'>onWalletPopup</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>event</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
-	    object - the event object passed in will have additional attributes
-<blockquote>
-<p>The new event object will conform to the following:</p>
-<table>
-<thead>
-<tr>
-<th>imparter tag</th>
-<th>event object attributes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>*</td>
-<td><code>{imparterTag:..}</code></td>
-</tr>
-</tbody>
-</table>
-<p><em>imparterTag</em> - causing the pop-up</p>
-</blockquote>
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
   
 
   

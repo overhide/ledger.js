@@ -1,18 +1,61 @@
 const puppeteer = require('puppeteer');
 const path = require('path');
 
+const TOKEN_URL = `https://token.overhide.io/token`;
+const API_KEY = '0x___API_KEY_ONLY_FOR_DEMOS_AND_TESTS___';
+var TOKEN = null;
+
+// @return promise
+function getToken() {
+  return new Promise((resolve,reject) => {
+    var endpoint = `${TOKEN_URL}?apikey=${API_KEY}`;
+    console.log("getToken :: hitting endpoint " + endpoint);
+    try {
+      require("https").get(endpoint, (res) => {
+        const { statusCode } = res;
+        if (statusCode != 200) {          
+          reject();
+        } else {
+          res.on('data', (data) => {
+            TOKEN = data;
+            console.log("getToken :: OK: " + TOKEN);
+            resolve();
+          })  
+        }
+      }).on('error', err => reject(err));
+    } catch (err) {
+      console.log("getToken :: error: " + err);
+      reject(err);
+    }
+  });  
+}
+
 async function go (fn) {
   const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
   const page = await browser.newPage();
   await page.goto(`file:${path.join(__dirname, '../html/index.html')}`);
-  await page.evaluate(fn);
+  await page.evaluate(fn, TOKEN);
 }
 
 describe('ledgers.js smoke', function() {
   this.timeout('20s');
 
+  // initialization hook for every test
+  before((done) => { 
+    console.log("Settings: \n");
+    TOKEN_URL && console.log('TOKEN_URL:'+TOKEN_URL);
+    API_KEY && console.log('API_KEY:'+API_KEY);
+    console.log("\n");
+
+    (async () => {
+      await getToken();
+      done();
+    })();
+  });
+
   it('returns canGenerateCredentials properly', async () => {
-    await go(async () => {
+    await go(async (token) => {
+      oh$.enable(token);
       chai.assert(oh$.canGenerateCredentials('ohledger') == true);
       chai.assert(oh$.canGenerateCredentials('ohledger-web3') == false);
       chai.assert(oh$.canGenerateCredentials('eth-web3') == false);
@@ -20,7 +63,8 @@ describe('ledgers.js smoke', function() {
   });
 
   it('returns canChangeNetwork properly', async () => {
-    await go(async () => {
+    await go(async (token) => {
+      oh$.enable(token);
       chai.assert(oh$.canChangeNetwork('ohledger') == true);
       chai.assert(oh$.canChangeNetwork('ohledger-web3') == true);
       chai.assert(oh$.canChangeNetwork('eth-web3') == false);
@@ -28,7 +72,8 @@ describe('ledgers.js smoke', function() {
   });
 
   it('can generateCredentials() on ohledger', async () => {
-    await go(async () => {
+    await go(async (token) => {
+      oh$.enable(token);
       var done = false;
       oh$.addEventListener('onCredentialsUpdate', (event) => {
         try {
@@ -43,7 +88,8 @@ describe('ledgers.js smoke', function() {
   });
 
   it('can setCredentials() on ohledger', async () => {
-    await go(async () => {
+    await go(async (token) => {
+      oh$.enable(token);
       var done = false;
       oh$.addEventListener('onCredentialsUpdate', (event) => {
         try {
@@ -62,7 +108,8 @@ describe('ledgers.js smoke', function() {
   });
 
   it('can setCredentials() on ohledger from secret only', async () => {
-    await go(async () => {
+    await go(async (token) => {
+      oh$.enable(token);
       var done = false;
       oh$.addEventListener('onCredentialsUpdate', (event) => {
         try {
@@ -81,7 +128,8 @@ describe('ledgers.js smoke', function() {
   });
 
   it('can setNetwork() on ohledger and getOverhideRemunerationAPIUri', async () => {
-    await go(async () => {
+    await go(async (token) => {
+      oh$.enable(token);
       var done = false;
       oh$.addEventListener('onNetworkChange', (event) => {
         try {

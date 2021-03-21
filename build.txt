@@ -1,0 +1,18 @@
+Extra build steps, for Debian/Linux:
+
+    see /.circleci/config.yml
+
+Extra build steps, for Windows 10:
+
+    (just simply `npm install --no-optional`)
+
+    choco install visualcpp-build-tools --version 14.0.25420.1
+    choco upgrade python2 visualstudio2017-workload-vctools
+    $env:VCTargetsPath=C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\v140
+    npm install --global --production windows-build-tools
+    npm install --global node-gyp
+
+    Reference:  https://spin.atomicobject.com/2019/03/27/node-gyp-windows/
+
+** If the Windows 10 steps above fail (nody-gyp for example), just use `build.ps1`.  Replays steps via docker. **
+

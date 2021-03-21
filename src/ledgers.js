@@ -1,9 +1,8 @@
 import Web3 from 'web3';
-import {Accounts} from 'web3-eth-accounts';
 
 //     ledgers.js 
-//     https://ohledger.com
-//     (c) 2019 Overhide LLC, Wyoming, USA
+//     https://ledger.overhide.io
+//     (c) 2021 Overhide LLC, Wyoming, USA
 //     ledgers.js may be freely distributed under the MIT license.
 
 /**
@@ -12,7 +11,7 @@ import {Accounts} from 'web3-eth-accounts';
  * 
  * #### REFERENCES
  * 
- * Library code: https://github.com/overhide/ledgers.js/blob/master/ledgers.js.
+ * Library code: https://github.com/overhide/ledgers.js/blob/master/dist/ledgers.js.
  *
  * Repository for this library is https://github.com/overhide/ledgers.js.
  * 
@@ -34,15 +33,24 @@ import {Accounts} from 'web3-eth-accounts';
  * 
  * ```
  * import oh$ from "ledgers.js";
+ * oh$.enable(token);
  * oh$.addEventListener('onWalletChange', (e) => {...});
  * ```
  * 
- * Once bundled with its dependencies--the library can be loaded straight into your HTML and accessed by its `oh$` 
- * property from the browser's `window` object:
+ * > APIs abstracted by *ledgers.js* require a bearer-token.  The `token` (above) is passed in to `enable` the rest of the library's
+ * > functionality.  `oh$.enable(..)` can be called every so often with a refreshed token.
+ * >
+ * >  A token can be retrieved with a `GET /token` call (see https://token.overhide.io/swagger.html).
+ * >
+ * > To retrieve tokens please first register for your own API key at https://token.overhide.io/register.
+ * 
+ * The library can be loaded straight into your HTML (along with pre-requisite `web3.min.js`) and accessed by its `oh$` property from the browser's `window` object:
  * 
  * ```
+ * <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.4/web3.min.js" integrity="sha512-TTGImODeszogiro9DUvleC9NJVnxO6M0+69nbM3YE9SYcVe4wZp2XYpELtcikuFZO9vjXNPyeoHAhS5DHzX1ZQ==" crossorigin="anonymous"></script>
  * <script src="./dist/ledgers.js"></script>
  * <script>
+ *   oh$.enable(token);
  *   oh$.addEventListener('onWalletChange', (e) => {...});
  * </script>
  * ```
@@ -228,6 +236,19 @@ const oh$ = (function() {
    *  > *uri* - remuneration API URI for network
    *
    */
+
+    /**
+     * @namespace oh$
+     * @function enable
+     * @description
+     *   Enable `oh$` by instrumenting with token for ledger access.
+     * 
+     *   A token can be retrieved with a `GET /token` call (see https://token.overhide.io/swagger.html).
+     * 
+     *   To retrieve tokens please first register for your own API key at https://token.overhide.io/register.
+     * @param {string} token
+     */
+    enable = enable;
 
     /**
      * @namespace oh$
@@ -505,6 +526,7 @@ const oh$ = (function() {
   const OHLEDGER_IMPARTER_TAG = 'ohledger'
   const OHLEDGER_WEB3_IMPARTER_TAG = 'ohledger-web3'
 
+  var token = null;
   var imparterTags = [OHLEDGER_IMPARTER_TAG];
 
   var data = {
@@ -525,8 +547,8 @@ const oh$ = (function() {
       secret: null,
       mode: 'test',
       remuneration_uri: {
-        'prod': 'https://ohledger.com/v1',
-        'test': 'https://test.ohledger.com/v1'
+        'prod': 'https://ledger.overhide.io/v1',
+        'test': 'https://test.ledger.overhide.io/v1'
       }
     },
     OHLEDGER_WEB3_IMPARTER_TAG: {
@@ -537,13 +559,13 @@ const oh$ = (function() {
       walletAddress: null,
       mode: 'test',
       remuneration_uri: {
-        'prod': 'https://ohledger.com/v1',
-        'test': 'https://test.ohledger.com/v1'
+        'prod': 'https://ledger.overhide.io/v1',
+        'test': 'https://test.ledger.overhide.io/v1'
       }
     }
   }
 
-  var eth_accounts = new Accounts('http://localhost:8545');
+  var eth_accounts = (new Web3('http://localhost:8545')).eth.accounts;
 
   createPopup();
   detectWeb3Wallet();
@@ -620,6 +642,10 @@ const oh$ = (function() {
       }
     }
   } 
+
+  function enable(_token) {
+    token = _token;
+  }
 
   function getImparterTags() {
     return imparterTags;
@@ -780,7 +806,11 @@ const oh$ = (function() {
     if (date) {
       since = `&since=${date.toISOString()}`;
     }
-    return await fetch(`${uri}/get-transactions/${from}/${to}?tally-only=${tallyOnly ? 'true' : 'false'}${since}`)
+    return await fetch(`${uri}/get-transactions/${from}/${to}?tally-only=${tallyOnly ? 'true' : 'false'}${since}`, {
+        headers: new Headers({
+          'Authorization': `Bearer ${token}`
+        })
+      })
       .then(res => res.json())
       .catch(e => {
         throw String(e)
@@ -837,7 +867,10 @@ const oh$ = (function() {
     let signature = await sign(imparterTag, message);
     return await fetch(`${uri}/is-signature-valid`, {
       method: "POST",
-      headers: { "Content-Type": "application/json; charset=utf-8" },
+      headers: { 
+        'Content-Type': 'application/json; charset=utf-8',
+        'Authorization': `Bearer ${token}`
+      },
       body: JSON.stringify({
         signature: btoa(signature),
         message: btoa(message),

@@ -26,7 +26,17 @@ For more information, videos, write-ups, please visit https://overhide.io.
 
 ## Getting a Taste
 
-You can see *ledgers.js* embedded in one of several "learning" tools:
+You can see *ledgers.js* live as embedded in this [live API playground](https://overhide.github.io/ledgers.js/play/) learning tool.
+
+This playground is hosted by this repo.  It's available in this repo at [./play](./play).  You can run your own local instance with `npm run play` and directing your browser at http://localhost:8080/play/index.html.
+
+The playground showcases all library APIs as available to be used against *ledgers.js* test networks.
+
+You can use the playground with your *web3.js* enabled browser wallet such as https://metamask.io/.  If testing with Ethereum, just ensure to use the *Rinkeby* testnet.
+
+
+
+You can also see *ledgers.js* embedded in one of these "demo" tools:
 
 * the [ledgers.js-demo](https://github.com/overhide/ledgers.js-demo)
     * a sample login page made with *ledger.js*
@@ -34,8 +44,6 @@ You can see *ledgers.js* embedded in one of several "learning" tools:
 * a demo of *ledgers.js* in a [serverless dApp](https://github.com/overhide/ledgers.js-demo-serverless-dapp)
     * *ledgers.js* used for fiat and crypto payments into an Ethereum smart contract
     * [remuneration APIs](https://github.com/overhide/ledgers.js#remuneration-api) called from Azure serverless as Logic Apps
-* the *ledgers.js* [live API playground](https://overhide.github.io/ledgers.js/play/) hosted by this repo
-    * all library APIs available to be used against *ledgers.js* test networks
 
 ## Getting Started
 
@@ -45,45 +53,60 @@ This *ledgers.js* library is client-side and abstracts ledgers (see figure above
 
 #### *overhide-ledger* (dollars)
 
-* register through [live app](https://ledger.overhide.io) for production
-* register through [test app](https://test.ledger.overhide.io) for development and testing
+* register through [live app](https://ledger.overhide.io/onboard) for production
+* register through [test app](https://test.ledger.overhide.io/onboard) for development and testing
 
 #### Ethereum (ethers)
 
 * generate a PKI pair on mainnet for production
 * generate a PKI pair on Rinkeby testnet for development and testing
 
-### Webpack
+### Distributable
 
 The *ledgers.js* library ['dist' folder](https://github.com/overhide/ledgers.js/blob/master/dist) contains the distributable artifact.
 
-You'll likely want to use [webpack](https://webpack.js.org/) to pull this library in, along with its dependencies ([web3.js](https://github.com/ethereum/web3.js/)).
+You'll likely want to [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) the library along with its dependencies ([web3.js](https://github.com/ethereum/web3.js/)).
 
 Within your front-end projects; using *npm* simply:  `npm install ledgers.js --save-prod`.
 
 The *ledgers.js* library exports the `oh$` object--it also sets a global `oh$` object on `window`.
 
-To bring in the `oh$` object into your code using [webpack](https://webpack.js.org/):
+To bring in the `oh$` object into your code using [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import):
 
 ```
 import oh$ from "ledgers.js";
+oh$.enable(token);
 oh$.onWalletChange = ...
 ```
+
+##### Enabling with Token
+
+APIs abstracted by *ledgers.js* require a bearer-token.  The `token` (above) is passed in to `enable` the rest of the library's functionality.  `oh$.enable(..)` can be called every so often with a refreshed token.
+
+A token can be retrieved with a `GET /token` call (see https://token.overhide.io/swagger.html).
+
+To retrieve tokens please first register for your own API key at https://token.overhide.io/register.
 
 ### CDN
 
 You can include *ledgers.js* via CDN:
 
-* `https://cdn.jsdelivr.net/npm/ledgers.js/ledgers.js`
-* `https://cdn.jsdelivr.net/npm/ledgers.js/ledgers.min.js`
+* `https://cdn.jsdelivr.net/npm/ledgers.js/dist/ledgers.js`
+* `https://cdn.jsdelivr.net/npm/ledgers.js/dist/ledgers.min.js`
 
-For a specific version, e.g. version *2.1.4*: `https://cdn.jsdelivr.net/npm/ledgers.js@2.1.4/ledgers.min.js`
+For a specific version, e.g. version *2.1.4*: `https://cdn.jsdelivr.net/npm/ledgers.js@2.1.4/dist/ledgers.min.js`
+
+> The library depends on [web3.js](https://github.com/ethereum/web3.js/), as such you must include the dependency (see first line in example below).
 
 The library can be loaded straight into your HTML and accessed by its `oh$` property in the globals:
 
 ```
-<script src="./dist/ledgers.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.4/web3.min.js" integrity="sha512-TTGImODeszogiro9DUvleC9NJVnxO6M0+69nbM3YE9SYcVe4wZp2XYpELtcikuFZO9vjXNPyeoHAhS5DHzX1ZQ==" crossorigin="anonymous"></script>
+
+<script src="`https://cdn.jsdelivr.net/npm/ledgers.js/dist/ledgers.min.js`"></script>
+
 <script>
+  oh$.enable(token); 
   oh$.addEventListener('onWalletChange', ...);
 </script>
 ```
@@ -119,7 +142,7 @@ For testing the library interacts with the *Rinkeby* *Ethereum* testnet and the 
 The respective API instances used are the following test network nodes:
 
 * ether:  [*overhide* Remuneration API for Ethereum](https://rinkeby.ethereum.overhide.io/swagger.html) 
-* dollars:  [*overhide-ledger*--the renmuneration provider for US dollars](https://test.ohledger.com/swagger.html)
+* dollars:  [*overhide-ledger*--the renmuneration provider for US dollars](https://test.ledger.overhide.io/swagger.html)
 
 Use a [Rinkeby](https://faucet.rinkeby.io/) faucet to get "test" Ether for playing around with the library.
 
@@ -129,13 +152,17 @@ Use [Stripe's "test" credit cards](https://stripe.com/docs/testing#cards) to pla
 
 To interact with the Ethereum *mainnet*, user your wallet.
 
-To interact with the production *overhide-ledger*, visit https://ohledger.com.
+To interact with the production *overhide-ledger*, visit https://ledger.overhide.io.
 
 For *production instances* of both APIs see:
 
 * [*mainnet* *Ethereum* APIs](https://ethereum.overhide.io/swagger.html)
-* [*Production* *overhide-ledger*](https://ohledger.com/swagger.html)
+* [*Production* *overhide-ledger*](https://ledger.overhide.io/swagger.html)
 
 #### Additional Notes on APIs
 
-The *overhide-ledger* [Swagger documentation](https://test.ohledger.com/swagger.html) discusses some additional *HTML*/*js* getter endpoints particular to *overhide-ledger* and not part of the generic remuneration API.  The *ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/src/ledgers.js))([API](https://overhide.github.io/ledgers.js/docs/ledgers.js-rendered-docs/index.html))  leverages these additional endpoints when it calls on *overhide-ledger* functionality.  This is similar to how *ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/src/ledgers.js))([API](https://overhide.github.io/ledgers.js/docs/ledgers.js-rendered-docs/index.html)) leverages the [web3.js](https://github.com/ethereum/web3.js/) library when working with ether.
+The *overhide-ledger* [Swagger documentation](https://test.ledger.overhide.io/swagger.html) discusses some additional *HTML*/*js* getter endpoints particular to *overhide-ledger* and not part of the generic remuneration API.  The *ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/src/ledgers.js))([API](https://overhide.github.io/ledgers.js/docs/ledgers.js-rendered-docs/index.html))  leverages these additional endpoints when it calls on *overhide-ledger* functionality.  This is similar to how *ledger.js* ([source](https://github.com/overhide/ledgers.js/blob/master/src/ledgers.js))([API](https://overhide.github.io/ledgers.js/docs/ledgers.js-rendered-docs/index.html)) leverages the [web3.js](https://github.com/ethereum/web3.js/) library when working with ether.
+
+
+
+> build notes: see [./build.txt](./build.txt)

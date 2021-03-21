@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>ledgers.js adhoc tester</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.4/web3.min.js" integrity="sha512-TTGImODeszogiro9DUvleC9NJVnxO6M0+69nbM3YE9SYcVe4wZp2XYpELtcikuFZO9vjXNPyeoHAhS5DHzX1ZQ==" crossorigin="anonymous"></script>    
     <script type="text/javascript" src="../dist/ledgers.js"></script>
 
     <!-- ignore below :: code pane / logging  pane setup -->
@@ -32,6 +33,9 @@
               Common test data for the API.  
             </p>
             <p>
+              The <em>API key</em> and <em>token</em> are retrieved from <a href="https://token.overhide.io" target="_blank">the token API</a> and are used to <em>oh$.enable(..)</em>.
+            </p>
+            <p>
               The <em>address</em> and <em>secret</em> track the last credentials reported by <em>onCredentialsUpdate</em>.
             </p>
             <p>
@@ -45,13 +49,17 @@
             <p>Invalid <em>imparterTag</em>.</p>
           </div>
           <div id="ohledgernote" class="w3-panel w3-yellow">
-            <p>For <em>ohledger</em> and <em>ohledger-web3</em> imparters please first <a href="https://test.ledger.overhide.io" target="_blank">register a provider address</a> with the <em>overhide-ledger</em> test network.</p>
+            <p>For <em>ohledger</em> and <em>ohledger-web3</em> imparters please first <a href="https://test.ledger.overhide.io/onboard" target="_blank">register a provider address</a> with the <em>overhide-ledger</em> test network.</p>
           </div>
           <div id="ethnote" class="w3-panel w3-yellow">
             <p>For the <em>eth-web3</em> imparter please use addresses from the <em>Rinkeby</em> testnet.</p>
           </div>
           <form id="setTestData">
             <p>
+              <p><input name="apikey" class="w3-input w3-border" type="text" disabled><label
+                class="w3-text-blue">apikey</label></p>
+              <p><input name="token" class="w3-input w3-border" type="text" disabled><label
+                class="w3-text-blue">token</label></p>
               <p><input name="address" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label
                 class="w3-text-blue">address</label></p>
               <p><input name="secret" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label
@@ -223,6 +231,7 @@
       transactionOptionsJSON:'{"message":"", "signature":""}'
     };
     fillForms();
+    getToken();
 
     window.onload = function () {
       showPostScreenSetupLogs(); // ignore above :: logging setup
@@ -241,6 +250,31 @@
     /* =========================================================================
                          ** Supporting Methods / Utilities **
        ========================================================================= */
+
+    function getToken() {
+      const tokenUrl = `https://token.overhide.io/token`;
+      const apiKey = '0x___API_KEY_ONLY_FOR_DEMOS_AND_TESTS___';
+      const url = `${tokenUrl}?apikey=${apiKey}`;
+
+      log('calling getToken', {url: url});
+      fetch(url, {
+        method: 'GET'
+      }).then(async result => {
+        if (result.status == 200) {
+          const token = await result.text();
+          log('success getToken', {url: url, token: token});
+          updateData({apikey: apiKey, token: token});
+
+          oh$.enable(token);
+          log('enabled library with token');
+
+        } else {
+          log('failed getToken', {url: url, status: result.status, error: result.message});
+        }
+      }).catch(e => {
+        log('failed getToken', {url: url, exception: e});
+      });
+    }
 
     /**
      * Update use-case 'data' (global) with JSON passed in.
