@@ -76,6 +76,16 @@
               
                 
                 <li><a
+                  href='#enable'
+                  class="">
+                  enable
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#getimpartertags'
                   class="">
                   getImparterTags
@@ -271,12 +281,20 @@ authentication (I am who I say) and authorization (paid access tiers).</p>
 (without wallets) where it cannot.</p>
 <p>The library exports the <code>oh$</code> object for use as a module when bundling.</p>
 <pre><code>import oh$ from "ledgers.js";
+oh$.enable(token);
 oh$.addEventListener('onWalletChange', (e) => {...});
 </code></pre>
-<p>Once bundled with its dependencies--the library can be loaded straight into your HTML and accessed by its <code>oh$</code>
-property from the browser's <code>window</code> object:</p>
-<pre><code>&#x3C;script src="./dist/ledgers.js">&#x3C;/script>
+<blockquote>
+<p>APIs abstracted by <em>ledgers.js</em> require a bearer-token.  The <code>token</code> (above) is passed in to <code>enable</code> the rest of the library's
+functionality.  <code>oh$.enable(..)</code> can be called every so often with a refreshed token.</p>
+<p> A token can be retrieved with a <code>GET /token</code> call (see <a href="https://token.overhide.io/swagger.html">https://token.overhide.io/swagger.html</a>).</p>
+<p>To retrieve tokens please first register for your own API key at <a href="https://token.overhide.io/register">https://token.overhide.io/register</a>.</p>
+</blockquote>
+<p>The library can be loaded straight into your HTML (along with pre-requisite <code>web3.min.js</code>) and accessed by its <code>oh$</code> property from the browser's <code>window</code> object:</p>
+<pre><code>&#x3C;script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.4/web3.min.js" integrity="sha512-TTGImODeszogiro9DUvleC9NJVnxO6M0+69nbM3YE9SYcVe4wZp2XYpELtcikuFZO9vjXNPyeoHAhS5DHzX1ZQ==" crossorigin="anonymous">&#x3C;/script>
+&#x3C;script src="./dist/ledgers.js">&#x3C;/script>
 &#x3C;script>
+  oh$.enable(token);
   oh$.addEventListener('onWalletChange', (e) => {...});
 &#x3C;/script>
 </code></pre>
@@ -693,6 +711,69 @@ other than USD come online, we'll revisit this.</p>
 <p><em>uri</em> - remuneration API URI for network</p>
 </blockquote>
 
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='enable'>
+      enable
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Enable <code>oh$</code> by instrumenting with token for ledger access.</p>
+<p>  A token can be retrieved with a <code>GET /token</code> call (see <a href="https://token.overhide.io/swagger.html">https://token.overhide.io/swagger.html</a>).</p>
+<p>  To retrieve tokens please first register for your own API key at <a href="https://token.overhide.io/register">https://token.overhide.io/register</a>.</p>
+
+    <div class='pre p1 fill-light mt0'>enable(token: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>token</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    
           </div>
           
         </div>
