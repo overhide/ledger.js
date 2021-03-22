@@ -28,7 +28,7 @@ For more information, videos, write-ups, please visit https://overhide.io.
 
 You can see *ledgers.js* live as embedded in this [live API playground](https://overhide.github.io/ledgers.js/play/) learning tool.
 
-This playground is hosted by this repo.  It's available in this repo at [./play](./play).  You can run your own local instance with `npm run play` and directing your browser at http://localhost:8080/play/index.html.
+This playground is hosted by this repo: it's available in this repo in the `./play` folder.  You can run your own local instance with `npm run play` and by directing your browser at `http://localhost:8080/play/index.html`.
 
 The playground showcases all library APIs as available to be used against *ledgers.js* test networks.
 
