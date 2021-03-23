@@ -243,6 +243,8 @@ const oh$ = (function() {
      * @description
      *   Enable `oh$` by instrumenting with token for ledger access.
      * 
+     *   `oh$` calls may stall while waiting for this call to complete successfully.
+     * 
      *   A token can be retrieved with a `GET /token` call (see https://token.overhide.io/swagger.html).
      * 
      *   To retrieve tokens please first register for your own API key at https://token.overhide.io/register.
@@ -526,7 +528,10 @@ const oh$ = (function() {
   const OHLEDGER_IMPARTER_TAG = 'ohledger'
   const OHLEDGER_WEB3_IMPARTER_TAG = 'ohledger-web3'
 
+  var doEnable = null;
+  const isEnabled = new Promise((resolve) => doEnable = resolve);
   var token = null;
+  var __fetch = null;
   var imparterTags = [OHLEDGER_IMPARTER_TAG];
 
   var data = {
@@ -643,8 +648,10 @@ const oh$ = (function() {
     }
   } 
 
-  function enable(_token) {
+  function enable(_token, {fetcher} = {fetcher: fetch}) {
     token = _token;
+    __fetch = fetcher;
+    doEnable(true);
   }
 
   function getImparterTags() {
@@ -806,7 +813,8 @@ const oh$ = (function() {
     if (date) {
       since = `&since=${date.toISOString()}`;
     }
-    return await fetch(`${uri}/get-transactions/${from}/${to}?tally-only=${tallyOnly ? 'true' : 'false'}${since}`, {
+    if (await isEnabled && !__fetch) throw new Error('did you forget to `oh$.enable(..)`?');
+    return await __fetch(`${uri}/get-transactions/${from}/${to}?tally-only=${tallyOnly ? 'true' : 'false'}${since}`, {
         headers: new Headers({
           'Authorization': `Bearer ${token}`
         })
@@ -865,7 +873,8 @@ const oh$ = (function() {
     if (!uri) throw new Error('no uri for request, unsupported network selected in wallet?');
     let message = 'verify ownership of address by signing';
     let signature = await sign(imparterTag, message);
-    return await fetch(`${uri}/is-signature-valid`, {
+    if (await isEnabled && !__fetch) throw new Error('did you forget to `oh$.enable(..)`?');
+    return await __fetch(`${uri}/is-signature-valid`, {
       method: "POST",
       headers: { 
         'Content-Type': 'application/json; charset=utf-8',
