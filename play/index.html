@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>ledgers.js adhoc tester</title>
+    <title>ledgers.js API playground</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.4/web3.min.js" integrity="sha512-TTGImODeszogiro9DUvleC9NJVnxO6M0+69nbM3YE9SYcVe4wZp2XYpELtcikuFZO9vjXNPyeoHAhS5DHzX1ZQ==" crossorigin="anonymous"></script>    
     <script type="text/javascript" src="../dist/ledgers.js"></script>
 
@@ -28,9 +28,9 @@
         <!-- setTestData -->
         <div class="w3-panel w3-card w3-light-grey">
           <p>
-            <p class="usecase">test data</p>
+            <p class="usecase"><a href="https://www.npmjs.com/package/ledgers.js" target="_blank">ledgers.js</a> <a href='../docs/ledgers.js-rendered-docs/index.html' target='_blank'>API</a> playground</p>
             <p>
-              Common test data for the API.  
+              This is a <a href="https://www.npmjs.com/package/ledgers.js" target="_blank">ledgers.js</a> library live <a href='../docs/ledgers.js-rendered-docs/index.html' target='_blank'>API</a> playground.
             </p>
             <p>
               The <em>API key</em> and <em>token</em> are retrieved from <a href="https://token.overhide.io" target="_blank">the token API</a> and are used to <em>oh$.enable(..)</em>.
@@ -134,6 +134,20 @@
             <p><textarea name="networkDetailsJSON" class="w3-input w3-border" rows="2" required onchange="scrubForm(event)"></textarea><label class="w3-text-blue">options JSON (<a href='../docs/ledgers.js-rendered-docs/index.html#setnetwork' target='_blank'>see docs</a>)</label></p>
           </p></form>
           <p><button class="w3-btn w3-blue w3-left-align w3-block" onclick="setNetwork()">run setNetwork()</button></p>
+        </div>
+
+        <!-- getTallyDollars -->
+        <div class="w3-panel w3-card">
+          <p class="usecase">getTallyDollars</p>
+          <p>
+            Call <em>getTallyDollars(..)</em> (<a href='../docs/ledgers.js-rendered-docs/index.html#getTallyDollars' target='_blank'>documentation</a>).
+          </p>
+          <form id="getTallyDollars"><p>
+            <p><input name="imparterTag" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label></p>
+            <p><textarea name="recipientJSON" class="w3-input w3-border" rows="2" required onchange="scrubForm(event)"></textarea><label class="w3-text-blue">recipient JSON (<a href='../docs/ledgers.js-rendered-docs/index.html#getTallyDollars' target='_blank'>see docs</a>)</label></p>
+            <p><input name="since" class="w3-input w3-border" type="datetime-local" onchange="scrubForm(event)"><label class="w3-text-blue">since</label></p>
+          </p></form>
+          <p><button class="w3-btn w3-blue w3-left-align w3-block" onclick="getTallyDollars()">run getTallyDollars()</button></p>
         </div>
 
         <!-- getTally -->
@@ -408,6 +422,18 @@
         log('setNetwork :: error', { error: new String(e) });
       }
       log('setNetwork :: done');
+    }
+
+    async function getTallyDollars() {
+      var json = data.recipientJSON ? JSON.parse(data.recipientJSON) : null;
+      log('getTallyDollars :: start', {imparterTag: data.imparterTag, recipient: json, since: data.since});
+      try {
+        let result = await oh$.getTallyDollars(data.imparterTag, json, new Date(data.since));
+        log('getTallyDollars :: result', { result: result });
+      } catch (e) {
+        log('getTallyDollars :: error', { error: new String(e) });
+      }
+      log('getTallyDollars :: done');
     }
 
     async function getTally() {

@@ -102,9 +102,13 @@ import Web3 from 'web3';
  * Network tuples consist of a 'currency' as a three letter ISO fiat currency code and a 'mode'.  The supported
  * 'currency' names are:
  * 
- * * 'USD' (cents)
+ * * 'USD'
  * 
- * The denomination in brackets is not part of the name and is the denomination for amounts.
+ * The denominations are:
+ * 
+ * | Currency | denomination |
+ * | --- | --- |
+ * | USD | cents |
  * 
  * Note: at this point only USD are supported.  If there is a need, and *overhide-ledger* instances in currencies
  * other than USD come online, we'll revisit this.
@@ -204,7 +208,7 @@ const oh$ = (function() {
    * @description
    *   Event called when the network changes for a particular imparter tag.
    * 
-   *   For example for "eth0" the network could changed from "main" to "rinkeby".  
+   *   For example for "eth" the network could changed from "main" to "rinkeby".  
    * 
    *   In user code:
    *
@@ -418,6 +422,39 @@ const oh$ = (function() {
      *  > | ohledger-web3 | `{currency:'USD',mode:('prod'|'test'), uri:..}` |
      */
     getNetwork = getNetwork;
+
+    /**
+     * @namespace oh$
+     * @function getFromDollars
+     * @description
+     *   Retrieve a converted amount in imparter specific denomination from a provided dollar amount.
+     * @param {string} imparterTag
+     * @param {number} dollarAmount - the dollar amount.
+     * @returns {Promise} with the value in imparter specific currency at the present time (based on recent exchange rate).
+     */
+     getFromDollars = getFromDollars;
+
+    /**
+     * @namespace oh$
+     * @function getTallyDollars
+     * @description
+     *   Retrieve a tally of all transactions on the imparter's ledger--perhaps within a date range--converted to a US dollar amount.
+     * @param {string} imparterTag
+     * @param {Object} recepient - imparter specific object describing recipient of transactions to tally for.
+     *
+     *  > Recipient objects are as per:
+     *  >
+     *  > | imparter tag | recipient object |
+     *  > | --- | --- |
+     *  > | eth-web3 | `{address:..}` |
+     *  > | ohledger | `{address:..}` |
+     *  > | ohledger-web3 | `{address:..}` |
+     *
+     * @param {Date} since - date to start tally since: date of oldest transaction to include.  No restriction if 'null'.
+     * @returns {Promise} with the tally value in US dollars: all transactions are exchanged to USD at an approximate exchange rate
+     *   close to the transactions' time.
+     */
+     getTallyDollars = getTallyDollars;
 
     /**
      * @namespace oh$
@@ -771,6 +808,59 @@ const oh$ = (function() {
         return data.OHLEDGER_WEB3_IMPARTER_TAG.remuneration_uri[data.OHLEDGER_WEB3_IMPARTER_TAG.mode];
       case ETH_WEB3_IMPARTER_TAG:
         return data.ETH_WEB3_IMPARTER_TAG.remuneration_uri[data.ETH_WEB3_IMPARTER_TAG.network];      
+      default:
+        return null;
+    }
+  }
+
+  async function getFromDollars(imparterTag, dollarAmount) {
+    switch (imparterTag) {
+      case OHLEDGER_IMPARTER_TAG:        
+      case OHLEDGER_WEB3_IMPARTER_TAG:
+        return dollarAmount * 100;
+      case ETH_WEB3_IMPARTER_TAG:
+        const hostPrefix = data.ETH_WEB3_IMPARTER_TAG.network === 'main' ? '' : 'test.';
+        const now = (new Date()).toISOString();
+        if (await isEnabled && !__fetch) throw new Error('did you forget to `oh$.enable(..)`?');
+        const result = await __fetch(`https://${hostPrefix}rates.overhide.io/rates/eth/${now}`, {
+            headers: new Headers({
+              'Authorization': `Bearer ${token}`
+            })
+          })
+          .then(res => res.json())
+          .catch(e => {
+            throw String(e)
+          });
+        if (!result || ! 'minrate' in result || result.minrate === 0) return 0;
+        return dollarAmount / result.minrate;
+      default:
+        return null;
+    }
+  }
+
+  async function getTallyDollars(imparterTag, recipient, date) {
+    switch (imparterTag) {
+      case OHLEDGER_IMPARTER_TAG:        
+      case OHLEDGER_WEB3_IMPARTER_TAG:
+        var tally = await getTally(imparterTag, recipient, date);
+        return (Math.round(tally * 100) / 100).toFixed(2);
+      case ETH_WEB3_IMPARTER_TAG:
+        const txs = await getTransactions(imparterTag, recipient, date);
+        if (!txs || txs.length == 0) return 0;
+        const values = txs.map(t => `${t['transaction-value']}@${(new Date(t['transaction-date'])).toISOString()}`);        
+        const hostPrefix = data.ETH_WEB3_IMPARTER_TAG.network === 'main' ? '' : 'test.';
+        const now = (new Date()).toISOString();
+        if (await isEnabled && !__fetch) throw new Error('did you forget to `oh$.enable(..)`?');
+        var tally = await __fetch(`https://${hostPrefix}rates.overhide.io/tallymax/eth/${values.join(',')}`, {
+            headers: new Headers({
+              'Authorization': `Bearer ${token}`
+            })
+          })
+          .then(res => res.text())
+          .catch(e => {
+            throw String(e)
+          });
+        return (Math.round(tally * 100) / 100).toFixed(2);
       default:
         return null;
     }
