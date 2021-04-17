@@ -164,6 +164,19 @@
           <p><button class="w3-btn w3-blue w3-left-align w3-block" onclick="getTally()">run getTally()</button></p>
         </div>
 
+        <!-- getFromDollars -->
+        <div class="w3-panel w3-card">
+          <p class="usecase">getFromDollars</p>
+          <p>
+            Call <em>getFromDollars(..)</em> (<a href='../docs/ledgers.js-rendered-docs/index.html#getFromDollars' target='_blank'>documentation</a>).
+          </p>
+          <form id="getFromDollars"><p>
+            <p><input name="imparterTag" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label></p>
+            <p><input name="dollarAmount" class="w3-input w3-border" type="datetime-local" onchange="scrubForm(event)"><label class="w3-text-blue">dollarAmount</label></p>
+          </p></form>
+          <p><button class="w3-btn w3-blue w3-left-align w3-block" onclick="getFromDollars()">run getFromDollars()</button></p>
+        </div>
+
         <!-- getTransactions -->
         <div class="w3-panel w3-card">
           <p class="usecase">getTransactions</p>
@@ -211,7 +224,7 @@
           </p>
           <form id="createTransaction"><p>
             <p><input name="imparterTag" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label></p>
-            <p><input name="amount" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">amount</label></p>
+            <p><input name="amount" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">amount (cents, wei, satoshis)</label></p>
             <p><input name="to" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">to (address)</label></p>
             <p><textarea name="transactionOptionsJSON" class="w3-input w3-border" rows="2" required onchange="scrubForm(event)"></textarea><label class="w3-text-blue">transaction JSON (<a href='../docs/ledgers.js-rendered-docs/index.html#createtransaction' target='_blank'>see docs</a>)</label></p>
           </p></form>
@@ -434,6 +447,18 @@
         log('getTallyDollars :: error', { error: new String(e) });
       }
       log('getTallyDollars :: done');
+    }
+
+    async function getFromDollars() {
+      var json = data.recipientJSON ? JSON.parse(data.recipientJSON) : null;
+      log('getFromDollars :: start', {imparterTag: data.imparterTag, recipient: json, since: data.since});
+      try {
+        let result = await oh$.getFromDollars(data.imparterTag, json, new Date(data.since));
+        log('getFromDollars :: result', { result: result });
+      } catch (e) {
+        log('getTallygetFromDollarsDollars :: error', { error: new String(e) });
+      }
+      log('getFromDollars :: done');
     }
 
     async function getTally() {

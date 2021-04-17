@@ -47,8 +47,8 @@
     "test": "mocha --exit test/js",
     "test-report": "mocha --exit test/js --reporter mocha-junit-reporter --reporter-options toConsole=true,mochaFile=test-report/test-report.xml",
     "docs": "documentation build src/ledgers.js --project-name \"ledgers.js :: overhide remuneration library for browser use\" --project-version \"$npm_package_version\" --project-homepage \"https://www.npmjs.com/package/ledgers.js\" --shallow true --format html --output docs/ledgers.js-rendered-docs",
-    "pack-dev": "webpack --mode=none --module-bind js=babel-loader",
-    "pack-prod": "webpack --mode=production --module-bind js=babel-loader",
+    "pack-dev": "webpack --devtool --mode=development",
+    "pack-prod": "webpack --mode=production",
     "all": "npm run docs & npm run pack-prod",
     "watch": "watch \"npm run pack-dev\" ./src",
     "play": "http-server ./"

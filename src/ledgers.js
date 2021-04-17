@@ -124,122 +124,122 @@ const oh$ = (function() {
     {};
 
   root.oh$ = new class extends EventTarget {
-  /**
-   * @event onWalletChange
-   * @param {Object} event object - the event object passed in will have additional attributes
-   *
-   *  > The new event object will conform to the following:
-   *  >
-   *  > | imparter tag | event object attributes |
-   *  > | --- | --- |
-   *  > | * | `{imparterTag:..,isPresent:..}` |
-   *  >
-   *  > *imparterTag* - causing the event
-   *  >
-   *  > *isPresent* - if wallet is present for imparter
-   *
-   * @description
-   *   Event called when wallets' state changes.
-   * 
-   *   In user code:
-   * 
-   *   ```
-   *   oh$.addEventListener('onWalletChange', (e) => console.log(`wallet for ${e.imparterTag} is available:${e.isPresent}`));
-   *   ```
-   */
+    /**
+     * @event onWalletChange
+     * @param {Object} event object - the event object passed in will have additional attributes
+     *
+     *  > The new event object will conform to the following:
+     *  >
+     *  > | imparter tag | event object attributes |
+     *  > | --- | --- |
+     *  > | * | `{imparterTag:..,isPresent:..}` |
+     *  >
+     *  > *imparterTag* - causing the event
+     *  >
+     *  > *isPresent* - if wallet is present for imparter
+     *
+     * @description
+     *   Event called when wallets' state changes.
+     * 
+     *   In user code:
+     * 
+     *   ```
+     *   oh$.addEventListener('onWalletChange', (e) => console.log(`wallet for ${e.imparterTag} is available:${e.isPresent}`));
+     *   ```
+     */
 
-  /**
-   * @event onWalletPopup
-   * @param {Object} event object - the event object passed in will have additional attributes
-   *
-   *  > The new event object will conform to the following:
-   *  >
-   *  > | imparter tag | event object attributes |
-   *  > | --- | --- |
-   *  > | * | `{imparterTag:..}` |
-   *  >
-   *  > *imparterTag* - causing the pop-up
-   *
-   * @description
-   *   Event called when wallet is expected to popup.  Useful in case user wants to react to popup in UI.
-   * 
-   *   In user code:
-   * 
-   *   ```
-   *   oh$.addEventListener('onWalletPopup', (e) => console.log(`wallet for ${e.imparterTag} popped`));
-   *   ```
-   */
+    /**
+     * @event onWalletPopup
+     * @param {Object} event object - the event object passed in will have additional attributes
+     *
+     *  > The new event object will conform to the following:
+     *  >
+     *  > | imparter tag | event object attributes |
+     *  > | --- | --- |
+     *  > | * | `{imparterTag:..}` |
+     *  >
+     *  > *imparterTag* - causing the pop-up
+     *
+     * @description
+     *   Event called when wallet is expected to popup.  Useful in case user wants to react to popup in UI.
+     * 
+     *   In user code:
+     * 
+     *   ```
+     *   oh$.addEventListener('onWalletPopup', (e) => console.log(`wallet for ${e.imparterTag} popped`));
+     *   ```
+     */
 
-  /**
-   * @event onCredentialsUpdate
-   * @description
-   *   Event called when an credentials change for one of the tracked imparters.
-   * 
-   *   Only called when credentials are valid as per imparter: ready to be used for signing, transacting.
-   *
-   *   In user code:
-   *
-   *   ```
-   *   oh$.addEventListener('onCredentialsUpdate', (e) => {
-   *     if (e.imparterTag === 'eth-web3') console.log(`new address for ${e.imparterTag} is:${e.address}`);
-   *     return;
-   *   });
-   *   ```
-   * @param {Object} event object - the event object passed in will have additional attributes
-   * 
-   *  > The new event object will conform to the following:
-   *  >
-   *  > | imparter tag | event object attributes |
-   *  > | --- | --- |
-   *  > | eth-web3 | `{imparterTag:..,address:..}` |
-   *  > | ohledger | `{imparterTag:..,address:..,secret:..}` |
-   *  > | ohledger-web3 | `{imparterTag:..,address:..}` |
-   *  >
-   *  > *imparterTag* - causing the event
-   *  >
-   *  > *address* - ledger public address of credential set for imparter
-   *  >
-   *  > *secret* - ledger PKI private secret for credential set for imparter
-   *
-   */
+    /**
+     * @event onCredentialsUpdate
+     * @description
+     *   Event called when an credentials change for one of the tracked imparters.
+     * 
+     *   Only called when credentials are valid as per imparter: ready to be used for signing, transacting.
+     *
+     *   In user code:
+     *
+     *   ```
+     *   oh$.addEventListener('onCredentialsUpdate', (e) => {
+     *     if (e.imparterTag === 'eth-web3') console.log(`new address for ${e.imparterTag} is:${e.address}`);
+     *     return;
+     *   });
+     *   ```
+     * @param {Object} event object - the event object passed in will have additional attributes
+     * 
+     *  > The new event object will conform to the following:
+     *  >
+     *  > | imparter tag | event object attributes |
+     *  > | --- | --- |
+     *  > | eth-web3 | `{imparterTag:..,address:..}` |
+     *  > | ohledger | `{imparterTag:..,address:..,secret:..}` |
+     *  > | ohledger-web3 | `{imparterTag:..,address:..}` |
+     *  >
+     *  > *imparterTag* - causing the event
+     *  >
+     *  > *address* - ledger public address of credential set for imparter
+     *  >
+     *  > *secret* - ledger PKI private secret for credential set for imparter
+     *
+     */
 
-  /**
-   * @event onNetworkChange
-   * @description
-   *   Event called when the network changes for a particular imparter tag.
-   * 
-   *   For example for "eth" the network could changed from "main" to "rinkeby".  
-   * 
-   *   In user code:
-   *
-   *   ```
-   *   oh$.addEventListener('onNetworkChange', (e) => {
-   *     if (e.imparterTag === 'eth-web3') console.log(`new network selected for ${e.imparterTag} is:${e.name}`);
-   *     if (e.imparterTag === /ohledger/.test(e.imparterTag)) console.log(`working in currency: ${e.currency}`);
-   *     return;
-   *   });
-   *   ```
-   * @param {Object} event object - the event object passed in will have additional attributes
-   *
-   *  > The new credentials object will conform to the following:
-   *  >
-   *  > | imparter tag | event object attributes |
-   *  > | --- | --- |
-   *  > | eth-web3 | `{imparterTag:..,name:('main'|'rinkeby'|'kovan').., uri:..}` |
-   *  > | ohledger | `{imparterTag:..,currency:'USD',mode:('prod'|'test'), uri:..}` |
-   *  > | ohledger-web3 | `{imparterTag:..,currency:'USD',mode:('prod'|'test'), uri:..}` |
-   *  >
-   *  > *imparterTag* - causing the event
-   *  >
-   *  > *name* - of network
-   *  >
-   *  > *currency* - represented by network
-   *  >
-   *  > *mode* - production or test network
-   *  >
-   *  > *uri* - remuneration API URI for network
-   *
-   */
+    /**
+     * @event onNetworkChange
+     * @description
+     *   Event called when the network changes for a particular imparter tag.
+     * 
+     *   For example for "eth" the network could changed from "main" to "rinkeby".  
+     * 
+     *   In user code:
+     *
+     *   ```
+     *   oh$.addEventListener('onNetworkChange', (e) => {
+     *     if (e.imparterTag === 'eth-web3') console.log(`new network selected for ${e.imparterTag} is:${e.name}`);
+     *     if (e.imparterTag === /ohledger/.test(e.imparterTag)) console.log(`working in currency: ${e.currency}`);
+     *     return;
+     *   });
+     *   ```
+     * @param {Object} event object - the event object passed in will have additional attributes
+     *
+     *  > The new credentials object will conform to the following:
+     *  >
+     *  > | imparter tag | event object attributes |
+     *  > | --- | --- |
+     *  > | eth-web3 | `{imparterTag:..,name:('main'|'rinkeby'|'kovan').., uri:..}` |
+     *  > | ohledger | `{imparterTag:..,currency:'USD',mode:('prod'|'test'), uri:..}` |
+     *  > | ohledger-web3 | `{imparterTag:..,currency:'USD',mode:('prod'|'test'), uri:..}` |
+     *  >
+     *  > *imparterTag* - causing the event
+     *  >
+     *  > *name* - of network
+     *  >
+     *  > *currency* - represented by network
+     *  >
+     *  > *mode* - production or test network
+     *  >
+     *  > *uri* - remuneration API URI for network
+     *
+     */
 
     /**
      * @namespace oh$
@@ -843,7 +843,7 @@ const oh$ = (function() {
       case OHLEDGER_IMPARTER_TAG:        
       case OHLEDGER_WEB3_IMPARTER_TAG:
         var tally = await getTally(imparterTag, recipient, date);
-        return (Math.round(tally * 100) / 100).toFixed(2);
+        return (tally / 100).toFixed(2);
       case ETH_WEB3_IMPARTER_TAG:
         const txs = await getTransactions(imparterTag, recipient, date);
         if (!txs || txs.length == 0) return 0;
@@ -851,7 +851,7 @@ const oh$ = (function() {
         const hostPrefix = data.ETH_WEB3_IMPARTER_TAG.network === 'main' ? '' : 'test.';
         const now = (new Date()).toISOString();
         if (await isEnabled && !__fetch) throw new Error('did you forget to `oh$.enable(..)`?');
-        var tally = await __fetch(`https://${hostPrefix}rates.overhide.io/tallymax/eth/${values.join(',')}`, {
+        var tally = await __fetch(`https://${hostPrefix}rates.overhide.io/tallymax/wei/${values.join(',')}`, {
             headers: new Headers({
               'Authorization': `Bearer ${token}`
             })
