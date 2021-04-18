@@ -831,8 +831,8 @@ const oh$ = (function() {
           .catch(e => {
             throw String(e)
           });
-        if (!result || ! 'minrate' in result || result.minrate === 0) return 0;
-        return dollarAmount / result.minrate;
+        if (!result || result.length === 0 || ! 'minrate' in result[0] || result[0].minrate === 0) return 0;
+        return dollarAmount / result[0].minrate;
       default:
         return null;
     }
@@ -904,7 +904,7 @@ const oh$ = (function() {
       since = `&since=${date.toISOString()}`;
     }
     if (await isEnabled && !__fetch) throw new Error('did you forget to `oh$.enable(..)`?');
-    return await __fetch(`${uri}/get-transactions/${from}/${to}?tally-only=${tallyOnly ? 'true' : 'false'}${since}`, {
+    return await __fetch(`${uri}/get-transactions/${from}/${to}?tally-only=${tallyOnly ? 'true' : 'false'}${since}&include-refunds=true`, {
         headers: new Headers({
           'Authorization': `Bearer ${token}`
         })

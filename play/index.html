@@ -172,7 +172,7 @@
           </p>
           <form id="getFromDollars"><p>
             <p><input name="imparterTag" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label></p>
-            <p><input name="dollarAmount" class="w3-input w3-border" type="datetime-local" onchange="scrubForm(event)"><label class="w3-text-blue">dollarAmount</label></p>
+            <p><input name="dollarAmount" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">dollarAmount</label></p>
           </p></form>
           <p><button class="w3-btn w3-blue w3-left-align w3-block" onclick="getFromDollars()">run getFromDollars()</button></p>
         </div>
@@ -255,7 +255,8 @@
       credentialsOptionsJSON: '{"address":"","secret":""}',
       networkDetailsJSON:'{"currency":"", "mode":""}',
       recipientJSON:'{"address":""}',
-      transactionOptionsJSON:'{"message":"", "signature":""}'
+      transactionOptionsJSON:'{"message":"", "signature":""}',
+      since: '2019-01-01T00:00'
     };
     fillForms();
     getToken();
@@ -450,13 +451,12 @@
     }
 
     async function getFromDollars() {
-      var json = data.recipientJSON ? JSON.parse(data.recipientJSON) : null;
-      log('getFromDollars :: start', {imparterTag: data.imparterTag, recipient: json, since: data.since});
+      log('getFromDollars :: start', {imparterTag: data.imparterTag, dollarAmount: data.dollarAmount});
       try {
-        let result = await oh$.getFromDollars(data.imparterTag, json, new Date(data.since));
+        let result = await oh$.getFromDollars(data.imparterTag, data.dollarAmount);
         log('getFromDollars :: result', { result: result });
       } catch (e) {
-        log('getTallygetFromDollarsDollars :: error', { error: new String(e) });
+        log('getFromDollars :: error', { error: new String(e) });
       }
       log('getFromDollars :: done');
     }
