@@ -1,4 +1,8 @@
-import Web3 from 'web3';
+import eth_web3 from './imparters/eth-web3.js';
+import ohledger_web3 from './imparters/ohledger-web3.js';
+import ohledger from './imparters/ohledger.js';
+import web3_wallet from './wallets/web3_wallet.js';
+import overhide_wallet from './wallets/overhide_wallet.js';
 
 //     ledgers.js 
 //     https://ledger.overhide.io
@@ -559,58 +563,11 @@ const oh$ = (function() {
     createTransaction = createTransaction;
   }();
 
-  const WALLET_CHECK_INTERVAL_MS = 500;
-
-  const ETH_WEB3_IMPARTER_TAG = 'eth-web3';
-  const OHLEDGER_IMPARTER_TAG = 'ohledger'
-  const OHLEDGER_WEB3_IMPARTER_TAG = 'ohledger-web3'
-
   var doEnable = null;
   const isEnabled = new Promise((resolve) => doEnable = resolve);
   var token = null;
   var __fetch = null;
   var imparterTags = [OHLEDGER_IMPARTER_TAG];
-
-  var data = {
-    ETH_WEB3_IMPARTER_TAG: {
-      walletAddress: null,
-      network: null,
-      remuneration_uri: {
-        'main':'https://ethereum.overhide.io',
-        'rinkeby':'https://rinkeby.ethereum.overhide.io'
-      }
-    },
-    OHLEDGER_IMPARTER_TAG: {
-      oh_ledger_transact_fn: {
-        'prod': null,
-        'test': null
-      },
-      address: null,
-      secret: null,
-      mode: 'test',
-      remuneration_uri: {
-        'prod': 'https://ledger.overhide.io/v1',
-        'test': 'https://test.ledger.overhide.io/v1'
-      }
-    },
-    OHLEDGER_WEB3_IMPARTER_TAG: {
-      oh_ledger_transact_fn: {
-        'prod': null,
-        'test': null
-      },
-      walletAddress: null,
-      mode: 'test',
-      remuneration_uri: {
-        'prod': 'https://ledger.overhide.io/v1',
-        'test': 'https://test.ledger.overhide.io/v1'
-      }
-    }
-  }
-
-  var eth_accounts = (new Web3('http://localhost:8545')).eth.accounts;
-
-  createPopup();
-  detectWeb3Wallet();
 
   /**
    * Function to fire events.
@@ -628,62 +585,50 @@ const oh$ = (function() {
   }
 
   /**
-   * Setup window.web3 to be the wallet's if available or offline if not (just for signing).
-   * 
-   * Sets up a timer to check for wallet being logged in and address changes.
-   * 
-   * @ignore
+   * @param {string} tag -- to add to `imparterTags` if not in `imparterTags`
    */
-  function detectWeb3Wallet() {    
-    if (!window.ethereum) return;
- 
-    // Modern dapp browsers...
-    (async () => {
-      try {
-        await window.ethereum.enable();
-        window.web3 = new Web3(window.ethereum);
-      } catch (e) {/*noop*/ }
+  function addTag(tag) {
+    let imparterTagIndex = imparterTags.findIndex(v => v === eth_web3.tag);
+    if (imparterTagIndex == -1) imparterTags.push(tag);
+  }
 
-      await detectWalletCb();
+  /**
+   * @param {string} tag -- to remove from `imparterTags` if in `imparterTags`
+   */
+   function removeTag(tag) {
+    let imparterTagIndex = imparterTags.findIndex(v => v === eth_web3.tag);
+    if (imparterTagIndex > -1) imparterTags.splice(imparterTagIndex, 1);
+  }
 
-      setInterval(async function () {
-        await detectWalletCb();
-      }, WALLET_CHECK_INTERVAL_MS);
-    })();
+  const web3Wallet = new web3_wallet(
+      (tag) => addTag(tag), 
+      (tag) => removeTag(tag),
+      (which, params) => fire(which, params));
 
-    var detectWalletCb = async () => {
-      try {
-        var currentAccounts = await window.web3.eth.getAccounts();
-        var currentAddress = (currentAccounts && currentAccounts.length > 0) ? currentAccounts[0] : null;
-        var currentNetwork = (await window.web3.eth.net.getNetworkType());
-      } catch (e) {/*noop*/}
-      if (currentNetwork !== data.ETH_WEB3_IMPARTER_TAG.network) {
-        data.ETH_WEB3_IMPARTER_TAG.network = currentNetwork;
-        fire('onNetworkChange',{imparterTag: ETH_WEB3_IMPARTER_TAG, name:currentNetwork, uri: data.ETH_WEB3_IMPARTER_TAG.remuneration_uri[currentNetwork]});
-      }
-      if (currentAddress !== data.ETH_WEB3_IMPARTER_TAG.walletAddress) {
-        if (currentAddress) { /* add imparters */
-          let imparterTagIndex = imparterTags.findIndex(v => v === ETH_WEB3_IMPARTER_TAG);
-          if (imparterTagIndex == -1) imparterTags.push(ETH_WEB3_IMPARTER_TAG);
-          imparterTagIndex = imparterTags.findIndex(v => v === OHLEDGER_WEB3_IMPARTER_TAG);
-          if (imparterTagIndex == -1) imparterTags.push(OHLEDGER_WEB3_IMPARTER_TAG);
-        } else { /* remove imparters */
-          let imparterTagIndex = imparterTags.findIndex(v => v === ETH_WEB3_IMPARTER_TAG);
-          if (imparterTagIndex > -1) imparterTags.splice(imparterTagIndex, 1);
-          imparterTagIndex = imparterTags.findIndex(v => v === OHLEDGER_WEB3_IMPARTER_TAG);
-          if (imparterTagIndex > -1) imparterTags.splice(imparterTagIndex, 1);
-        } 
-        data.ETH_WEB3_IMPARTER_TAG.walletAddress = currentAddress;
-        data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress = currentAddress;
-        fire('onWalletChange', { imparterTag: ETH_WEB3_IMPARTER_TAG, isPresent: !!currentAddress });
-        fire('onWalletChange', { imparterTag: OHLEDGER_WEB3_IMPARTER_TAG, isPresent: !!currentAddress });
-        if (currentAddress) {
-          fire('onCredentialsUpdate', { imparterTag: ETH_WEB3_IMPARTER_TAG, address: currentAddress });
-          fire('onCredentialsUpdate', { imparterTag: OHLEDGER_WEB3_IMPARTER_TAG, address: currentAddress });
-        }
-      }
-    }
-  } 
+  const overhideWallet = new overhide_wallet();
+
+  const imparters = {};
+  imparters[eth_web3.tag] = new eth_web3(
+    web3Wallet, 
+    token,
+    __fetch,
+    (which, params) => fire(which, params));
+  imparters[ohledger_web3.tag] = new ohledger_web3(
+    overhideWallet,
+    token,
+    __fetch,
+    (which, params) => fire(which, params)
+  );
+  imparters[ohledger.tag] = new ohledger(
+    overhideWallet,
+    web3Wallet,
+    token,
+    __fetch,
+    (which, params) => fire(which, params)
+  );
+
+  overhideWallet.createPopup();
+  web3Wallet.detectWeb3Wallet();
 
   function enable(_token, {fetcher} = {fetcher: fetch}) {
     token = _token;
@@ -696,174 +641,71 @@ const oh$ = (function() {
   }
 
   function canSetCredentials(imparterTag) {
-    return imparterTag === OHLEDGER_IMPARTER_TAG;
+    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+    
+    return imparters[imparterTag].canSetCredentials();
   }
 
   function canGenerateCredentials(imparterTag) {
-    return imparterTag === OHLEDGER_IMPARTER_TAG;
+    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+    
+    return imparters[imparterTag].canGenerateCredentials();
   }
 
   function canChangeNetwork(imparterTag) {
-    switch (imparterTag) {
-      case OHLEDGER_IMPARTER_TAG:
-      case OHLEDGER_WEB3_IMPARTER_TAG:
-        return true;
-      default:
-        return false;
-    }
+    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+    
+    return imparters[imparterTag].canChangeNetwork();
   }
 
   async function setCredentials(imparterTag, credentials) {
-    switch (imparterTag) {
-      case OHLEDGER_IMPARTER_TAG:
-        if (!('secret' in credentials)) throw new Error("'secret' must be passed in");
-        if ('address' in credentials && credentials.address) {
-          data.OHLEDGER_IMPARTER_TAG.address = credentials.address.toLowerCase();
-        } else {
-          data.OHLEDGER_IMPARTER_TAG.address = eth_accounts.privateKeyToAccount(credentials.secret).address.toLowerCase();
-        }
-        data.OHLEDGER_IMPARTER_TAG.secret = credentials.secret;
-        try {
-          if (!(eth_accounts.recover(eth_accounts.sign('test message', data.OHLEDGER_IMPARTER_TAG.secret)).toLowerCase() == data.OHLEDGER_IMPARTER_TAG.address)) {
-            throw new Error("'secret' not valid for 'address");
-          }
-        } catch (err) {
-          throw new Error("'secret' not valid for 'address");
-        }        
-        fire('onCredentialsUpdate', { imparterTag: OHLEDGER_IMPARTER_TAG, address: data.OHLEDGER_IMPARTER_TAG.address, secret: data.OHLEDGER_IMPARTER_TAG.secret});
-        return true;
-      default:
-        return false;
-    }
+    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+    
+    return imparters[imparterTag].setCredentials(credentials);
   }
 
   function getCredentials(imparterTag) {
-    switch (imparterTag) {
-      case OHLEDGER_IMPARTER_TAG:        
-        return {"address":data.OHLEDGER_IMPARTER_TAG.address, "secret":data.OHLEDGER_IMPARTER_TAG.secret};
-      case OHLEDGER_WEB3_IMPARTER_TAG:
-        return {"address":data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress};
-      case ETH_WEB3_IMPARTER_TAG:
-        return {"address":data.ETH_WEB3_IMPARTER_TAG.walletAddress};
-      default:
-        throw new Error("invalid imparterTag");
-    }
+    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+
+    return imparters[imparterTag].getCredentials();
   }
 
   async function generateCredentials(imparterTag, options) {
-    switch (imparterTag) {
-      case OHLEDGER_IMPARTER_TAG:
-        let res = eth_accounts.create();
-        data.OHLEDGER_IMPARTER_TAG.address = res.address.toLowerCase();
-        data.OHLEDGER_IMPARTER_TAG.secret = res.privateKey;
-        fire('onCredentialsUpdate', { imparterTag: OHLEDGER_IMPARTER_TAG, address: data.OHLEDGER_IMPARTER_TAG.address, secret: data.OHLEDGER_IMPARTER_TAG.secret});
-        return true;
-      default:
-        return false;
-    }
+    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+
+    return imparters[imparterTag].generateCredentials(options);
   }
 
   async function setNetwork(imparterTag, details) {
-    if (ETH_WEB3_IMPARTER_TAG == imparterTag) return false;
-    if (!('currency' in details)) throw new Error("'currency' must be passed in");
-    if (!('mode' in details)) throw new Error("'mode' must be passed in");
-    details.currency = details.currency.toUpperCase();
-    details.mode = details.mode.toLowerCase();
-    if (details.currency !== 'USD') throw new Error("'currency' must be 'USD'");
-    if (details.mode !== 'prod' && details.mode !== 'test') throw new Error("'mode' must be 'prod' or 'test'");
-    switch (imparterTag) {
-      case OHLEDGER_IMPARTER_TAG:
-        data.OHLEDGER_IMPARTER_TAG.mode = details.mode;
-        fire('onNetworkChange', { imparterTag: OHLEDGER_IMPARTER_TAG, currency: 'USD', mode: details.mode, uri: data.OHLEDGER_IMPARTER_TAG.remuneration_uri[details.mode]});
-        return true;
-      case OHLEDGER_WEB3_IMPARTER_TAG:
-        data.OHLEDGER_WEB3_IMPARTER_TAG.mode = details.mode;
-        fire('onNetworkChange', { imparterTag: OHLEDGER_WEB3_IMPARTER_TAG, currency: 'USD', mode: details.mode, uri: data.OHLEDGER_WEB3_IMPARTER_TAG.remuneration_uri[details.mode] });
-        return true;
-      default:
-        return false;
-    }
+    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+
+    return imparters[imparterTag].setNetwork(details);
   }
 
   function getNetwork(imparterTag) {
-    switch (imparterTag) {
-      case OHLEDGER_IMPARTER_TAG:        
-        return { "currency": "USD", "mode": data.OHLEDGER_WEB3_IMPARTER_TAG.mode, "uri": data.OHLEDGER_WEB3_IMPARTER_TAG.remuneration_uri[data.OHLEDGER_WEB3_IMPARTER_TAG.mode]};
-      case OHLEDGER_WEB3_IMPARTER_TAG:
-        return { "currency": "USD", "mode": data.OHLEDGER_IMPARTER_TAG.mode, "uri": data.OHLEDGER_IMPARTER_TAG.remuneration_uri[data.OHLEDGER_IMPARTER_TAG.mode]};
-      case ETH_WEB3_IMPARTER_TAG:
-        return { "name": data.ETH_WEB3_IMPARTER_TAG.network, "uri": data.ETH_WEB3_IMPARTER_TAG.remuneration_uri[data.ETH_WEB3_IMPARTER_TAG.network]};
-      default:
-        throw new Error("invalid imparterTag");
-    }
+    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+
+    return imparters[imparterTag].getNetwork();    
   }
 
   function getOverhideRemunerationAPIUri(imparterTag) {
-    switch (imparterTag) {
-      case OHLEDGER_IMPARTER_TAG:        
-        if (!data.OHLEDGER_IMPARTER_TAG.mode) throw new Error("network 'mode' must be set, use setNetwork");
-        return data.OHLEDGER_IMPARTER_TAG.remuneration_uri[data.OHLEDGER_IMPARTER_TAG.mode];
-      case OHLEDGER_WEB3_IMPARTER_TAG:
-        if (!data.OHLEDGER_WEB3_IMPARTER_TAG.mode) throw new Error("network 'mode' must be set, use setNetwork");
-        return data.OHLEDGER_WEB3_IMPARTER_TAG.remuneration_uri[data.OHLEDGER_WEB3_IMPARTER_TAG.mode];
-      case ETH_WEB3_IMPARTER_TAG:
-        return data.ETH_WEB3_IMPARTER_TAG.remuneration_uri[data.ETH_WEB3_IMPARTER_TAG.network];      
-      default:
-        return null;
-    }
+    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+
+    return imparters[imparterTag].getOverhideRemunerationAPIUri();    
   }
 
   async function getFromDollars(imparterTag, dollarAmount) {
-    switch (imparterTag) {
-      case OHLEDGER_IMPARTER_TAG:        
-      case OHLEDGER_WEB3_IMPARTER_TAG:
-        return dollarAmount * 100;
-      case ETH_WEB3_IMPARTER_TAG:
-        const hostPrefix = data.ETH_WEB3_IMPARTER_TAG.network === 'main' ? '' : 'test.';
-        const now = (new Date()).toISOString();
-        if (await isEnabled && !__fetch) throw new Error('did you forget to `oh$.enable(..)`?');
-        const result = await __fetch(`https://${hostPrefix}rates.overhide.io/rates/eth/${now}`, {
-            headers: new Headers({
-              'Authorization': `Bearer ${token}`
-            })
-          })
-          .then(res => res.json())
-          .catch(e => {
-            throw String(e)
-          });
-        if (!result || result.length === 0 || ! 'minrate' in result[0] || result[0].minrate === 0) return 0;
-        return dollarAmount / result[0].minrate;
-      default:
-        return null;
-    }
+    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+    if (await isEnabled && !__fetch) throw new Error('did you forget to `oh$.enable(..)`?');
+
+    return imparters[imparterTag].getFromDollars(dollarAmount);
   }
 
   async function getTallyDollars(imparterTag, recipient, date) {
-    switch (imparterTag) {
-      case OHLEDGER_IMPARTER_TAG:        
-      case OHLEDGER_WEB3_IMPARTER_TAG:
-        var tally = await getTally(imparterTag, recipient, date);
-        return (tally / 100).toFixed(2);
-      case ETH_WEB3_IMPARTER_TAG:
-        const txs = await getTransactions(imparterTag, recipient, date);
-        if (!txs || txs.length == 0) return 0;
-        const values = txs.map(t => `${t['transaction-value']}@${(new Date(t['transaction-date'])).toISOString()}`);        
-        const hostPrefix = data.ETH_WEB3_IMPARTER_TAG.network === 'main' ? '' : 'test.';
-        const now = (new Date()).toISOString();
-        if (await isEnabled && !__fetch) throw new Error('did you forget to `oh$.enable(..)`?');
-        var tally = await __fetch(`https://${hostPrefix}rates.overhide.io/tallymax/wei/${values.join(',')}`, {
-            headers: new Headers({
-              'Authorization': `Bearer ${token}`
-            })
-          })
-          .then(res => res.text())
-          .catch(e => {
-            throw String(e)
-          });
-        return (Math.round(tally * 100) / 100).toFixed(2);
-      default:
-        return null;
-    }
+    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+    if (await isEnabled && !__fetch) throw new Error('did you forget to `oh$.enable(..)`?');
+
+    return imparters[imparterTag].getTallyDollars(recipient, date);
   }
 
   async function getTally(imparterTag, recipient, date) {
@@ -875,346 +717,33 @@ const oh$ = (function() {
   }
 
   async function getTxs(imparterTag, recipient, date, tallyOnly) {
-    if (date && !(date instanceof Date)) throw new Error("'date' must be a Date is passed in");
-    if (!('address' in recipient) || !recipient.address) throw new Error("'address' required in recipient");
-    let to = recipient.address;
-    let uri = getOverhideRemunerationAPIUri(imparterTag);
-    switch (imparterTag) {
-      case OHLEDGER_IMPARTER_TAG:
-        if (!data.OHLEDGER_IMPARTER_TAG.mode) throw new Error("network 'mode' must be set, use setNetwork");
-        if (!data.OHLEDGER_IMPARTER_TAG.address) throw new Error("from 'address' not set: use setCredentials");
-        var from = data.OHLEDGER_IMPARTER_TAG.address;
-        break;
-      case OHLEDGER_WEB3_IMPARTER_TAG:
-        if (!data.OHLEDGER_WEB3_IMPARTER_TAG.mode) throw new Error("network 'mode' must be set, use setNetwork");
-        if (!data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress) throw new Error("from 'walletAddress' not set: use wallet");
-        var from = data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress;
-        break;
-      case ETH_WEB3_IMPARTER_TAG:
-        if (!data.ETH_WEB3_IMPARTER_TAG.network) throw new Error("no network for imparter tag");
-        if (!data.ETH_WEB3_IMPARTER_TAG.walletAddress) throw new Error("from 'walletAddress' not set: use wallet");
-        var from = data.ETH_WEB3_IMPARTER_TAG.walletAddress;
-        break;
-      default:
-        throw new Error('unsupported imparter tag');
-    }
-    if (!uri) throw new Error('no uri for request, unsupported network selected in wallet?');
-    let since = '';
-    if (date) {
-      since = `&since=${date.toISOString()}`;
-    }
+    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
     if (await isEnabled && !__fetch) throw new Error('did you forget to `oh$.enable(..)`?');
-    return await __fetch(`${uri}/get-transactions/${from}/${to}?tally-only=${tallyOnly ? 'true' : 'false'}${since}&include-refunds=true`, {
-        headers: new Headers({
-          'Authorization': `Bearer ${token}`
-        })
-      })
-      .then(res => res.json())
-      .catch(e => {
-        throw String(e)
-      });
-  }
 
-  // raise oh$-event
-  // @param {string} imparterTag
-  // @param {string} triggerFor 
-  // @param {Object} data - to stringify and sent as event.details.
-  function raiseEventClick(imparterTag, triggerFor) {
-    window.parent.document.dispatchEvent(new CustomEvent('oh$-event', {detail: JSON.stringify({
-      imparterTag: imparterTag,
-      triggerFor: triggerFor,
-      click: true
-    })}));
-  }
-
-  // raise oh$-event
-  // @param {string} imparterTag
-  // @param {string} triggerFor 
-  // @param {Object} data - to stringify and sent as event.details.
-  function raiseEvent(imparterTag, triggerFor, data) {
-    window.parent.document.dispatchEvent(new CustomEvent('oh$-event', {detail: JSON.stringify({
-      ...data,
-      imparterTag: imparterTag,
-      triggerFor: triggerFor
-    })}));    
+    return await imparters[imparterTag].getTxs(recipient, date, tallyOnly);
   }
 
   async function isOnLedger(imparterTag) {
-    let uri = getOverhideRemunerationAPIUri(imparterTag);
-    switch (imparterTag) {
-      case OHLEDGER_IMPARTER_TAG:
-        if (!data.OHLEDGER_IMPARTER_TAG.mode) throw new Error("network 'mode' must be set, use setNetwork");
-        if (!data.OHLEDGER_IMPARTER_TAG.address) throw new Error("from 'address' not set: use setCredentials");
-        var from = data.OHLEDGER_IMPARTER_TAG.address;
-        break;
-      case OHLEDGER_WEB3_IMPARTER_TAG:
-        if (!data.OHLEDGER_WEB3_IMPARTER_TAG.mode) throw new Error("network 'mode' must be set, use setNetwork");
-        if (!data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress) throw new Error("from 'walletAddress' not set: use wallet");
-        var from = data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress;
-        break;
-      case ETH_WEB3_IMPARTER_TAG:
-        if (!data.ETH_WEB3_IMPARTER_TAG.network) throw new Error("no network for imparter tag");
-        if (!data.ETH_WEB3_IMPARTER_TAG.walletAddress) throw new Error("from 'walletAddress' not set: use wallet");
-        var from = data.ETH_WEB3_IMPARTER_TAG.walletAddress;
-        break;
-      default:
-        throw new Error('unsupported imparter tag');
-    }
-    if (!uri) throw new Error('no uri for request, unsupported network selected in wallet?');
-    let message = 'verify ownership of address by signing';
-    let signature = await sign(imparterTag, message);
+    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
     if (await isEnabled && !__fetch) throw new Error('did you forget to `oh$.enable(..)`?');
-    return await __fetch(`${uri}/is-signature-valid`, {
-      method: "POST",
-      headers: { 
-        'Content-Type': 'application/json; charset=utf-8',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        signature: btoa(signature),
-        message: btoa(message),
-        address: from
-      })
-    })
-      .then((result) => {
-        if (result.status == 200) {
-          return true;
-        } else {
-          return false;
-        }
-      })
-      .catch(e => {
-        throw String(e)
-      });
+
+    return await imparters[imparterTag].isOnLedger();
   }
 
   async function sign(imparterTag, message) {
-    switch (imparterTag) {
-      case OHLEDGER_IMPARTER_TAG:
-        if (!data.OHLEDGER_IMPARTER_TAG.secret) throw new Error(`credentials for imparter ${OHLEDGER_IMPARTER_TAG} not set`);
-        return eth_accounts.sign(message, data.OHLEDGER_IMPARTER_TAG.secret).signature;
-      case OHLEDGER_WEB3_IMPARTER_TAG:
-        if (!data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress) throw new Error(`imparter ${OHLEDGER_WEB3_IMPARTER_TAG} not active`);
-        fire('onWalletPopup', {imparterTag: OHLEDGER_WEB3_IMPARTER_TAG});
-        return (await window.web3.eth.personal.sign(message, data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress, ''));
-      case ETH_WEB3_IMPARTER_TAG:
-        if (!data.ETH_WEB3_IMPARTER_TAG.walletAddress) throw new Error(`imparter ${ETH_WEB3_IMPARTER_TAG} not active`);
-        fire('onWalletPopup', {imparterTag: ETH_WEB3_IMPARTER_TAG});
-        return (await window.web3.eth.personal.sign(message, data.ETH_WEB3_IMPARTER_TAG.walletAddress, ''));
-      default:
-        return null;
-    }
+    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+    if (await isEnabled && !__fetch) throw new Error('did you forget to `oh$.enable(..)`?');
+
+    return await imparters[imparterTag].sign(message);
   }
 
   async function createTransaction(imparterTag, amount, to, options) {
-    switch (imparterTag) {
-      case OHLEDGER_IMPARTER_TAG:
-        if (!data.OHLEDGER_IMPARTER_TAG.mode) throw new Error("network 'mode' must be set, use setNetwork");
-        if (!data.OHLEDGER_IMPARTER_TAG.address) throw new Error("from 'address' not set: use setCredentials");
-        var from = data.OHLEDGER_IMPARTER_TAG.address;
-        break;
-      case OHLEDGER_WEB3_IMPARTER_TAG:
-        if (!data.OHLEDGER_WEB3_IMPARTER_TAG.mode) throw new Error("network 'mode' must be set, use setNetwork");
-        if (!data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress) throw new Error("from 'walletAddress' not set: use wallet");
-        var from = data.OHLEDGER_WEB3_IMPARTER_TAG.walletAddress;
-        break;
-      case ETH_WEB3_IMPARTER_TAG:
-        if (!data.ETH_WEB3_IMPARTER_TAG.network) throw new Error("no network for imparter tag");
-        if (!data.ETH_WEB3_IMPARTER_TAG.walletAddress) throw new Error("from 'walletAddress' not set: use wallet");
-        var from = data.ETH_WEB3_IMPARTER_TAG.walletAddress;
-        break;
-      default:
-        throw new Error('unsupported imparter tag');
-    }
-    switch (imparterTag) {
-      case OHLEDGER_IMPARTER_TAG:
-      case OHLEDGER_WEB3_IMPARTER_TAG:
-        if (amount == 0) {
-          if ('message' in options && options.message && 'signature' in options && options.signature) {
-            var message = options.message;
-            var signature = options.signature;
-          } else {
-            var message = `verify ownership of address by signing on ${new Date().toLocaleString()}`;
-            var signature = await sign(imparterTag, message);
-          }
-          await showOhLedgerGratisIframeUri(imparterTag, from, signature, message);
-        } else {
-          let eventPromise = setupNewPromise();
-          data.OHLEDGER_IMPARTER_TAG.oh_ledger_transact_fn[data.OHLEDGER_IMPARTER_TAG.mode](amount, from, to);
-          await eventPromise;
-        }
-        break;
-      case ETH_WEB3_IMPARTER_TAG:
-        fire('onWalletPopup', {imparterTag: ETH_WEB3_IMPARTER_TAG});
-        await (new Promise((resolve, reject) => {
-          web3.eth.sendTransaction({ from: from, to: to, value: amount })
-          .on('confirmation', function (confirmationNumber, receipt) {
-            resolve();
-          })
-          .on('error', (error) => {
-            reject(error);
-          }); 
-        }));
-        break;
-      default:
-        throw new Error('unsupported imparter tag');
-    }
-    return true;
+    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+    if (await isEnabled && !__fetch) throw new Error('did you forget to `oh$.enable(..)`?');
+
+    return await imparters[imparterTag].createTransaction(amount, to, options);
   }
-
-  var resolve = null;
-  var reject = null;
-
-  // promise used for popups and resolutions via oh-ledger-* messages.
-  function setupNewPromise() {
-    console.assert(!resolve, 'oh-popup promise being set but already set when calling setupNewPromise(..)');
-    return new Promise((rs, rj) => {
-      resolve = rs;
-      reject = rj;
-    });    
-  }
-
-  // make popup visible to be hidden with makePopupHidden
-  function makePopupVisible() {
-    var popup = document.getElementById('oh-popup-container');
-    popup.style.display='block';
-    return setupNewPromise();
-  }
-
-  function makePopupHidden(params, isError) {
-    var popup = document.getElementById('oh-popup-container');
-    hideAllPopupContents();
-    popup.style.display='none';
-    console.assert(resolve, 'oh-popup promise not set yet calling makePopupHidden(..)');
-    if (isError) reject(params)
-    else resolve(params);
-    resolve = null;
-    reject = null;
-  }
-
-  window.addEventListener('message', (e) => {
-    if (e.data && e.data.event === 'oh-ledger-ok') {
-      makePopupHidden(e.data.detail);
-    } else if (e.data && e.data.event === 'oh-ledger-error') {
-      makePopupHidden(e.data.detail, true);
-    }
-  }, false);
-
-  function hideAllPopupContents() {
-    document.getElementById('oh-ledger-gratis-iframe').style.display='none';
-  }
-
-  async function showOhLedgerGratisIframeUri(imparterTag, from, signature, message) {
-    hideAllPopupContents();
-    let uri = getOverhideRemunerationAPIUri(imparterTag);
-    var frame = document.getElementById('oh-ledger-gratis-iframe');
-    frame.setAttribute('src', `${uri}/gratis.html?address=${from}&signature=${signature}&message=${message}`);
-    frame.style.display='block';    
-    await makePopupVisible();
-  }
-
-  function createPopup() {
-    var popup = document.createElement('div');
-    popup.setAttribute('id','oh-popup-container');
-    popup.style.display='none';
-    popup.innerHTML = `
-      <div>
-        <a href="#" title="Close" id="oh-popup-close" onclick="window.parent.document.dispatchEvent(new CustomEvent('oh$-popup-close',{})); return false;">X</a>
-        <iframe id="oh-ledger-gratis-iframe"></iframe>
-      </div>
-    `;
-    var style = document.createElement('style');
-    style.innerHTML =`
-      #oh-popup-container {
-          position: fixed;
-          font-family: arial, "lucida console", sans-serif;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          left: 0;
-          background: rgba(0, 0, 0, 0.8);
-          z-index: 999;
-          opacity:1;
-          pointer-events: auto;
-      }
-      #oh-popup-container > div {
-          width: 80vw;
-          height: 75vh;
-          position: relative;
-          top: 15vh;
-          margin: auto auto;
-          padding: 5px 5px 5px 5px;
-          background: white;
-      }
-      #oh-popup-close {
-          background: grey;
-          color: white;
-          line-height: 25px;
-          position: absolute;
-          right: 2px;
-          text-align: center;
-          top: 2px;
-          width: 24px;
-          text-decoration: none;
-          font-weight: bold;
-      }
-      #oh-popup-close:hover {
-          background: black;
-      }
-
-      #oh-ledger-gratis-iframe {
-        display: none;
-        border: 0;
-        overflow: hidden;
-        width: 100%;
-        height: 100%;
-      }
-    `;
-    var attach = () => {
-      if (document.body) {
-        document.body.appendChild(popup);
-        document.body.appendChild(style);
-        loadOhLedgerTransactFns();
-      } else {
-        setTimeout(attach, 100);
-      };
-    };
-    attach();
-  }
-
-  window.document.addEventListener('oh$-popup-close', (e) => {
-    makePopupHidden('user close', true);
-  });
-
-  // https://stackoverflow.com/a/31374433
-  function loadJS(url, implementationCode, location) {
-    //url is URL of external file, implementationCode is the code
-    //to be called from the file, location is the location to 
-    //insert the <script> element
-
-    var scriptTag = document.createElement('script');
-    scriptTag.src = url;
-
-    scriptTag.onload = implementationCode;
-    scriptTag.onreadystatechange = implementationCode;
-
-    location.appendChild(scriptTag);
-  };
-
-  function loadOhLedgerTransactFns() {
-    // load prod ohledger transact fn
-    loadJS(`${data.OHLEDGER_IMPARTER_TAG.remuneration_uri.prod}/transact.js`, () => {
-      data.OHLEDGER_IMPARTER_TAG.oh_ledger_transact_fn.prod = oh_ledger_transact;
-      data.OHLEDGER_WEB3_IMPARTER_TAG.oh_ledger_transact_fn.prod = oh_ledger_transact;
-    }, document.body);
-
-    // load test ohledger transact fn
-    loadJS(`${data.OHLEDGER_IMPARTER_TAG.remuneration_uri.test}/transact.js`, () => {
-      data.OHLEDGER_IMPARTER_TAG.oh_ledger_transact_fn.test = oh_ledger_transact;
-      data.OHLEDGER_WEB3_IMPARTER_TAG.oh_ledger_transact_fn.test = oh_ledger_transact;
-    }, document.body);
-  }
-
+  
   return root.oh$;
 })();
 
