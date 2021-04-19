@@ -186,6 +186,26 @@
               
                 
                 <li><a
+                  href='#getfromdollars'
+                  class="">
+                  getFromDollars
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#gettallydollars'
+                  class="">
+                  getTallyDollars
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#gettally'
                   class="">
                   getTally
@@ -239,6 +259,26 @@
                   href='#fire'
                   class="">
                   fire
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#addtag'
+                  class="">
+                  addTag
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#removetag'
+                  class="">
+                  removeTag
                   
                 </a>
                 
@@ -334,9 +374,23 @@ and will be suffixed on the <em>web3</em> walleted version:</p>
 <p>Network tuples consist of a 'currency' as a three letter ISO fiat currency code and a 'mode'.  The supported
 'currency' names are:</p>
 <ul>
-<li>'USD' (cents)</li>
+<li>'USD'</li>
 </ul>
-<p>The denomination in brackets is not part of the name and is the denomination for amounts.</p>
+<p>The denominations are:</p>
+<table>
+<thead>
+<tr>
+<th>Currency</th>
+<th>denomination</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>USD</td>
+<td>cents</td>
+</tr>
+</tbody>
+</table>
 <p>Note: at this point only USD are supported.  If there is a need, and <em>overhide-ledger</em> instances in currencies
 other than USD come online, we'll revisit this.</p>
 <p>An 'ohledger' mode is on of 'prod' or 'test'</p>
@@ -652,7 +706,7 @@ other than USD come online, we'll revisit this.</p>
   
 
   <p>Event called when the network changes for a particular imparter tag.</p>
-<p>  For example for "eth0" the network could changed from "main" to "rinkeby".  </p>
+<p>  For example for "eth" the network could changed from "main" to "rinkeby".  </p>
 <p>  In user code:</p>
 <pre><code>oh$.addEventListener('onNetworkChange', (e) => {
   if (e.imparterTag === 'eth-web3') console.log(`new network selected for ${e.imparterTag} is:${e.name}`);
@@ -1666,6 +1720,197 @@ exclusively.</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='getfromdollars'>
+      getFromDollars
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Retrieve a converted amount in imparter specific denomination from a provided dollar amount.</p>
+
+    <div class='pre p1 fill-light mt0'>getFromDollars(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, dollarAmount: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>imparterTag</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>dollarAmount</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    the dollar amount.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        with the value in imparter specific currency at the present time (based on recent exchange rate).
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='gettallydollars'>
+      getTallyDollars
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Retrieve a tally of all transactions on the imparter's ledger--perhaps within a date range--converted to a US dollar amount.</p>
+
+    <div class='pre p1 fill-light mt0'>getTallyDollars(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, recepient: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, since: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date">Date</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>imparterTag</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>recepient</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    imparter specific object describing recipient of transactions to tally for.
+<blockquote>
+<p>Recipient objects are as per:</p>
+<table>
+<thead>
+<tr>
+<th>imparter tag</th>
+<th>recipient object</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>eth-web3</td>
+<td><code>{address:..}</code></td>
+</tr>
+<tr>
+<td>ohledger</td>
+<td><code>{address:..}</code></td>
+</tr>
+<tr>
+<td>ohledger-web3</td>
+<td><code>{address:..}</code></td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>since</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date">Date</a>)</code>
+	    date to start tally since: date of oldest transaction to include.  No restriction if 'null'.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        with the tally value in US dollars: all transactions are exchanged to USD at an approximate exchange rate
+close to the transactions' time.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='gettally'>
       getTally
     </h3>
@@ -2216,6 +2461,134 @@ as the <em>to</em> address, not the specified <em>to</em> address.</p>
           <div>
             <span class='code bold'>params</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
 	    to copy to event
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='addtag'>
+      addTag
+    </h3>
+    
+    
+  </div>
+  
+
+  
+    <div class='pre p1 fill-light mt0'>addTag(tag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>tag</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    -- to add to 
+<code>imparterTags</code>
+ if not in 
+<code>imparterTags</code>
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='removetag'>
+      removeTag
+    </h3>
+    
+    
+  </div>
+  
+
+  
+    <div class='pre p1 fill-light mt0'>removeTag(tag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>tag</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    -- to remove from 
+<code>imparterTags</code>
+ if in 
+<code>imparterTags</code>
 
           </div>
           

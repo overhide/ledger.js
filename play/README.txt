@@ -2,9 +2,9 @@
             | GETTING STARTED |
             `-----------------'
 
-Ad-hoc API execution for ledgers.js.
+Ad-hoc API playground for ledgers.js.
 
-The library is all glue code so an ad-hoc integration testing application 
+The library is mostly glue code so an ad-hoc integration testing playground 
 such as this made sense.
 
 To start watching ledgers.js code for changes...
