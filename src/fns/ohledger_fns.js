@@ -1,4 +1,4 @@
-class overhide_fns {
+class ohledger_fns {
   static setNetwork_check_details(details) {
     if (!('currency' in details)) throw new Error("'currency' must be passed in");
     if (!('mode' in details)) throw new Error("'mode' must be passed in");
@@ -19,11 +19,9 @@ class overhide_fns {
       }
       await showGratisFn(from, signature, message);
     } else {
-      let eventPromise = setupNewPromise();
-      data.OHLEDGER_IMPARTER_TAG.oh_ledger_transact_fn[data.OHLEDGER_IMPARTER_TAG.mode](amount, from, to);
-      await eventPromise;
+      await ohLedgerTransactFn(amount, from, to);
     }
   }
 }
 
-export default overhide_fns;
+export default ohledger_fns;

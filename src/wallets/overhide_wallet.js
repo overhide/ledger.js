@@ -15,14 +15,14 @@ class overhide_wallet {
   constructor() {
     window.addEventListener('message', (e) => {
       if (e.data && e.data.event === 'oh-ledger-ok') {
-        makePopupHidden(e.data.detail);
+        this.makePopupHidden(e.data.detail);
       } else if (e.data && e.data.event === 'oh-ledger-error') {
-        makePopupHidden(e.data.detail, true);
+        this.makePopupHidden(e.data.detail, true);
       }
     }, false);
 
     window.document.addEventListener('oh$-popup-close', (e) => {
-      makePopupHidden('user close', true);
+      this.makePopupHidden('user close', true);
     });    
   }
 
@@ -52,10 +52,10 @@ class overhide_wallet {
 
   // promise used for popups and resolutions via oh-ledger-* messages.
   setupNewPromise() {
-    console.assert(!resolve, 'oh-popup promise being set but already set when calling setupNewPromise(..)');
+    console.assert(!this.resolve, 'oh-popup promise being set but already set when calling setupNewPromise(..)');
     return new Promise((rs, rj) => {
-      resolve = rs;
-      reject = rj;
+      this.resolve = rs;
+      this.reject = rj;
     });    
   }
 
@@ -63,18 +63,18 @@ class overhide_wallet {
   makePopupVisible() {
     var popup = document.getElementById('oh-popup-container');
     popup.style.display='block';
-    return setupNewPromise();
+    return this.setupNewPromise();
   }
 
   makePopupHidden(params, isError) {
     var popup = document.getElementById('oh-popup-container');
-    hideAllPopupContents();
+    this.hideAllPopupContents();
     popup.style.display='none';
-    console.assert(resolve, 'oh-popup promise not set yet calling makePopupHidden(..)');
-    if (isError) reject(params)
-    else resolve(params);
-    resolve = null;
-    reject = null;
+    console.assert(this.resolve, 'oh-popup promise not set yet calling makePopupHidden(..)');
+    if (isError) this.reject(params)
+    else this.resolve(params);
+    this.resolve = null;
+    this.reject = null;
   }
 
   hideAllPopupContents() {
@@ -82,11 +82,11 @@ class overhide_wallet {
   }
 
   async showOhLedgerGratisIframeUri(uri, from, signature, message) {
-    hideAllPopupContents();
+    this.hideAllPopupContents();
     var frame = document.getElementById('oh-ledger-gratis-iframe');
     frame.setAttribute('src', `${uri}/gratis.html?address=${from}&signature=${signature}&message=${message}`);
     frame.style.display='block';    
-    await makePopupVisible();
+    await this.makePopupVisible();
   }
 
   createPopup() {
@@ -150,7 +150,7 @@ class overhide_wallet {
       if (document.body) {
         document.body.appendChild(popup);
         document.body.appendChild(style);
-        loadOhLedgerTransactFns();
+        this.loadOhLedgerTransactFns();
       } else {
         setTimeout(attach, 100);
       };
@@ -175,15 +175,13 @@ class overhide_wallet {
 
   loadOhLedgerTransactFns() {
     // load prod ohledger transact fn
-    loadJS(`${this.remuneration_uri.prod}/transact.js`, () => {
-      this.oh_ledger_transact_fn.prod = oh_ledger_transact;
-      this.oh_ledger_transact_fn.prod = oh_ledger_transact;
+    this.loadJS(`${this.remuneration_uri.prod}/transact.js`, () => {
+      this.oh_ledger_transact_fn.prod = (...args) => { oh_ledger_transact(...args); return this.setupNewPromise(); }
     }, document.body);
 
     // load test ohledger transact fn
-    loadJS(`${this.remuneration_uri.test}/transact.js`, () => {
-      this.oh_ledger_transact_fn.test = oh_ledger_transact;
-      this.oh_ledger_transact_fn.test = oh_ledger_transact;
+    this.loadJS(`${this.remuneration_uri.test}/transact.js`, () => {
+      this.oh_ledger_transact_fn.test = (...args) => { oh_ledger_transact(...args); return this.setupNewPromise(); }
     }, document.body);
   }
 }

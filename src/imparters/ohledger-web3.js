@@ -1,13 +1,16 @@
+import ohledger_fns from '../fns/ohledger_fns.js';
+import imparter_fns from '../fns/imparter_fns.js';
+
 class ohledger_web3 {
   static tag = 'ohledger-web3';
 
-  walletAddress = null;
   mode = 'test';
 
-  constructor(overhide_wallet, token, __fetch, fire) {
+  constructor(overhide_wallet, web3_wallet, getToken, __fetch, fire) {
+    this.web3_wallet = web3_wallet;
     this.overhide_wallet = overhide_wallet;
     this.__fetch = __fetch;
-    this.token = token;
+    this.getToken = getToken;
     this.fire = fire;
   }
 
@@ -28,7 +31,7 @@ class ohledger_web3 {
   }  
 
   getCredentials() {
-    return {"address":this.walletAddress};
+    return {"address": this.web3_wallet.walletAddress};
   }  
 
   generateCredentials(options) {
@@ -52,53 +55,53 @@ class ohledger_web3 {
     return this.overhide_wallet.remuneration_uri[this.mode];
   }
 
-  getFromDollars(dollarAmount) {
+  async getFromDollars(dollarAmount) {
     return dollarAmount * 100;
   }
 
-  getTallyDollars(recipient, date) {
-    var tally = await getTally(imparterTag, recipient, date);
+  async getTallyDollars(recipient, date) {
+    var tally = (await this.getTxs(recipient, date, true)).tally;
     return (tally / 100).toFixed(2);
   }
 
-  getTxs(recipient, date, tallyOnly) {
-    this.imparter_fns.getTxs_check_details(recipient, date);
+  async getTxs(recipient, date, tallyOnly) {
+    imparter_fns.getTxs_check_details(recipient, date);
 
     const to = recipient.address;
-    const uri = getOverhideRemunerationAPIUri(imparterTag);
+    const uri = this.getOverhideRemunerationAPIUri();
 
     if (!this.mode) throw new Error("network 'mode' must be set, use setNetwork");
-    if (!this.walletAddress) throw new Error("from 'walletAddress' not set: use wallet");
-    var from = this.walletAddress;
+    if (!this.web3_wallet.walletAddress) throw new Error("from 'walletAddress' not set: use wallet");
+    var from = this.web3_wallet.walletAddress;
 
-    return await this.imparter_fns.getTxs_retrieve(uri, from, to, tallyOnly, date, this.token, this.__fetch);
+    return await imparter_fns.getTxs_retrieve(uri, from, to, tallyOnly, date, this.getToken(), this.__fetch);
   }  
 
-  isOnLedger() {
+  async isOnLedger() {
     const uri = this.getOverhideRemunerationAPIUri();
     if (!this.mode) throw new Error("network 'mode' must be set, use setNetwork");
-    if (!this.walletAddress) throw new Error("from 'walletAddress' not set: use wallet");
-    const from = this.walletAddress;
+    if (!this.web3_wallet.walletAddress) throw new Error("from 'walletAddress' not set: use wallet");
+    const from = this.web3_wallet.walletAddress;
     if (!uri) throw new Error('no uri for request, unsupported network selected in wallet?');
     const message = 'verify ownership of address by signing';
     const signature = await this.sign(message);
 
-    return await this.imparter_fns.isSignatureValid_call(uri, signature, message, from, this.token, this.__fetch);
+    return await imparter_fns.isSignatureValid_call(uri, signature, message, from, this.getToken(), this.__fetch);
   }
 
-  sign(message) {
-    if (!this.walletAddress) throw new Error(`imparter ${ohledger_web3.tag} not active`);
+  async sign(message) {
+    if (!this.web3_wallet.walletAddress) throw new Error(`imparter ${ohledger_web3.tag} not active`);
     this.fire('onWalletPopup', {imparterTag: ohledger_web3.tag});
-    return (await window.web3.eth.personal.sign(message, this.walletAddress, ''));
+    return (await window.web3.eth.personal.sign(message, this.web3_wallet.walletAddress, ''));
   }
 
-  createTransaction(amount, to, options) {
+  async createTransaction(amount, to, options) {
     if (!this.mode) throw new Error("network 'mode' must be set, use setNetwork");
-    if (!this.walletAddress) throw new Error("from 'walletAddress' not set: use wallet");
-    const from = this.walletAddress;
+    if (!this.web3_wallet.walletAddress) throw new Error("from 'walletAddress' not set: use wallet");
+    const from = this.web3_wallet.walletAddress;
     const uri = this.getOverhideRemunerationAPIUri();
 
-    await this.ohledger_fns.createTransaction(
+    await ohledger_fns.createTransaction(
       amount, 
       from,
       to,

@@ -67,11 +67,7 @@
               <p><input name="signature" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label
                 class="w3-text-blue">signature</label></p>
               <p>
-                <select name="imparterTag" class="w3-select w3-border" onchange="scrubForm(event)">
-                  <option value="eth-web3" selected>eth-web3</option>
-                  <option value="ohledger">ohledger</option>
-                  <option value="ohledger-web3">ohledger-web3</option>
-                </select><label class="w3-text-blue">imparterTag</label>
+                <select name="imparterTag" class="w3-select w3-border" onchange="scrubForm(event); refreshCreds()"></select><label class="w3-text-blue">imparterTag</label>
               </p>
             </p>
           </form>
@@ -92,7 +88,7 @@
             </ul>
           </p></p>
           <form id="getters"><p>
-            <input name="imparterTag" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label>
+            <select name="imparterTag" class="w3-select w3-border" onchange="scrubForm(event); refreshCreds()"></select><label class="w3-text-blue">imparterTag</label>
           </p></form>
           <p><button class="w3-btn w3-blue w3-left-align w3-block" onclick="getters()">run getters()</button></p>
         </div>
@@ -104,7 +100,7 @@
             Call <em>generateCredentials(..)</em> (<a href='../docs/ledgers.js-rendered-docs/index.html#generatecredentials' target='_blank'>documentation</a>).
           </p>
           <form id="generateCredentials"><p>
-            <p><input name="imparterTag" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label></p>
+            <p><select name="imparterTag" class="w3-select w3-border" onchange="scrubForm(event); refreshCreds()"></select><label class="w3-text-blue">imparterTag</label></p>
             <p><textarea name="generateCredentialsOptionsJSON" class="w3-input w3-border" rows="2" required onchange="scrubForm(event)"></textarea><label class="w3-text-blue">options JSON (<a href='../docs/ledgers.js-rendered-docs/index.html#generatecredentials' target='_blank'>see docs</a>)</label></p>
           </p></form>
           <p><button class="w3-btn w3-blue w3-left-align w3-block" onclick="generateCredentials()">run generateCredentials()</button></p>
@@ -117,7 +113,7 @@
             Call <em>setCredentials(..)</em> (<a href='../docs/ledgers.js-rendered-docs/index.html#setcredentials' target='_blank'>documentation</a>).
           </p>
           <form id="setCredentials"><p>
-            <p><input name="imparterTag" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label></p>
+            <p><select name="imparterTag" class="w3-select w3-border" onchange="scrubForm(event); refreshCreds()"></select><label class="w3-text-blue">imparterTag</label></p>
             <p><textarea name="credentialsOptionsJSON" class="w3-input w3-border" rows="2" required onchange="scrubForm(event)"></textarea><label class="w3-text-blue">options JSON (<a href='../docs/ledgers.js-rendered-docs/index.html#setcredentials' target='_blank'>see docs</a>)</label></p>
           </p></form>
           <p><button class="w3-btn w3-blue w3-left-align w3-block" onclick="setCredentials()">run setCredentials()</button></p>
@@ -130,7 +126,7 @@
             Call <em>setNetwork(..)</em> (<a href='../docs/ledgers.js-rendered-docs/index.html#setnetwork' target='_blank'>documentation</a>).
           </p>
           <form id="setNetwork"><p>
-            <p><input name="imparterTag" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label></p>
+            <p><select name="imparterTag" class="w3-select w3-border" onchange="scrubForm(event); refreshCreds()"></select><label class="w3-text-blue">imparterTag</label></p>
             <p><textarea name="networkDetailsJSON" class="w3-input w3-border" rows="2" required onchange="scrubForm(event)"></textarea><label class="w3-text-blue">options JSON (<a href='../docs/ledgers.js-rendered-docs/index.html#setnetwork' target='_blank'>see docs</a>)</label></p>
           </p></form>
           <p><button class="w3-btn w3-blue w3-left-align w3-block" onclick="setNetwork()">run setNetwork()</button></p>
@@ -140,10 +136,10 @@
         <div class="w3-panel w3-card">
           <p class="usecase">getTallyDollars</p>
           <p>
-            Call <em>getTallyDollars(..)</em> (<a href='../docs/ledgers.js-rendered-docs/index.html#getTallyDollars' target='_blank'>documentation</a>).
+            Call <em>getTallyDollars(..)</em> (<a href='../docs/ledgers.js-rendered-docs/index.html#gettallydollars' target='_blank'>documentation</a>).
           </p>
           <form id="getTallyDollars"><p>
-            <p><input name="imparterTag" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label></p>
+            <p><select name="imparterTag" class="w3-select w3-border" onchange="scrubForm(event); refreshCreds()"></select><label class="w3-text-blue">imparterTag</label></p>
             <p><textarea name="recipientJSON" class="w3-input w3-border" rows="2" required onchange="scrubForm(event)"></textarea><label class="w3-text-blue">recipient JSON (<a href='../docs/ledgers.js-rendered-docs/index.html#getTallyDollars' target='_blank'>see docs</a>)</label></p>
             <p><input name="since" class="w3-input w3-border" type="datetime-local" onchange="scrubForm(event)"><label class="w3-text-blue">since</label></p>
           </p></form>
@@ -157,7 +153,7 @@
             Call <em>getTally(..)</em> (<a href='../docs/ledgers.js-rendered-docs/index.html#gettally' target='_blank'>documentation</a>).
           </p>
           <form id="getTally"><p>
-            <p><input name="imparterTag" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label></p>
+            <p><select name="imparterTag" class="w3-select w3-border" onchange="scrubForm(event); refreshCreds()"></select><label class="w3-text-blue">imparterTag</label></p>
             <p><textarea name="recipientJSON" class="w3-input w3-border" rows="2" required onchange="scrubForm(event)"></textarea><label class="w3-text-blue">recipient JSON (<a href='../docs/ledgers.js-rendered-docs/index.html#gettally' target='_blank'>see docs</a>)</label></p>
             <p><input name="since" class="w3-input w3-border" type="datetime-local" onchange="scrubForm(event)"><label class="w3-text-blue">since</label></p>
           </p></form>
@@ -168,10 +164,10 @@
         <div class="w3-panel w3-card">
           <p class="usecase">getFromDollars</p>
           <p>
-            Call <em>getFromDollars(..)</em> (<a href='../docs/ledgers.js-rendered-docs/index.html#getFromDollars' target='_blank'>documentation</a>).
+            Call <em>getFromDollars(..)</em> (<a href='../docs/ledgers.js-rendered-docs/index.html#getfromdollars' target='_blank'>documentation</a>).
           </p>
           <form id="getFromDollars"><p>
-            <p><input name="imparterTag" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label></p>
+            <p><select name="imparterTag" class="w3-select w3-border" onchange="scrubForm(event); refreshCreds()"></select><label class="w3-text-blue">imparterTag</label></p>
             <p><input name="dollarAmount" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">dollarAmount</label></p>
           </p></form>
           <p><button class="w3-btn w3-blue w3-left-align w3-block" onclick="getFromDollars()">run getFromDollars()</button></p>
@@ -184,7 +180,7 @@
             Call <em>getTransactions(..)</em> (<a href='../docs/ledgers.js-rendered-docs/index.html#gettransactions' target='_blank'>documentation</a>).
           </p>
           <form id="getTransactions"><p>
-            <p><input name="imparterTag" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label></p>
+            <p><select name="imparterTag" class="w3-select w3-border" onchange="scrubForm(event); refreshCreds()"></select><label class="w3-text-blue">imparterTag</label></p>
             <p><textarea name="recipientJSON" class="w3-input w3-border" rows="2" required onchange="scrubForm(event)"></textarea><label class="w3-text-blue">recipient JSON (<a href='../docs/ledgers.js-rendered-docs/index.html#gettransactions' target='_blank'>see docs</a>)</label></p>
             <p><input name="since" class="w3-input w3-border" type="datetime-local" onchange="scrubForm(event)"><label class="w3-text-blue">since</label></p>
           </p></form>
@@ -198,7 +194,7 @@
             Call <em>isOnLedger(..)</em> (<a href='../docs/ledgers.js-rendered-docs/index.html#isonledger' target='_blank'>documentation</a>).
           </p>
           <form id="isOnLedger"><p>
-            <p><input name="imparterTag" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label></p>
+            <p><select name="imparterTag" class="w3-select w3-border" onchange="scrubForm(event); refreshCreds()"></select><label class="w3-text-blue">imparterTag</label></p>
           </p></form>
           <p><button class="w3-btn w3-blue w3-left-align w3-block" onclick="isOnLedger()">run isOnLedger()</button></p>
         </div>
@@ -210,7 +206,7 @@
             Call <em>sign(..)</em> (<a href='../docs/ledgers.js-rendered-docs/index.html#sign' target='_blank'>documentation</a>).
           </p>
           <form id="sign"><p>
-            <p><input name="imparterTag" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label></p>
+            <p><select name="imparterTag" class="w3-select w3-border" onchange="scrubForm(event); refreshCreds()"></select><label class="w3-text-blue">imparterTag</label></p>
             <p><input name="message" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">message</label></p>
           </p></form>
           <p><button class="w3-btn w3-blue w3-left-align w3-block" onclick="sign()">run sign()</button></p>
@@ -223,7 +219,7 @@
             Call <em>createTransaction(..)</em> (<a href='../docs/ledgers.js-rendered-docs/index.html#createtransaction' target='_blank'>documentation</a>).
           </p>
           <form id="createTransaction"><p>
-            <p><input name="imparterTag" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">imparterTag</label></p>
+            <p><select name="imparterTag" class="w3-select w3-border" onchange="scrubForm(event); refreshCreds()"></select><label class="w3-text-blue">imparterTag</label></p>
             <p><input name="amount" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">amount (cents, wei, satoshis)</label></p>
             <p><input name="to" class="w3-input w3-border" type="text" onchange="scrubForm(event)"><label class="w3-text-blue">to (address)</label></p>
             <p><textarea name="transactionOptionsJSON" class="w3-input w3-border" rows="2" required onchange="scrubForm(event)"></textarea><label class="w3-text-blue">transaction JSON (<a href='../docs/ledgers.js-rendered-docs/index.html#createtransaction' target='_blank'>see docs</a>)</label></p>
@@ -262,6 +258,7 @@
     getToken();
 
     window.onload = function () {
+      setImparterTags()
       showPostScreenSetupLogs(); // ignore above :: logging setup
     }
 
@@ -278,6 +275,19 @@
     /* =========================================================================
                          ** Supporting Methods / Utilities **
        ========================================================================= */
+
+    function setImparterTags() {
+      for (var el of $('form select[name=imparterTag]')) 
+      { 
+        el.append(new Option('eth-web3','eth-web3',true,true));
+        el.append(new Option('ohledger-web3','ohledger-web3'));
+        el.append(new Option('ohledger','ohledger'));
+      }
+    }
+
+    function refreshCreds() {
+      updateData({...data, secret: '', ...oh$.getCredentials(data.imparterTag)});
+    }
 
     function getToken() {
       const tokenUrl = `https://token.overhide.io/token`;

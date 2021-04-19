@@ -1,3 +1,5 @@
+import imparter_fns from '../fns/imparter_fns.js';
+
 class eth_web3 {
   static tag = 'eth-web3';
 
@@ -6,10 +8,10 @@ class eth_web3 {
     'rinkeby':'https://rinkeby.ethereum.overhide.io'
   };
 
-  constructor(web3_wallet, token, _fetch, fire) {
+  constructor(web3_wallet, getToken, __fetch, fire) {
     this.web3_wallet = web3_wallet;
     this.eth_accounts = web3_wallet.eth_accounts;
-    this.token = token;
+    this.getToken = getToken;
     this.__fetch = __fetch;
     this.fire = fire;
 
@@ -17,7 +19,7 @@ class eth_web3 {
   }
 
   onNetworkChange(network) {
-    this.fire('onNetworkChange',{imparterTag: eth_web3.tag, name: network, uri: data.remuneration_uri[network]});
+    this.fire('onNetworkChange',{imparterTag: eth_web3.tag, name: network, uri: this.remuneration_uri[network]});
   }
 
   canSetCredentials() {
@@ -37,7 +39,7 @@ class eth_web3 {
   }
 
   getCredentials() {
-    return {"address":this.walletAddress};
+    return {"address":this.web3_wallet.walletAddress};
   }    
 
   generateCredentials(options) {
@@ -49,19 +51,19 @@ class eth_web3 {
   }
 
   getNetwork() {
-    return { "name": this.network, "uri": this.remuneration_uri[this.network]};
+    return { "name": this.web3_wallet.network, "uri": this.remuneration_uri[this.web3_wallet.network]};
   }  
 
   getOverhideRemunerationAPIUri() {
-    return this.remuneration_uri[this.network];      
+    return this.remuneration_uri[this.web3_wallet.network];      
   }  
 
-  getFromDollars(dollarAmount) {
-    const hostPrefix = this.network === 'main' ? '' : 'test.';
+  async getFromDollars(dollarAmount) {
+    const hostPrefix = this.web3_wallet.network === 'main' ? '' : 'test.';
     const now = (new Date()).toISOString();
-    const result = await __fetch(`https://${hostPrefix}rates.overhide.io/rates/eth/${now}`, {
+    const result = await this.__fetch(`https://${hostPrefix}rates.overhide.io/rates/wei/${now}`, {
         headers: new Headers({
-          'Authorization': `Bearer ${this.token}`
+          'Authorization': `Bearer ${this.getToken()}`
         })
       })
       .then(res => res.json())
@@ -72,15 +74,15 @@ class eth_web3 {
     return dollarAmount / result[0].minrate;
   }
 
-  getTallyDollars(recipient, date) {
-    const txs = await this.getTxs(recipient, date, false);
+  async getTallyDollars(recipient, date) {
+    const txs = (await this.getTxs(recipient, date, false)).transactions;
     if (!txs || txs.length == 0) return 0;
     const values = txs.map(t => `${t['transaction-value']}@${(new Date(t['transaction-date'])).toISOString()}`);        
-    const hostPrefix = data.ETH_WEB3_IMPARTER_TAG.network === 'main' ? '' : 'test.';
+    const hostPrefix = this.web3_wallet.network === 'main' ? '' : 'test.';
     const now = (new Date()).toISOString();
     var tally = await this.__fetch(`https://${hostPrefix}rates.overhide.io/tallymax/wei/${values.join(',')}`, {
         headers: new Headers({
-          'Authorization': `Bearer ${this.token}`
+          'Authorization': `Bearer ${this.getToken()}`
         })
       })
       .then(res => res.text())
@@ -90,41 +92,41 @@ class eth_web3 {
     return (Math.round(tally * 100) / 100).toFixed(2);
   }
 
-  getTxs(recipient, date, tallyOnly) {
-    this.imparter_fns.getTxs_check_details(recipient, date);
+  async getTxs(recipient, date, tallyOnly) {
+    imparter_fns.getTxs_check_details(recipient, date);
 
     const to = recipient.address;
-    const uri = getOverhideRemunerationAPIUri(imparterTag);
+    const uri = this.getOverhideRemunerationAPIUri();
 
-    if (!this.mode) throw new Error("network 'mode' must be set, use setNetwork");
-    if (!this.walletAddress) throw new Error("from 'walletAddress' not set: use wallet");
-    var from = this.walletAddress;
+    if (!this.web3_wallet.network) throw new Error("network must be set in wallet");
+    if (!this.web3_wallet.walletAddress) throw new Error("from 'walletAddress' not set: use wallet");
+    var from = this.web3_wallet.walletAddress;
 
-    return await this.imparter_fns.getTxs_retrieve(uri, from, to, tallyOnly, date, this.token, this.__fetch);
+    return await imparter_fns.getTxs_retrieve(uri, from, to, tallyOnly, date, this.getToken(), this.__fetch);
   }  
 
-  isOnLedger() {
+  async isOnLedger() {
     const uri = this.getOverhideRemunerationAPIUri();
-    if (!this.network) throw new Error("no network for imparter tag");
-    if (!this.walletAddress) throw new Error("from 'walletAddress' not set: use wallet");
-    const from = this.walletAddress;
+    if (!this.web3_wallet.network) throw new Error("no network for imparter tag");
+    if (!this.web3_wallet.walletAddress) throw new Error("from 'walletAddress' not set: use wallet");
+    const from = this.web3_wallet.walletAddress;
     if (!uri) throw new Error('no uri for request, unsupported network selected in wallet?');
     const message = 'verify ownership of address by signing';
     const signature = await this.sign(message);
 
-    return await this.imparter_fns.isSignatureValid_call(uri, signature, message, from, this.token, this.__fetch);
+    return await imparter_fns.isSignatureValid_call(uri, signature, message, from, this.getToken(), this.__fetch);
   }
 
-  sign(message) {
-    if (!this.walletAddress) throw new Error(`imparter ${eth_web3.tag} not active`);
+  async sign(message) {
+    if (!this.web3_wallet.walletAddress) throw new Error(`imparter ${eth_web3.tag} not active`);
     this.fire('onWalletPopup', {imparterTag: eth_web3.tag});
-    return (await window.web3.eth.personal.sign(message, this.walletAddress, ''));
+    return (await window.web3.eth.personal.sign(message, this.web3_wallet.walletAddress, ''));
   }
 
-  createTransaction(amount, to, options) {
-    if (!this.network) throw new Error("no network for imparter tag");
-    if (!this.walletAddress) throw new Error("from 'walletAddress' not set: use wallet");
-    const from = this.walletAddress;
+  async createTransaction(amount, to, options) {
+    if (!this.web3_wallet.network) throw new Error("no network for imparter tag");
+    if (!this.web3_wallet.walletAddress) throw new Error("from 'walletAddress' not set: use wallet");
+    const from = this.web3_wallet.walletAddress;
     const uri = this.getOverhideRemunerationAPIUri();
 
     this.fire('onWalletPopup', {imparterTag: eth_web3.tag});

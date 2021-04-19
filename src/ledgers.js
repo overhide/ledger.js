@@ -567,7 +567,7 @@ const oh$ = (function() {
   const isEnabled = new Promise((resolve) => doEnable = resolve);
   var token = null;
   var __fetch = null;
-  var imparterTags = [OHLEDGER_IMPARTER_TAG];
+  var imparterTags = [ohledger.tag];
 
   /**
    * Function to fire events.
@@ -588,7 +588,7 @@ const oh$ = (function() {
    * @param {string} tag -- to add to `imparterTags` if not in `imparterTags`
    */
   function addTag(tag) {
-    let imparterTagIndex = imparterTags.findIndex(v => v === eth_web3.tag);
+    let imparterTagIndex = imparterTags.findIndex(v => v === tag);
     if (imparterTagIndex == -1) imparterTags.push(tag);
   }
 
@@ -596,7 +596,7 @@ const oh$ = (function() {
    * @param {string} tag -- to remove from `imparterTags` if in `imparterTags`
    */
    function removeTag(tag) {
-    let imparterTagIndex = imparterTags.findIndex(v => v === eth_web3.tag);
+    let imparterTagIndex = imparterTags.findIndex(v => v === tag);
     if (imparterTagIndex > -1) imparterTags.splice(imparterTagIndex, 1);
   }
 
@@ -610,20 +610,21 @@ const oh$ = (function() {
   const imparters = {};
   imparters[eth_web3.tag] = new eth_web3(
     web3Wallet, 
-    token,
-    __fetch,
+    () => token,
+    (...args) => __fetch(...args),
     (which, params) => fire(which, params));
   imparters[ohledger_web3.tag] = new ohledger_web3(
     overhideWallet,
-    token,
-    __fetch,
+    web3Wallet,
+    () => token,
+    (...args) => __fetch(...args),
     (which, params) => fire(which, params)
   );
   imparters[ohledger.tag] = new ohledger(
     overhideWallet,
     web3Wallet,
-    token,
-    __fetch,
+    () => token,
+    (...args) => __fetch(...args),
     (which, params) => fire(which, params)
   );
 
@@ -641,71 +642,71 @@ const oh$ = (function() {
   }
 
   function canSetCredentials(imparterTag) {
-    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+    if (!imparterTag in imparters) throw new Error("invalid imparterTag");
     
     return imparters[imparterTag].canSetCredentials();
   }
 
   function canGenerateCredentials(imparterTag) {
-    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+    if (!imparterTag in imparters) throw new Error("invalid imparterTag");
     
     return imparters[imparterTag].canGenerateCredentials();
   }
 
   function canChangeNetwork(imparterTag) {
-    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+    if (!imparterTag in imparters) throw new Error("invalid imparterTag");
     
     return imparters[imparterTag].canChangeNetwork();
   }
 
   async function setCredentials(imparterTag, credentials) {
-    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+    if (!imparterTag in imparters) throw new Error("invalid imparterTag");
     
     return imparters[imparterTag].setCredentials(credentials);
   }
 
   function getCredentials(imparterTag) {
-    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+    if (!imparterTag in imparters) throw new Error("invalid imparterTag");
 
     return imparters[imparterTag].getCredentials();
   }
 
   async function generateCredentials(imparterTag, options) {
-    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+    if (!imparterTag in imparters) throw new Error("invalid imparterTag");
 
     return imparters[imparterTag].generateCredentials(options);
   }
 
   async function setNetwork(imparterTag, details) {
-    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+    if (!imparterTag in imparters) throw new Error("invalid imparterTag");
 
     return imparters[imparterTag].setNetwork(details);
   }
 
   function getNetwork(imparterTag) {
-    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+    if (!imparterTag in imparters) throw new Error("invalid imparterTag");
 
     return imparters[imparterTag].getNetwork();    
   }
 
   function getOverhideRemunerationAPIUri(imparterTag) {
-    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+    if (!imparterTag in imparters) throw new Error("invalid imparterTag");
 
     return imparters[imparterTag].getOverhideRemunerationAPIUri();    
   }
 
   async function getFromDollars(imparterTag, dollarAmount) {
-    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+    if (!imparterTag in imparters) throw new Error("invalid imparterTag");
     if (await isEnabled && !__fetch) throw new Error('did you forget to `oh$.enable(..)`?');
 
-    return imparters[imparterTag].getFromDollars(dollarAmount);
+    return await imparters[imparterTag].getFromDollars(dollarAmount);
   }
 
   async function getTallyDollars(imparterTag, recipient, date) {
-    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+    if (!imparterTag in imparters) throw new Error("invalid imparterTag");
     if (await isEnabled && !__fetch) throw new Error('did you forget to `oh$.enable(..)`?');
 
-    return imparters[imparterTag].getTallyDollars(recipient, date);
+    return await imparters[imparterTag].getTallyDollars(recipient, date);
   }
 
   async function getTally(imparterTag, recipient, date) {
@@ -717,33 +718,33 @@ const oh$ = (function() {
   }
 
   async function getTxs(imparterTag, recipient, date, tallyOnly) {
-    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+    if (!imparterTag in imparters) throw new Error("invalid imparterTag");
     if (await isEnabled && !__fetch) throw new Error('did you forget to `oh$.enable(..)`?');
 
     return await imparters[imparterTag].getTxs(recipient, date, tallyOnly);
   }
 
   async function isOnLedger(imparterTag) {
-    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+    if (!imparterTag in imparters) throw new Error("invalid imparterTag");
     if (await isEnabled && !__fetch) throw new Error('did you forget to `oh$.enable(..)`?');
 
     return await imparters[imparterTag].isOnLedger();
   }
 
   async function sign(imparterTag, message) {
-    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+    if (!imparterTag in imparters) throw new Error("invalid imparterTag");
     if (await isEnabled && !__fetch) throw new Error('did you forget to `oh$.enable(..)`?');
 
     return await imparters[imparterTag].sign(message);
   }
 
   async function createTransaction(imparterTag, amount, to, options) {
-    if (!imparters.includes(imparterTag)) throw new Error("invalid imparterTag");
+    if (!imparterTag in imparters) throw new Error("invalid imparterTag");
     if (await isEnabled && !__fetch) throw new Error('did you forget to `oh$.enable(..)`?');
 
     return await imparters[imparterTag].createTransaction(amount, to, options);
   }
-  
+
   return root.oh$;
 })();
 
