@@ -74,25 +74,7 @@ class eth_web3 {
     return dollarAmount / result[0].minrate;
   }
 
-  async getTallyDollars(recipient, date) {
-    const txs = (await this.getTxs(recipient, date, false)).transactions;
-    if (!txs || txs.length == 0) return 0;
-    const values = txs.map(t => `${t['transaction-value']}@${(new Date(t['transaction-date'])).toISOString()}`);        
-    const hostPrefix = this.web3_wallet.network === 'main' ? '' : 'test.';
-    const now = (new Date()).toISOString();
-    var tally = await this.__fetch(`https://${hostPrefix}rates.overhide.io/tallymax/wei/${values.join(',')}`, {
-        headers: new Headers({
-          'Authorization': `Bearer ${this.getToken()}`
-        })
-      })
-      .then(res => res.text())
-      .catch(e => {
-        throw String(e)
-      });
-    return (Math.round(tally * 100) / 100).toFixed(2);
-  }
-
-  async getTxs(recipient, date, tallyOnly) {
+  async getTxs(recipient, date, tallyOnly, tallyDollars) {
     imparter_fns.getTxs_check_details(recipient, date);
 
     const to = recipient.address;
@@ -102,7 +84,7 @@ class eth_web3 {
     if (!this.web3_wallet.walletAddress) throw new Error("from 'walletAddress' not set: use wallet");
     var from = this.web3_wallet.walletAddress;
 
-    return await imparter_fns.getTxs_retrieve(uri, from, to, tallyOnly, date, this.getToken(), this.__fetch);
+    return await imparter_fns.getTxs_retrieve(uri, from, to, tallyOnly, tallyDollars, date, this.getToken(), this.__fetch);
   }  
 
   async isOnLedger() {

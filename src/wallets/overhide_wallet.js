@@ -176,12 +176,14 @@ class overhide_wallet {
   loadOhLedgerTransactFns() {
     // load prod ohledger transact fn
     this.loadJS(`${this.remuneration_uri.prod}/transact.js`, () => {
-      this.oh_ledger_transact_fn.prod = (...args) => { oh_ledger_transact(...args); return this.setupNewPromise(); }
+      const fn = oh_ledger_transact;
+      this.oh_ledger_transact_fn.prod = (...args) => { fn(...args); return this.setupNewPromise(); }
     }, document.body);
 
     // load test ohledger transact fn
     this.loadJS(`${this.remuneration_uri.test}/transact.js`, () => {
-      this.oh_ledger_transact_fn.test = (...args) => { oh_ledger_transact(...args); return this.setupNewPromise(); }
+      const fn = oh_ledger_transact;
+      this.oh_ledger_transact_fn.test = (...args) => { fn(...args); return this.setupNewPromise(); }
     }, document.body);
   }
 }

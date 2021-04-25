@@ -59,12 +59,7 @@ class ohledger_web3 {
     return dollarAmount * 100;
   }
 
-  async getTallyDollars(recipient, date) {
-    var tally = (await this.getTxs(recipient, date, true)).tally;
-    return (tally / 100).toFixed(2);
-  }
-
-  async getTxs(recipient, date, tallyOnly) {
+  async getTxs(recipient, date, tallyOnly, tallyDollars) {
     imparter_fns.getTxs_check_details(recipient, date);
 
     const to = recipient.address;
@@ -74,7 +69,7 @@ class ohledger_web3 {
     if (!this.web3_wallet.walletAddress) throw new Error("from 'walletAddress' not set: use wallet");
     var from = this.web3_wallet.walletAddress;
 
-    return await imparter_fns.getTxs_retrieve(uri, from, to, tallyOnly, date, this.getToken(), this.__fetch);
+    return await imparter_fns.getTxs_retrieve(uri, from, to, tallyOnly, tallyDollars, date, this.getToken(), this.__fetch);
   }  
 
   async isOnLedger() {

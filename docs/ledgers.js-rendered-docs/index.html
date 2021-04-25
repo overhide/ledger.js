@@ -1728,7 +1728,7 @@ exclusively.</p>
   </div>
   
 
-  <p>Retrieve a converted amount in imparter specific denomination from a provided dollar amount.</p>
+  <p>Retrieve a (highest) converted amount in imparter specific denomination from a provided dollar amount at a very recent exchange rate.</p>
 
     <div class='pre p1 fill-light mt0'>getFromDollars(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, dollarAmount: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
@@ -1883,8 +1883,11 @@ exclusively.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
-        with the tally value in US dollars: all transactions are exchanged to USD at an approximate exchange rate
-close to the transactions' time.
+        with the 
+<code>{'tally':.., 'as-of':..}</code>
+ object, whereby the 'tally' value is in US dollars: all transactions
+are exchanged to USD at an approximate (highest) exchange rate close to the transactions' time.  The 'as-of' timestamp
+is that of the call (pass this to back-end to retrieve cached values at better API call rates).
 
       
     
@@ -1996,7 +1999,10 @@ close to the transactions' time.
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
-        with the tally value in imparter specific currency
+        with the 
+<code>{'tally':.., 'as-of':..}</code>
+ object, whereby the tally value is in imparter specific currency.
+The 'as-of' timestamp is that of the call (pass this to back-end to retrieve cached values at better API call rates).
 
       
     
@@ -2109,8 +2115,10 @@ imparter to a recipient</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
-        with the transactions: 
-<code>[{"transaction-value":..,"transaction-date":..},..]</code>
+        with the 
+<code>{'transactions': [{"transaction-value":..,"transaction-date":..},..], 'as-of':..}</code>
+ object,
+whereby 'transactions' is the list of transactions and 'as-of' is the timestamp of the call.
 
       
     

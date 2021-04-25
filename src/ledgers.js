@@ -431,7 +431,7 @@ const oh$ = (function() {
      * @namespace oh$
      * @function getFromDollars
      * @description
-     *   Retrieve a converted amount in imparter specific denomination from a provided dollar amount.
+     *   Retrieve a (highest) converted amount in imparter specific denomination from a provided dollar amount at a very recent exchange rate.
      * @param {string} imparterTag
      * @param {number} dollarAmount - the dollar amount.
      * @returns {Promise} with the value in imparter specific currency at the present time (based on recent exchange rate).
@@ -455,8 +455,9 @@ const oh$ = (function() {
      *  > | ohledger-web3 | `{address:..}` |
      *
      * @param {Date} since - date to start tally since: date of oldest transaction to include.  No restriction if 'null'.
-     * @returns {Promise} with the tally value in US dollars: all transactions are exchanged to USD at an approximate exchange rate
-     *   close to the transactions' time.
+     * @returns {Promise} with the `{'tally':.., 'as-of':..}` object, whereby the 'tally' value is in US dollars: all transactions 
+     *   are exchanged to USD at an approximate (highest) exchange rate close to the transactions' time.  The 'as-of' timestamp 
+     *   is that of the call (pass this to back-end to retrieve cached values at better API call rates).
      */
      getTallyDollars = getTallyDollars;
 
@@ -477,7 +478,8 @@ const oh$ = (function() {
      *  > | ohledger-web3 | `{address:..}` |
      *
      * @param {Date} since - date to start tally since: date of oldest transaction to include.  No restriction if 'null'.
-     * @returns {Promise} with the tally value in imparter specific currency
+     * @returns {Promise} with the `{'tally':.., 'as-of':..}` object, whereby the tally value is in imparter specific currency.
+     *   The 'as-of' timestamp is that of the call (pass this to back-end to retrieve cached values at better API call rates).
      */
     getTally = getTally;
 
@@ -499,7 +501,8 @@ const oh$ = (function() {
      *  > | ohledger | `{address:..}` |
      *  > | ohledger-web3 | `{address:..}` |
      *
-     * @returns {Promise} with the transactions: `[{"transaction-value":..,"transaction-date":..},..]`
+     * @returns {Promise} with the `{'transactions': [{"transaction-value":..,"transaction-date":..},..], 'as-of':..}` object, 
+     *   whereby 'transactions' is the list of transactions and 'as-of' is the timestamp of the call.
      */
     getTransactions = getTransactions;
 
@@ -703,25 +706,22 @@ const oh$ = (function() {
   }
 
   async function getTallyDollars(imparterTag, recipient, date) {
-    if (!imparterTag in imparters) throw new Error("invalid imparterTag");
-    if (await isEnabled && !__fetch) throw new Error('did you forget to `oh$.enable(..)`?');
-
-    return await imparters[imparterTag].getTallyDollars(recipient, date);
+    return (await getTxs(imparterTag, recipient, date, true, true));
   }
 
   async function getTally(imparterTag, recipient, date) {
-    return (await getTxs(imparterTag, recipient, date, true)).tally;
+    return (await getTxs(imparterTag, recipient, date, true, false));
   }
 
   async function getTransactions(imparterTag, recipient, date) {
-    return (await getTxs(imparterTag, recipient, date, false)).transactions;
+    return (await getTxs(imparterTag, recipient, date, false, false));
   }
 
-  async function getTxs(imparterTag, recipient, date, tallyOnly) {
+  async function getTxs(imparterTag, recipient, date, tallyOnly, tallyDollars) {
     if (!imparterTag in imparters) throw new Error("invalid imparterTag");
     if (await isEnabled && !__fetch) throw new Error('did you forget to `oh$.enable(..)`?');
 
-    return await imparters[imparterTag].getTxs(recipient, date, tallyOnly);
+    return await imparters[imparterTag].getTxs(recipient, date, tallyOnly, tallyDollars);
   }
 
   async function isOnLedger(imparterTag) {

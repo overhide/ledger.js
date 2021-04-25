@@ -80,12 +80,7 @@ class ohledger {
     return dollarAmount * 100;
   }
 
-  async getTallyDollars(recipient, date) {
-    var tally = (await this.getTxs(recipient, date, true)).tally;
-    return (tally / 100).toFixed(2);
-  }
-
-  async getTxs(recipient, date, tallyOnly) {
+  async getTxs(recipient, date, tallyOnly, tallyDollars) {
     imparter_fns.getTxs_check_details(recipient, date);
 
     const to = recipient.address;
@@ -95,7 +90,7 @@ class ohledger {
     if (!this.address) throw new Error("from 'address' not set: use setCredentials");
     const from = this.address;
 
-    return await imparter_fns.getTxs_retrieve(uri, from, to, tallyOnly, date, this.getToken(), this.__fetch);
+    return await imparter_fns.getTxs_retrieve(uri, from, to, tallyOnly, tallyDollars, date, this.getToken(), this.__fetch);
   }
 
   async isOnLedger() {
