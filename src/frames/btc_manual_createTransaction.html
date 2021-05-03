@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> <!-- only needed for logging, code panes, and some notes -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lato" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .header {
+          font-size: larger;
+        }        
+
+        .info {
+          font-size: smaller;
+        }        
+
+        html,body {
+          font-family: Lato;
+          font-variant: small-caps;
+        }
+
+        .panel {
+          width: 80%; 
+          margin: auto;
+          margin-top: 20px; 
+          margin-bottom: 20px;
+        }
+
+        .bottom-buttons {
+          display: flex; 
+          justify-content: space-evenly; 
+          margin: 20px;          
+        }
+
+        .icon {
+            position: relative;
+        }
+        
+        .icon i {
+            right: 0px;
+            position: absolute;
+            padding: 10px;
+            color: green;
+            min-width: 50px;
+            text-align: center;
+            cursor:pointer;
+        }
+
+        input {
+          font-variant: normal;
+        }
+    </style>
+  </head>
+
+  <body>
+    <div class="panel">
+      <p>
+        <p class="header">
+          Bitcoin transaction requested on <b><em><span bind="network"></span></em></b>.
+        </p>
+        <p>
+          Please create a transaction from <b><em><span bind="from"></span></em></b> to <b><em><span bind="to"></span></em></b> for <b><em><span bind="value"></span></em></b> satoshis.
+        </p>
+        <p>
+          <p><div class="icon"><i class="fa fa-copy" onclick="copyToClipboard('from')"></i><input bind="from" class="w3-input w3-border" type="text" disabled></div><label
+            class="w3-text-blue">from <b>your</b> address</label></p>
+          <p><div class="icon"><i class="fa fa-copy" onclick="copyToClipboard('to')"></i><input bind="to" class="w3-input w3-border" type="text" disabled></div><label
+            class="w3-text-blue">to <b>site</b> address</label></p>
+          <div style="display: flex; justify-content: space-between;">
+            <div style="width: 30%;">
+              <div class="icon"><i class="fa fa-copy" onclick="copyToClipboard('satoshi')"></i><input bind="satoshi" class="w3-input w3-border" type="text" disabled></div><label
+              class="w3-text-blue">for <b>satoshis</b></label>
+            </div>
+            <div style="width: 30%;">
+              <div class="icon"><i class="fa fa-copy" onclick="copyToClipboard('mbtc')"></i><input bind="mbtc" class="w3-input w3-border" type="text" disabled></div><label
+              class="w3-text-blue">for <b>mBTC</b></label>
+            </div>
+            <div style="width: 30%;">
+              <div class="icon"><i class="fa fa-copy" onclick="copyToClipboard('btc')"></i><input bind="btc" class="w3-input w3-border" type="text" disabled></div><label
+              class="w3-text-blue">for <b>BTC</b></label>
+            </div>
+          </div>
+          <p><input bind="network" class="w3-input w3-border" type="text" disabled><label
+            class="w3-text-blue">on network</label></p>
+        </p>
+        <br/>
+      <span class="bottom-buttons">
+        <button class="w3-btn w3-blue" style="width:40%;" onclick="ok()">OK</button>
+      </span>
+      <br/>
+      <p class="info">
+        <i class="fa fa-question-circle"></i>
+        Use your bitcoin wallet.
+      </p>
+      <p class="info">
+        <i class="fa fa-question-circle"></i>
+        Future top-up payments will need to be made from <b><em><span bind="from"></span></em></b> &mdash; not a change address.
+      </p>
+    </div>
+  </body>
+  
+  <script>
+    var data = {
+      network: 'testnet',
+      from: '',
+      to: '',
+      value: '',
+      satoshi: '',
+      mbtc: '',
+      btc: '',
+      isTest: true
+    };
+
+    window.onload = function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      data.from = urlParams.get('from');
+      data.to = urlParams.get('to');
+      data.value = urlParams.get('value');
+      data.satoshi = data.value;
+      data.mbtc = data.satoshi / 100000;
+      data.btc = data.mbtc / 1000;
+      data.isTest = /[tT]/.test(urlParams.get('isTest'));
+      data.network = data.isTest ? 'testnet' : 'mainnet';
+      fillValues();
+    }
+
+    // bind all values to eachother and to global 'data' by name.
+    $("*[bind]").on('change keyup input', function (e) {
+      var to_bind = $(this).attr('bind');
+      data[to_bind] = $(this).val();
+      $("*[bind='" + to_bind + "']").val(data[to_bind]);
+      $("*[bind='" + to_bind + "']").text(data[to_bind]);
+    })
+
+    /**
+     * Go through all forms and fill matching fields with 'data' (data attribut -> field name)
+     */
+    function fillValues() {
+      Object.keys(data).forEach(k => $("*[bind='" + k + "']").val(data[k]));
+      Object.keys(data).forEach(k => $("*[bind='" + k + "']").text(data[k]));
+    }
+
+    // @param {string} which - data key to copy
+    function copyToClipboard(which) {
+      let str = data[which];
+      if (!str) return;
+      const el = document.createElement('textarea');
+      el.value = str;
+      el.setAttribute('readonly', '');
+      el.style.position = 'absolute';
+      el.style.left = '-9999px';
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+    } 
+
+    function ok() {
+      window.parent.document.dispatchEvent(new CustomEvent('oh$-popup-close',{detail:'ok'}));
+    }
+  </script>
+</html>

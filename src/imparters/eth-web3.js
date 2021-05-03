@@ -19,7 +19,7 @@ class eth_web3 {
   }
 
   onNetworkChange(network) {
-    this.fire('onNetworkChange',{imparterTag: eth_web3.tag, name: network, uri: this.remuneration_uri[network]});
+    this.fire('onNetworkChange',{imparterTag: eth_web3.tag, name: network, mode: network == 'main' ? 'prod' : 'test', uri: this.remuneration_uri[network]});
   }
 
   canSetCredentials() {
@@ -51,7 +51,7 @@ class eth_web3 {
   }
 
   getNetwork() {
-    return { "name": this.web3_wallet.network, "uri": this.remuneration_uri[this.web3_wallet.network]};
+    return { "name": this.web3_wallet.network, "mode": this.web3_wallet.network == 'main' ? 'prod' : 'test', "uri": this.remuneration_uri[this.web3_wallet.network]};
   }  
 
   getOverhideRemunerationAPIUri() {

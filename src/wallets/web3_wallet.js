@@ -17,6 +17,11 @@ class web3_wallet {
     this.fire = fire;
   }
 
+  // initialize this after all dependencies wired up
+  init() {
+    this.detectWeb3Wallet();
+  }
+
   /**
    * Setup window.web3 to be the wallet's if available or offline if not (just for signing).
    * 

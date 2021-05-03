@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> <!-- only needed for logging, code panes, and some notes -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lato" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .header {
+          font-size: larger;
+        }        
+
+        .info {
+          font-size: smaller;
+        }        
+
+        html,body {
+          font-family: Lato;
+          font-variant: small-caps;
+        }
+
+        .panel {
+          width: 80%; 
+          margin: auto;
+          margin-top: 20px; 
+          margin-bottom: 20px;
+        }
+
+        .bottom-buttons {
+          display: flex; 
+          justify-content: space-evenly; 
+          margin: 20px;          
+        }
+
+        .icon {
+            position: relative;
+        }
+        
+        .icon i {
+            right: 0px;
+            position: absolute;
+            padding: 10px;
+            color: green;
+            min-width: 50px;
+            text-align: center;
+            cursor:pointer;
+        }
+
+        input {
+          font-variant: normal;
+        }
+    </style>
+  </head>
+
+  <body>
+    <div class="panel">
+      <p>
+        <p class="header">
+          Bitcoin signature needed.
+        </p>
+        <p>
+          Please <em>sign</em> the <em>message</em> below using the provided <em>address</em>.  Paste the result below and <em>submit</em>.
+        </p>
+        <p>
+          <p><div class="icon"><i class="fa fa-copy" onclick="copyToClipboard('address')"></i><input bind="address" class="w3-input w3-border" type="text" disabled></div><label
+            class="w3-text-blue">bitcoin address</label></p>
+          <p><div class="icon"><i class="fa fa-copy" onclick="copyToClipboard('message')"></i><input bind="message" class="w3-input w3-border" type="text" disabled></div><label
+            class="w3-text-blue">message</label></p>
+          <p><input bind="signature" class="w3-input w3-border" type="text"><label
+            class="w3-text-blue">signature</label></p>
+        </p>
+        <br/>
+        <p>
+          <div id="toast" class="w3-panel w3-pale-red">
+            <p bind="toast"></p>
+          </div>
+        </p>
+      <span class="bottom-buttons">
+        <button id="submit" class="w3-btn w3-blue" style="width:40%;" onclick="submit()">Submit</button>
+        <button class="w3-btn" style="width:40%;" onclick="cancel()">Cancel</button>
+      </span>
+      <br/>
+      <p class="info">
+        <i class="fa fa-question-circle"></i>
+        Signature functionality is usually found in your wallet's <em>addresses</em> view &mdash; use the correct address.
+      </p>
+    </div>
+  </body>
+  
+  <script>
+    var data = {
+      token: '',
+      address: '',
+      message: '',
+      signature: '',
+      toast: null,
+      isTest: true,
+      remuneration_uri: {
+        false: 'https://bitcoin.overhide.io',
+        true: 'https://test.bitcoin.overhide.io'
+      }
+    };
+
+    window.onload = function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      data.address = urlParams.get('address');
+      data.message = atob(urlParams.get('message'));
+      data.token = urlParams.get('token');
+      data.isTest = /[tT]/.test(urlParams.get('isTest'));
+      fillValues();
+      validations();
+    }
+
+    function validations() {
+      (!data.signature || data.signature.length === 0) ? $('#submit').prop('disabled', true) : $('#submit').prop('disabled', false);
+      (!data.toast || data.toast.length === 0) ? $('#toast').hide() : $('#toast').show();
+
+      data.toast = null;
+    }
+
+    // bind all values to eachother and to global 'data' by name.
+    $("*[bind]").on('change keyup input', function (e) {
+      var to_bind = $(this).attr('bind');
+      data[to_bind] = $(this).val();
+      $("*[bind='" + to_bind + "']").val(data[to_bind]);
+      $("*[bind='" + to_bind + "']").text(data[to_bind]);
+      validations();
+    })
+
+    /**
+     * Go through all forms and fill matching fields with 'data' (data attribut -> field name)
+     */
+    function fillValues() {
+      Object.keys(data).forEach(k => $("*[bind='" + k + "']").val(data[k]));
+      Object.keys(data).forEach(k => $("*[bind='" + k + "']").text(data[k]));
+    }
+
+    // @param {string} which - data key to copy
+    function copyToClipboard(which) {
+      let str = data[which];
+      if (!str) return;
+      const el = document.createElement('textarea');
+      el.value = str;
+      el.setAttribute('readonly', '');
+      el.style.position = 'absolute';
+      el.style.left = '-9999px';
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+    }    
+
+
+
+    function cancel() {
+      window.parent.document.dispatchEvent(new CustomEvent('oh$-popup-close',{detail:'cancel'}));
+    }
+
+    function submit() {
+      checkSignatureValid();
+    }
+
+    function checkSignatureValid() {
+      const url = `${data.remuneration_uri[data.isTest]}/is-signature-valid`;
+      fetch(url, {
+        method: "POST",
+        headers: { 
+          'Content-Type': 'application/json; charset=utf-8',
+          'Authorization': `Bearer ${data.token}`
+        },
+        body: JSON.stringify({
+          signature: btoa(data.signature),
+          message: btoa(data.message),
+          address: data.address
+        })
+      }).then((result) => {
+        if (result.status == 200) {
+          window.parent.document.dispatchEvent(new CustomEvent('oh$-popup-signature',{detail: {signature:btoa(data.signature)}}));
+        } else {
+          data.toast = "Invalid signature.";
+          fillValues();
+          validations();
+        }
+      })
+      .catch(e => {
+        data.toast = `Invalid signature :: ${e}`;
+        fillValues();
+        validations();
+      });     
+    }
+  </script>
+</html>

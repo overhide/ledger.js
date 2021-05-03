@@ -269,7 +269,7 @@
       data.imparterTag = data.imparterTag.trim();
       /^ohledger(-web3)?$/.test(data.imparterTag) ? $("#ohledgernote").show() : $("#ohledgernote").hide();
       /^eth-web3$/.test(data.imparterTag) ? $("#ethnote").show() : $("#ethnote").hide();
-      /^(ohledger(-web3)?|eth-web3)?$/.test(data.imparterTag) ? $("#invalidnote").hide() : $("#invalidnote").show();
+      /^(ohledger(-web3)?|eth-web3|btc-manual)?$/.test(data.imparterTag) ? $("#invalidnote").hide() : $("#invalidnote").show();
     })
   
     /* =========================================================================
@@ -280,6 +280,7 @@
       for (var el of $('form select[name=imparterTag]')) 
       { 
         el.append(new Option('eth-web3','eth-web3',true,true));
+        el.append(new Option('btc-manual','btc-manual'));
         el.append(new Option('ohledger-web3','ohledger-web3'));
         el.append(new Option('ohledger','ohledger'));
       }
@@ -393,7 +394,7 @@
     });
 
     oh$.addEventListener('onNetworkChange', function (e) {
-      log('onNetworkChange called', { imparterTag: e.imparterTag, name: e.name, uri: e.uri });
+      log('onNetworkChange called', { imparterTag: e.imparterTag, name: e.name, mode: e.mode, uri: e.uri });
     });
 
     /* =========================================================================

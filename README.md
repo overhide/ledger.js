@@ -65,6 +65,11 @@ This *ledgers.js* library is client-side and abstracts ledgers (see figure above
 * generate a PKI pair on mainnet for production
 * generate a PKI pair on Rinkeby testnet for development and testing
 
+#### Bitcoin (bitcoins)
+
+* generate a PKI pair on mainnet for production
+* generate a PKI pair on testnet for development and testing
+
 ### Distributable
 
 The *ledgers.js* library ['dist' folder](https://github.com/overhide/ledgers.js/blob/master/dist) contains the distributable artifact.
@@ -145,12 +150,15 @@ For testing the library interacts with the *Rinkeby* *Ethereum* testnet and the 
 
 The respective API instances used are the following test network nodes:
 
-* ether:  [*overhide* Remuneration API for Ethereum](https://rinkeby.ethereum.overhide.io/swagger.html) 
+* ethers:  [*overhide* Remuneration API for Ethereum](https://rinkeby.ethereum.overhide.io/swagger.html) 
 * dollars:  [*overhide-ledger*--the renmuneration provider for US dollars](https://test.ledger.overhide.io/swagger.html)
+* bitcoins:  [*overhide* Remuneration API for Bitcoin](https://test.bitcoin.overhide.io/swagger.html) 
 
-Use a [Rinkeby](https://faucet.rinkeby.io/) faucet to get "test" Ether for playing around with the library.
+Use a [Rinkeby](https://faucet.rinkeby.io/) faucet to get "test" Ether for playing around with the ethers portion of the library.
 
 Use [Stripe's "test" credit cards](https://stripe.com/docs/testing#cards) to play around with dollar transactions in the library.
+
+Use a Bitcoin testnet faucet to get "test" bitcoins for playing around with the bitcoins imparter in the library.  You'll need to use a wallet and &mdash; for best results &mdash; configure it to not use "change" addresses.
 
 #### Production Environment APIs
 
@@ -158,10 +166,13 @@ To interact with the Ethereum *mainnet*, user your wallet.
 
 To interact with the production *overhide-ledger*, visit https://ledger.overhide.io.
 
-For *production instances* of both APIs see:
+To interact with the production Bitcoin *mainnet*, use the [Electrum wallet](https://electrum.org/#home) and configure it not to use "change" addresses (works best for ledger-based authorizations).
+
+For *production instances* of all APIs see:
 
 * [*mainnet* *Ethereum* APIs](https://ethereum.overhide.io/swagger.html)
 * [*Production* *overhide-ledger*](https://ledger.overhide.io/swagger.html)
+* [*mainnet Bitcoin* APIs](https://bitcoin.overhide.io/swagger.html)
 
 #### Additional Notes on APIs
 

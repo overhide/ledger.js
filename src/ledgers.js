@@ -1,4 +1,6 @@
+import dom_fns from './fns/dom_fns';
 import eth_web3 from './imparters/eth-web3.js';
+import btc_manual from './imparters/btc-manual.js';
 import ohledger_web3 from './imparters/ohledger-web3.js';
 import ohledger from './imparters/ohledger.js';
 import web3_wallet from './wallets/web3_wallet.js';
@@ -13,16 +15,19 @@ import overhide_wallet from './wallets/overhide_wallet.js';
  * @namespace oh$
  * @description 
  * 
- * #### REFERENCES
+ * ### REFERENCES
  * 
  * Library code: https://github.com/overhide/ledgers.js/blob/master/dist/ledgers.js.
  *
  * Repository for this library is https://github.com/overhide/ledgers.js.
  * 
- * The repository contains a demo app of this library working in conjunction with the *overhide* Ethereum remuneration
- * provider (Rinkeby testnet -- https://rinkeby.ethereum.overhide.io) and the *overhide-ledger* (test environment -- https://test.ledger.overhide.io)
+ * The above repository contains a demo app of this library working in conjunction with:
  * 
- * #### ABOUT
+ * - the *overhide* Ethereum remuneration provider (Rinkeby testnet -- https://rinkeby.ethereum.overhide.io) 
+ * - the *overhide-ledger* (test environment -- https://test.ledger.overhide.io)
+ * - the *overhide* Bitcoin remuneration provider (testnet -- https://test.bitcoin.overhide.io) 
+ * 
+ * ### ABOUT
  * 
  * JavaScript library to be used in-browser and interrogate *overhide* remuneration providers as to validity
  * of ledger credentials and transactions involving these credentials.
@@ -35,11 +40,13 @@ import overhide_wallet from './wallets/overhide_wallet.js';
  * 
  * The library exports the `oh$` object for use as a module when bundling.
  * 
- * ```
- * import oh$ from "ledgers.js";
- * oh$.enable(token);
- * oh$.addEventListener('onWalletChange', (e) => {...});
- * ```
+ * > ---
+ * > ```
+ * > import oh$ from "ledgers.js";
+ * > oh$.enable(token);
+ * > oh$.addEventListener('onWalletChange', (e) => {...});
+ * > ```
+ * > ---
  * 
  * > APIs abstracted by *ledgers.js* require a bearer-token.  The `token` (above) is passed in to `enable` the rest of the library's
  * > functionality.  `oh$.enable(..)` can be called every so often with a refreshed token.
@@ -50,16 +57,21 @@ import overhide_wallet from './wallets/overhide_wallet.js';
  * 
  * The library can be loaded straight into your HTML (along with pre-requisite `web3.min.js`) and accessed by its `oh$` property from the browser's `window` object:
  * 
- * ```
- * <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.4/web3.min.js" integrity="sha512-TTGImODeszogiro9DUvleC9NJVnxO6M0+69nbM3YE9SYcVe4wZp2XYpELtcikuFZO9vjXNPyeoHAhS5DHzX1ZQ==" crossorigin="anonymous"></script>
- * <script src="./dist/ledgers.js"></script>
- * <script>
- *   oh$.enable(token);
- *   oh$.addEventListener('onWalletChange', (e) => {...});
- * </script>
- * ```
+ * > ---
+ * > ```
+ * > <script 
+ * >    src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.4/web3.min.js" 
+ * >    integrity="sha512-TTGImODeszogiro9DUvleC9NJVnxO6M0+69nbM3YE9SYcVe4wZp2XYpELtcikuFZO9vjXNPyeoHAhS5DHzX1ZQ==" 
+ * >    crossorigin="anonymous"></script>
+ * > <script src="./dist/ledgers.js"></script>
+ * > <script>
+ * >   oh$.enable(token);
+ * >   oh$.addEventListener('onWalletChange', (e) => {...});
+ * > </script>
+ * > ```
+ * > ---
  * 
- * #### IMPARTERS
+ * ### IMPARTERS
  * 
  * The library works with a concept of *imprater* tags.  Wallets impart credentials, signatures, and transactions.  For
  * *loose change*--where no wallet exists--the library can be interrogated as to which entities should be set by the 
@@ -78,46 +90,64 @@ import overhide_wallet from './wallets/overhide_wallet.js';
  * - ohledger
  * - ohledger-web3
  * 
+ * Thus far Bitcoin is only supported in manual mode (no Bitcoin wallet injection into target site):
+ * 
+ * - btc-manual
+ * 
  * The following sections cover special notes on each imparter.  The library adheres to these notes.
  * 
- * ##### eth-web3
+ * #### eth-web3
  * 
- * Ethereum addresses are 20 bytes: 42 character 'hex' strings prefixed with '0x'.
+ * > Ethereum addresses are 20 bytes: 42 character 'hex' strings prefixed with '0x'.
+ * > 
+ * > Ethereum secret keys for signing addresses are 32 bytes: 66 character 'hex' strings prefixed with '0x'.
+ * > 
+ * > Ethereum networks names/modes are:
+ * >
+ * >> | name | mode | notes |
+ * >> | --- | --- | --- |
+ * >> | main | prod | |
+ * >> | rinkeyby | test | |
+ * >> | kovan | test | not supported |
+ * >> | ropsten | test | not supported |
+ * >> | goerli | test | not supported |
+ * >
+ * > The denomination for amounts is the Wei
  * 
- * Ethereum secret keys for signing addresses are 32 bytes: 66 character 'hex' strings prefixed with '0x'.
+ * #### ohledger, ohledger-web3
  * 
- * Ethereum networks names are:
+ * > Addresses and secret keys use Ethereum format.
+ * >
+ * > Addresses are 20 bytes: 42 character 'hex' strings prefixed with '0x'.
+ * > 
+ * > Secret keys for signing addresses are 32 bytes: 66 character 'hex' strings prefixed with '0x'.
+ * >
+ * > Network tuples consist of a 'currency' as a three letter ISO fiat currency code and a 'mode'.  The supported
+ * > 'currency' names are:
+ * > 
+ * > * 'USD'
+ * > 
+ * > The denominations are:
+ * > 
+ * >> | Currency | denomination |
+ * >> | --- | --- |
+ * >> | USD | cents |
+ * > 
+ * > Note: at this point only USD are supported.  If there is a need, and *overhide-ledger* instances in currencies
+ * > other than USD come online, we'll revisit this.
+ * >
+ * > An 'ohledger' mode is one of 'prod' or 'test'
  * 
- * * main
- * * kovan
- * * rinkeyby
- * * ropsten
+ * #### btc-manual
  * 
- * The denomination for amounts is the Wei
- * 
- * ##### ohledger, ohledger-web3
- * 
- * Addresses and secret keys use Ethereum format.
- * 
- * Addresses are 20 bytes: 42 character 'hex' strings prefixed with '0x'.
- * 
- * Secret keys for signing addresses are 32 bytes: 66 character 'hex' strings prefixed with '0x'.
- * 
- * Network tuples consist of a 'currency' as a three letter ISO fiat currency code and a 'mode'.  The supported
- * 'currency' names are:
- * 
- * * 'USD'
- * 
- * The denominations are:
- * 
- * | Currency | denomination |
- * | --- | --- |
- * | USD | cents |
- * 
- * Note: at this point only USD are supported.  If there is a need, and *overhide-ledger* instances in currencies
- * other than USD come online, we'll revisit this.
- *
- * An 'ohledger' mode is on of 'prod' or 'test'
+ * > Addresses use Bitcoin format.
+ * > 
+ * > Bitcoin network modes are:
+ * > 
+ * > * prod -- for mainnet
+ * > * test -- for testnet
+ * > 
+ * > The denomination for amounts is the Satoshi.
  * 
  */
 const oh$ = (function() {
@@ -185,7 +215,7 @@ const oh$ = (function() {
      *
      *   ```
      *   oh$.addEventListener('onCredentialsUpdate', (e) => {
-     *     if (e.imparterTag === 'eth-web3') console.log(`new address for ${e.imparterTag} is:${e.address}`);
+     *     console.log(`new address for ${e.imparterTag} is:${e.address}`);
      *     return;
      *   });
      *   ```
@@ -198,6 +228,7 @@ const oh$ = (function() {
      *  > | eth-web3 | `{imparterTag:..,address:..}` |
      *  > | ohledger | `{imparterTag:..,address:..,secret:..}` |
      *  > | ohledger-web3 | `{imparterTag:..,address:..}` |
+     *  > | btc-manual | `{imparterTag:..,address:..}` |
      *  >
      *  > *imparterTag* - causing the event
      *  >
@@ -220,6 +251,7 @@ const oh$ = (function() {
      *   oh$.addEventListener('onNetworkChange', (e) => {
      *     if (e.imparterTag === 'eth-web3') console.log(`new network selected for ${e.imparterTag} is:${e.name}`);
      *     if (e.imparterTag === /ohledger/.test(e.imparterTag)) console.log(`working in currency: ${e.currency}`);
+     *     if (e.imparterTag === 'btc-manual') console.log(`new network mode selected for ${e.imparterTag} is:${e.name}`);
      *     return;
      *   });
      *   ```
@@ -229,9 +261,10 @@ const oh$ = (function() {
      *  >
      *  > | imparter tag | event object attributes |
      *  > | --- | --- |
-     *  > | eth-web3 | `{imparterTag:..,name:('main'|'rinkeby'|'kovan').., uri:..}` |
+     *  > | eth-web3 | `{imparterTag:..,name:('main'|'rinkeby'|'kovan')..,mode:('prod'|'test'), uri:..}` |
      *  > | ohledger | `{imparterTag:..,currency:'USD',mode:('prod'|'test'), uri:..}` |
      *  > | ohledger-web3 | `{imparterTag:..,currency:'USD',mode:('prod'|'test'), uri:..}` |
+     *  > | btc-manual | `{imparterTag:..,mode:('prod'|'test'), uri:..}` |
      *  >
      *  > *imparterTag* - causing the event
      *  >
@@ -279,6 +312,7 @@ const oh$ = (function() {
      *   Only the following imparter(s) will return 'true':
      * 
      *   - ohledger
+     *   - btc-manual
      * 
      * @param {string} imparterTag
      * @returns {boolean} 'true' if particular imparter tag can have credentials set.
@@ -312,6 +346,7 @@ const oh$ = (function() {
      *
      *   - ohledger
      *   - ohledger-web3
+     *   - btc-manual
      *
      * @param {string} imparterTag
      * @returns {boolean} 'true' if particular imparter tag can have networks changed via oh$.
@@ -330,11 +365,12 @@ const oh$ = (function() {
      * 
      *  > The options objects are as follows:
      *  >
-     *  > | imparter tag | credentials object |
-     *  > | --- | --- |
-     *  > | eth-web3 | N/A |
-     *  > | ohledger | null |
-     *  > | ohledger-web3 | N/A |
+     *  > | imparter tag | credentials object | comments |
+     *  > | --- | --- | --- |
+     *  > | eth-web3 | N/A | not supported |
+     *  > | ohledger | null | |
+     *  > | ohledger-web3 | N/A | not supported |
+     *  > | btc-manual | N/A | not supported |
      *
      * @returns {Promise} representing a 'true' if success else 'false'; also fires [onCredentialsUpdate](#eventoncredentialsupdate) event against `oh$`
 
@@ -355,9 +391,10 @@ const oh$ = (function() {
      *  >
      *  > | imparter tag | credentials object | comments |
      *  > | --- | --- | --- |
-     *  > | eth-web3 | N/A | |
+     *  > | eth-web3 | N/A | not suppoted |
      *  > | ohledger | `{address:..,secret:..}` | `address` is optional, if not set will be extracted from `secret` |
-     *  > | ohledger-web3 | N/A | |
+     *  > | ohledger-web3 | N/A | not supported |
+     *  > | btc-manual | `{address:..}` | |
      *
      * @returns {Promise} representing a 'true' if success else 'false'; also fires [onCredentialsUpdate](#eventoncredentialsupdate) event against `oh$`
      */
@@ -375,11 +412,12 @@ const oh$ = (function() {
      * 
      *  > The network details objects are as follows:
      *  >
-     *  > | imparter tag | network details object |
-     *  > | --- | --- |
-     *  > | eth-web3 | N/A |
-     *  > | ohledger | `{currency:'USD', mode:'prod'|'test'}` |
-     *  > | ohledger-web3 | `{currency:'USD', mode:'prod'|'test'}` |
+     *  > | imparter tag | network details object | comments |
+     *  > | --- | --- | --- |
+     *  > | eth-web3 | N/A | not supported, change in wallet |
+     *  > | ohledger | `{currency:'USD', mode:'prod'|'test'}` | |
+     *  > | ohledger-web3 | `{currency:'USD', mode:'prod'|'test'}` | |
+     *  > | btc-manual | `{mode:'prod'|'test'}` | |
      *
      * @returns {Promise} representing a 'true' if success else 'false'; also fires [onNetworkChange](#eventonnetworkchange) event against `oh$`
      */
@@ -408,6 +446,7 @@ const oh$ = (function() {
      *  > | eth-web3 | `{address:..}` |
      *  > | ohledger | `{address:..,secret:..}` |
      *  > | ohledger-web3 | `{address:..}` |
+     *  > | btc-manual | `{address:..}` |
      */
     getCredentials = getCredentials;
 
@@ -421,9 +460,10 @@ const oh$ = (function() {
      * 
      *  > | imparter tag | network details object |
      *  > | --- | --- |
-     *  > | eth-web3 | `{name:('main'|'rinkeby'|'kovan').., uri:..}` |
+     *  > | eth-web3 | `{name:('main'|'rinkeby'|'kovan').., mode:('prod'|'test'), uri:..}` |
      *  > | ohledger | `{currency:'USD',mode:('prod'|'test'), uri:..}` |
      *  > | ohledger-web3 | `{currency:'USD',mode:('prod'|'test'), uri:..}` |
+     *  > | btc-manual | `{mode:('prod'|'test'), uri:..}` |
      */
     getNetwork = getNetwork;
 
@@ -453,6 +493,7 @@ const oh$ = (function() {
      *  > | eth-web3 | `{address:..}` |
      *  > | ohledger | `{address:..}` |
      *  > | ohledger-web3 | `{address:..}` |
+     *  > | btc-manual | `{address:..}` |
      *
      * @param {Date} since - date to start tally since: date of oldest transaction to include.  No restriction if 'null'.
      * @returns {Promise} with the `{'tally':.., 'as-of':..}` object, whereby the 'tally' value is in US dollars: all transactions 
@@ -476,6 +517,7 @@ const oh$ = (function() {
      *  > | eth-web3 | `{address:..}` |
      *  > | ohledger | `{address:..}` |
      *  > | ohledger-web3 | `{address:..}` |
+     *  > | btc-manual | `{address:..}` |
      *
      * @param {Date} since - date to start tally since: date of oldest transaction to include.  No restriction if 'null'.
      * @returns {Promise} with the `{'tally':.., 'as-of':..}` object, whereby the tally value is in imparter specific currency.
@@ -500,6 +542,7 @@ const oh$ = (function() {
      *  > | eth-web3 | `{address:..}` |
      *  > | ohledger | `{address:..}` |
      *  > | ohledger-web3 | `{address:..}` |
+     *  > | btc-manual | `{address:..}` |
      *
      * @returns {Promise} with the `{'transactions': [{"transaction-value":..,"transaction-date":..},..], 'as-of':..}` object, 
      *   whereby 'transactions' is the list of transactions and 'as-of' is the timestamp of the call.
@@ -558,6 +601,7 @@ const oh$ = (function() {
      *  > | eth-web3 | null |
      *  > | ohledger | {message:.., signature:..} |
      *  > | ohledger-web3 | {message:.., signature:..} |
+     *  > | btc-manual | null |
      *  > 
      *  > If *message* and *signature* are provided they are used instead of oh$ asking for wallet to resign message.
      *
@@ -570,7 +614,7 @@ const oh$ = (function() {
   const isEnabled = new Promise((resolve) => doEnable = resolve);
   var token = null;
   var __fetch = null;
-  var imparterTags = [ohledger.tag];
+  var imparterTags = [ohledger.tag, btc_manual.tag];
 
   /**
    * Function to fire events.
@@ -603,16 +647,21 @@ const oh$ = (function() {
     if (imparterTagIndex > -1) imparterTags.splice(imparterTagIndex, 1);
   }
 
+  const domFns = new dom_fns();
   const web3Wallet = new web3_wallet(
       (tag) => addTag(tag), 
       (tag) => removeTag(tag),
       (which, params) => fire(which, params));
-
-  const overhideWallet = new overhide_wallet();
+  const overhideWallet = new overhide_wallet(domFns);
 
   const imparters = {};
   imparters[eth_web3.tag] = new eth_web3(
     web3Wallet, 
+    () => token,
+    (...args) => __fetch(...args),
+    (which, params) => fire(which, params));
+  imparters[btc_manual.tag] = new btc_manual(
+    domFns,
     () => token,
     (...args) => __fetch(...args),
     (which, params) => fire(which, params));
@@ -631,8 +680,9 @@ const oh$ = (function() {
     (which, params) => fire(which, params)
   );
 
-  overhideWallet.createPopup();
-  web3Wallet.detectWeb3Wallet();
+  domFns.init();
+  web3Wallet.init();
+  overhideWallet.init();
 
   function enable(_token, {fetcher} = {fetcher: fetch}) {
     token = _token;

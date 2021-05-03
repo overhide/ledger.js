@@ -307,12 +307,16 @@
   </div>
   
 
-  <h4>REFERENCES</h4>
+  <h3>REFERENCES</h3>
 <p>Library code: <a href="https://github.com/overhide/ledgers.js/blob/master/dist/ledgers.js">https://github.com/overhide/ledgers.js/blob/master/dist/ledgers.js</a>.</p>
 <p>Repository for this library is <a href="https://github.com/overhide/ledgers.js">https://github.com/overhide/ledgers.js</a>.</p>
-<p>The repository contains a demo app of this library working in conjunction with the <em>overhide</em> Ethereum remuneration
-provider (Rinkeby testnet -- <a href="https://rinkeby.ethereum.overhide.io">https://rinkeby.ethereum.overhide.io</a>) and the <em>overhide-ledger</em> (test environment -- <a href="https://test.ledger.overhide.io">https://test.ledger.overhide.io</a>)</p>
-<h4>ABOUT</h4>
+<p>The above repository contains a demo app of this library working in conjunction with:</p>
+<ul>
+<li>the <em>overhide</em> Ethereum remuneration provider (Rinkeby testnet -- <a href="https://rinkeby.ethereum.overhide.io">https://rinkeby.ethereum.overhide.io</a>) </li>
+<li>the <em>overhide-ledger</em> (test environment -- <a href="https://test.ledger.overhide.io">https://test.ledger.overhide.io</a>)</li>
+<li>the <em>overhide</em> Bitcoin remuneration provider (testnet -- <a href="https://test.bitcoin.overhide.io">https://test.bitcoin.overhide.io</a>) </li>
+</ul>
+<h3>ABOUT</h3>
 <p>JavaScript library to be used in-browser and interrogate <em>overhide</em> remuneration providers as to validity
 of ledger credentials and transactions involving these credentials.</p>
 <p>The goal of the library and the <em>overhide</em> remuneration providers is to ease using of all types of ledgers for
@@ -320,25 +324,34 @@ authentication (I am who I say) and authorization (paid access tiers).</p>
 <p>The library leverages injected currency wallets where it can, and exposes functions to work with <em>loose</em> currencies
 (without wallets) where it cannot.</p>
 <p>The library exports the <code>oh$</code> object for use as a module when bundling.</p>
+<blockquote>
+<hr>
 <pre><code>import oh$ from "ledgers.js";
 oh$.enable(token);
 oh$.addEventListener('onWalletChange', (e) => {...});
 </code></pre>
-<blockquote>
+<hr>
 <p>APIs abstracted by <em>ledgers.js</em> require a bearer-token.  The <code>token</code> (above) is passed in to <code>enable</code> the rest of the library's
 functionality.  <code>oh$.enable(..)</code> can be called every so often with a refreshed token.</p>
 <p> A token can be retrieved with a <code>GET /token</code> call (see <a href="https://token.overhide.io/swagger.html">https://token.overhide.io/swagger.html</a>).</p>
 <p>To retrieve tokens please first register for your own API key at <a href="https://token.overhide.io/register">https://token.overhide.io/register</a>.</p>
 </blockquote>
 <p>The library can be loaded straight into your HTML (along with pre-requisite <code>web3.min.js</code>) and accessed by its <code>oh$</code> property from the browser's <code>window</code> object:</p>
-<pre><code>&#x3C;script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.4/web3.min.js" integrity="sha512-TTGImODeszogiro9DUvleC9NJVnxO6M0+69nbM3YE9SYcVe4wZp2XYpELtcikuFZO9vjXNPyeoHAhS5DHzX1ZQ==" crossorigin="anonymous">&#x3C;/script>
+<blockquote>
+<hr>
+<pre><code>&#x3C;script 
+   src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.4/web3.min.js" 
+   integrity="sha512-TTGImODeszogiro9DUvleC9NJVnxO6M0+69nbM3YE9SYcVe4wZp2XYpELtcikuFZO9vjXNPyeoHAhS5DHzX1ZQ==" 
+   crossorigin="anonymous">&#x3C;/script>
 &#x3C;script src="./dist/ledgers.js">&#x3C;/script>
 &#x3C;script>
   oh$.enable(token);
   oh$.addEventListener('onWalletChange', (e) => {...});
 &#x3C;/script>
 </code></pre>
-<h4>IMPARTERS</h4>
+<hr>
+</blockquote>
+<h3>IMPARTERS</h3>
 <p>The library works with a concept of <em>imprater</em> tags.  Wallets impart credentials, signatures, and transactions.  For
 <em>loose change</em>--where no wallet exists--the library can be interrogated as to which entities should be set by the
 user (can* functions); causing the entities to be imparted back to the user in a common code flow.  </p>
@@ -355,19 +368,58 @@ and will be suffixed on the <em>web3</em> walleted version:</p>
 <li>ohledger</li>
 <li>ohledger-web3</li>
 </ul>
+<p>Thus far Bitcoin is only supported in manual mode (no Bitcoin wallet injection into target site):</p>
+<ul>
+<li>btc-manual</li>
+</ul>
 <p>The following sections cover special notes on each imparter.  The library adheres to these notes.</p>
-<h5>eth-web3</h5>
+<h4>eth-web3</h4>
+<blockquote>
 <p>Ethereum addresses are 20 bytes: 42 character 'hex' strings prefixed with '0x'.</p>
 <p>Ethereum secret keys for signing addresses are 32 bytes: 66 character 'hex' strings prefixed with '0x'.</p>
-<p>Ethereum networks names are:</p>
-<ul>
-<li>main</li>
-<li>kovan</li>
-<li>rinkeyby</li>
-<li>ropsten</li>
-</ul>
+<p>Ethereum networks names/modes are:</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>mode</th>
+<th>notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>main</td>
+<td>prod</td>
+<td></td>
+</tr>
+<tr>
+<td>rinkeyby</td>
+<td>test</td>
+<td></td>
+</tr>
+<tr>
+<td>kovan</td>
+<td>test</td>
+<td>not supported</td>
+</tr>
+<tr>
+<td>ropsten</td>
+<td>test</td>
+<td>not supported</td>
+</tr>
+<tr>
+<td>goerli</td>
+<td>test</td>
+<td>not supported</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
 <p>The denomination for amounts is the Wei</p>
-<h5>ohledger, ohledger-web3</h5>
+</blockquote>
+<h4>ohledger, ohledger-web3</h4>
+<blockquote>
 <p>Addresses and secret keys use Ethereum format.</p>
 <p>Addresses are 20 bytes: 42 character 'hex' strings prefixed with '0x'.</p>
 <p>Secret keys for signing addresses are 32 bytes: 66 character 'hex' strings prefixed with '0x'.</p>
@@ -377,6 +429,7 @@ and will be suffixed on the <em>web3</em> walleted version:</p>
 <li>'USD'</li>
 </ul>
 <p>The denominations are:</p>
+<blockquote>
 <table>
 <thead>
 <tr>
@@ -391,9 +444,21 @@ and will be suffixed on the <em>web3</em> walleted version:</p>
 </tr>
 </tbody>
 </table>
+</blockquote>
 <p>Note: at this point only USD are supported.  If there is a need, and <em>overhide-ledger</em> instances in currencies
 other than USD come online, we'll revisit this.</p>
-<p>An 'ohledger' mode is on of 'prod' or 'test'</p>
+<p>An 'ohledger' mode is one of 'prod' or 'test'</p>
+</blockquote>
+<h4>btc-manual</h4>
+<blockquote>
+<p>Addresses use Bitcoin format.</p>
+<p>Bitcoin network modes are:</p>
+<ul>
+<li>prod -- for mainnet</li>
+<li>test -- for testnet</li>
+</ul>
+<p>The denomination for amounts is the Satoshi.</p>
+</blockquote>
 
     <div class='pre p1 fill-light mt0'>oh$</div>
   
@@ -612,7 +677,7 @@ other than USD come online, we'll revisit this.</p>
 <p>  Only called when credentials are valid as per imparter: ready to be used for signing, transacting.</p>
 <p>  In user code:</p>
 <pre><code>oh$.addEventListener('onCredentialsUpdate', (e) => {
-  if (e.imparterTag === 'eth-web3') console.log(`new address for ${e.imparterTag} is:${e.address}`);
+  console.log(`new address for ${e.imparterTag} is:${e.address}`);
   return;
 });
 </code></pre>
@@ -656,6 +721,10 @@ other than USD come online, we'll revisit this.</p>
 </tr>
 <tr>
 <td>ohledger-web3</td>
+<td><code>{imparterTag:..,address:..}</code></td>
+</tr>
+<tr>
+<td>btc-manual</td>
 <td><code>{imparterTag:..,address:..}</code></td>
 </tr>
 </tbody>
@@ -711,6 +780,7 @@ other than USD come online, we'll revisit this.</p>
 <pre><code>oh$.addEventListener('onNetworkChange', (e) => {
   if (e.imparterTag === 'eth-web3') console.log(`new network selected for ${e.imparterTag} is:${e.name}`);
   if (e.imparterTag === /ohledger/.test(e.imparterTag)) console.log(`working in currency: ${e.currency}`);
+  if (e.imparterTag === 'btc-manual') console.log(`new network mode selected for ${e.imparterTag} is:${e.name}`);
   return;
 });
 </code></pre>
@@ -746,7 +816,7 @@ other than USD come online, we'll revisit this.</p>
 <tbody>
 <tr>
 <td>eth-web3</td>
-<td><code>{imparterTag:..,name:('main'|'rinkeby'|'kovan').., uri:..}</code></td>
+<td><code>{imparterTag:..,name:('main'|'rinkeby'|'kovan')..,mode:('prod'|'test'), uri:..}</code></td>
 </tr>
 <tr>
 <td>ohledger</td>
@@ -755,6 +825,10 @@ other than USD come online, we'll revisit this.</p>
 <tr>
 <td>ohledger-web3</td>
 <td><code>{imparterTag:..,currency:'USD',mode:('prod'|'test'), uri:..}</code></td>
+</tr>
+<tr>
+<td>btc-manual</td>
+<td><code>{imparterTag:..,mode:('prod'|'test'), uri:..}</code></td>
 </tr>
 </tbody>
 </table>
@@ -930,6 +1004,7 @@ exclusively.</p>
 <p>  Only the following imparter(s) will return 'true':</p>
 <ul>
 <li>ohledger</li>
+<li>btc-manual</li>
 </ul>
 
     <div class='pre p1 fill-light mt0'>canSetCredentials(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
@@ -1079,6 +1154,7 @@ exclusively.</p>
 <ul>
 <li>ohledger</li>
 <li>ohledger-web3</li>
+<li>btc-manual</li>
 </ul>
 
     <div class='pre p1 fill-light mt0'>canChangeNetwork(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
@@ -1185,20 +1261,29 @@ exclusively.</p>
 <tr>
 <th>imparter tag</th>
 <th>credentials object</th>
+<th>comments</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>eth-web3</td>
 <td>N/A</td>
+<td>not supported</td>
 </tr>
 <tr>
 <td>ohledger</td>
 <td>null</td>
+<td></td>
 </tr>
 <tr>
 <td>ohledger-web3</td>
 <td>N/A</td>
+<td>not supported</td>
+</tr>
+<tr>
+<td>btc-manual</td>
+<td>N/A</td>
+<td>not supported</td>
 </tr>
 </tbody>
 </table>
@@ -1299,7 +1384,7 @@ exclusively.</p>
 <tr>
 <td>eth-web3</td>
 <td>N/A</td>
-<td></td>
+<td>not suppoted</td>
 </tr>
 <tr>
 <td>ohledger</td>
@@ -1309,6 +1394,11 @@ exclusively.</p>
 <tr>
 <td>ohledger-web3</td>
 <td>N/A</td>
+<td>not supported</td>
+</tr>
+<tr>
+<td>btc-manual</td>
+<td><code>{address:..}</code></td>
 <td></td>
 </tr>
 </tbody>
@@ -1403,20 +1493,29 @@ exclusively.</p>
 <tr>
 <th>imparter tag</th>
 <th>network details object</th>
+<th>comments</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>eth-web3</td>
 <td>N/A</td>
+<td>not supported, change in wallet</td>
 </tr>
 <tr>
 <td>ohledger</td>
 <td><code>{currency:'USD', mode:'prod'|'test'}</code></td>
+<td></td>
 </tr>
 <tr>
 <td>ohledger-web3</td>
 <td><code>{currency:'USD', mode:'prod'|'test'}</code></td>
+<td></td>
+</tr>
+<tr>
+<td>btc-manual</td>
+<td><code>{mode:'prod'|'test'}</code></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -1598,6 +1697,10 @@ exclusively.</p>
 <td>ohledger-web3</td>
 <td><code>{address:..}</code></td>
 </tr>
+<tr>
+<td>btc-manual</td>
+<td><code>{address:..}</code></td>
+</tr>
 </tbody>
 </table>
 </blockquote>
@@ -1681,7 +1784,7 @@ exclusively.</p>
 <tbody>
 <tr>
 <td>eth-web3</td>
-<td><code>{name:('main'|'rinkeby'|'kovan').., uri:..}</code></td>
+<td><code>{name:('main'|'rinkeby'|'kovan').., mode:('prod'|'test'), uri:..}</code></td>
 </tr>
 <tr>
 <td>ohledger</td>
@@ -1690,6 +1793,10 @@ exclusively.</p>
 <tr>
 <td>ohledger-web3</td>
 <td><code>{currency:'USD',mode:('prod'|'test'), uri:..}</code></td>
+</tr>
+<tr>
+<td>btc-manual</td>
+<td><code>{mode:('prod'|'test'), uri:..}</code></td>
 </tr>
 </tbody>
 </table>
@@ -1857,6 +1964,10 @@ exclusively.</p>
 <td>ohledger-web3</td>
 <td><code>{address:..}</code></td>
 </tr>
+<tr>
+<td>btc-manual</td>
+<td><code>{address:..}</code></td>
+</tr>
 </tbody>
 </table>
 </blockquote>
@@ -1971,6 +2082,10 @@ is that of the call (pass this to back-end to retrieve cached values at better A
 </tr>
 <tr>
 <td>ohledger-web3</td>
+<td><code>{address:..}</code></td>
+</tr>
+<tr>
+<td>btc-manual</td>
 <td><code>{address:..}</code></td>
 </tr>
 </tbody>
@@ -2096,6 +2211,10 @@ imparter to a recipient</p>
 </tr>
 <tr>
 <td>ohledger-web3</td>
+<td><code>{address:..}</code></td>
+</tr>
+<tr>
+<td>btc-manual</td>
 <td><code>{address:..}</code></td>
 </tr>
 </tbody>
@@ -2382,6 +2501,10 @@ as the <em>to</em> address, not the specified <em>to</em> address.</p>
 <tr>
 <td>ohledger-web3</td>
 <td>{message:.., signature:..}</td>
+</tr>
+<tr>
+<td>btc-manual</td>
+<td>null</td>
 </tr>
 </tbody>
 </table>
