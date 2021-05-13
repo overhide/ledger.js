@@ -228,6 +228,7 @@ const oh$ = (function() {
      *  > | eth-web3 | `{imparterTag:..,address:..}` |
      *  > | ohledger | `{imparterTag:..,address:..,secret:..}` |
      *  > | ohledger-web3 | `{imparterTag:..,address:..}` |
+     *  > | ohledger-social | `{imparterTag:..,address:..}` |
      *  > | btc-manual | `{imparterTag:..,address:..}` |
      *  >
      *  > *imparterTag* - causing the event
@@ -394,6 +395,7 @@ const oh$ = (function() {
      *  > | eth-web3 | N/A | not suppoted |
      *  > | ohledger | `{address:..,secret:..}` | `address` is optional, if not set will be extracted from `secret` |
      *  > | ohledger-web3 | N/A | not supported |
+     *  > | ohledger-social | `{provider:..}` | `provider` is one of 'google' or 'microsoft'; if null, log-out |
      *  > | btc-manual | `{address:..}` | |
      *
      * @returns {Promise} representing a 'true' if success else 'false'; also fires [onCredentialsUpdate](#eventoncredentialsupdate) event against `oh$`
@@ -446,6 +448,7 @@ const oh$ = (function() {
      *  > | eth-web3 | `{address:..}` |
      *  > | ohledger | `{address:..,secret:..}` |
      *  > | ohledger-web3 | `{address:..}` |
+     *  > | ohledger-social | `{address:..}` |
      *  > | btc-manual | `{address:..}` |
      */
     getCredentials = getCredentials;
@@ -596,11 +599,12 @@ const oh$ = (function() {
      * 
      *  > The options objects are as follows:
      *  > 
-     *  > | imparter tag | credentials object |
+     *  > | imparter tag | credentials object | 
      *  > | --- | --- |
      *  > | eth-web3 | null |
      *  > | ohledger | {message:.., signature:..} |
      *  > | ohledger-web3 | {message:.., signature:..} |
+     *  > | ohledger-social | {message:.., signature:..} |
      *  > | btc-manual | null |
      *  > 
      *  > If *message* and *signature* are provided they are used instead of oh$ asking for wallet to resign message.
