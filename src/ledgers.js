@@ -3,6 +3,7 @@ import eth_web3 from './imparters/eth-web3.js';
 import btc_manual from './imparters/btc-manual.js';
 import ohledger_web3 from './imparters/ohledger-web3.js';
 import ohledger from './imparters/ohledger.js';
+import ohledger_social from './imparters/ohledger-social.js';
 import web3_wallet from './wallets/web3_wallet.js';
 import overhide_wallet from './wallets/overhide_wallet.js';
 
@@ -89,6 +90,11 @@ import overhide_wallet from './wallets/overhide_wallet.js';
  * 
  * - ohledger
  * - ohledger-web3
+ * - ohledger-social
+ * 
+ * The *ohledger-social* imparter is to use the *overhide-ledger* with credentials stored online behind a Microsoft or
+ * Google social login.  The *overhide-ledger* credentials are not transferred to the client.  They sit in the cloud and
+ * are used once a social provider allows it.
  * 
  * Thus far Bitcoin is only supported in manual mode (no Bitcoin wallet injection into target site):
  * 
@@ -114,7 +120,7 @@ import overhide_wallet from './wallets/overhide_wallet.js';
  * >
  * > The denomination for amounts is the Wei
  * 
- * #### ohledger, ohledger-web3
+ * #### ohledger, ohledger-web3, ohledger-social
  * 
  * > Addresses and secret keys use Ethereum format.
  * >
@@ -618,7 +624,7 @@ const oh$ = (function() {
   const isEnabled = new Promise((resolve) => doEnable = resolve);
   var token = null;
   var __fetch = null;
-  var imparterTags = [ohledger.tag, btc_manual.tag];
+  var imparterTags = [ohledger.tag, ohledger_social.tag, btc_manual.tag];
 
   /**
    * Function to fire events.
@@ -677,6 +683,14 @@ const oh$ = (function() {
     (which, params) => fire(which, params)
   );
   imparters[ohledger.tag] = new ohledger(
+    overhideWallet,
+    web3Wallet,
+    () => token,
+    (...args) => __fetch(...args),
+    (which, params) => fire(which, params)
+  );
+  imparters[ohledger_social.tag] = new ohledger_social(
+    domFns,
     overhideWallet,
     web3Wallet,
     () => token,

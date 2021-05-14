@@ -39,7 +39,7 @@ class ohledger_social {
     return true;
   }  
 
-  setCredentials(credentials) {
+  async setCredentials(credentials) {
     if (!credentials) {
       if (!this.social) throw new Error("Not logged in");    
       this.domFns.hideAllPopupContents();
@@ -121,13 +121,13 @@ class ohledger_social {
         'Content-Type': 'application/json; charset=utf-8',
         'Authorization': `Bearer ${this.getToken()}`
       }})
-    .then((result) => {
+    .then(async (result) => {
       if (result.status == 200) {
         const resultValue = await result.json();
         this.address = resultValue.address;
         return atob(resultValue.signature);
       } else {
-        return false;
+        throw new Error(await result.text());
       }
     })
     .catch(e => {

@@ -367,7 +367,11 @@ and will be suffixed on the <em>web3</em> walleted version:</p>
 <ul>
 <li>ohledger</li>
 <li>ohledger-web3</li>
+<li>ohledger-social</li>
 </ul>
+<p>The <em>ohledger-social</em> imparter is to use the <em>overhide-ledger</em> with credentials stored online behind a Microsoft or
+Google social login.  The <em>overhide-ledger</em> credentials are not transferred to the client.  They sit in the cloud and
+are used once a social provider allows it.</p>
 <p>Thus far Bitcoin is only supported in manual mode (no Bitcoin wallet injection into target site):</p>
 <ul>
 <li>btc-manual</li>
@@ -418,7 +422,7 @@ and will be suffixed on the <em>web3</em> walleted version:</p>
 </blockquote>
 <p>The denomination for amounts is the Wei</p>
 </blockquote>
-<h4>ohledger, ohledger-web3</h4>
+<h4>ohledger, ohledger-web3, ohledger-social</h4>
 <blockquote>
 <p>Addresses and secret keys use Ethereum format.</p>
 <p>Addresses are 20 bytes: 42 character 'hex' strings prefixed with '0x'.</p>
@@ -721,6 +725,10 @@ other than USD come online, we'll revisit this.</p>
 </tr>
 <tr>
 <td>ohledger-web3</td>
+<td><code>{imparterTag:..,address:..}</code></td>
+</tr>
+<tr>
+<td>ohledger-social</td>
 <td><code>{imparterTag:..,address:..}</code></td>
 </tr>
 <tr>
@@ -1397,6 +1405,11 @@ exclusively.</p>
 <td>not supported</td>
 </tr>
 <tr>
+<td>ohledger-social</td>
+<td><code>{provider:..}</code></td>
+<td><code>provider</code> is one of 'google' or 'microsoft'; if null, log-out</td>
+</tr>
+<tr>
 <td>btc-manual</td>
 <td><code>{address:..}</code></td>
 <td></td>
@@ -1695,6 +1708,10 @@ exclusively.</p>
 </tr>
 <tr>
 <td>ohledger-web3</td>
+<td><code>{address:..}</code></td>
+</tr>
+<tr>
+<td>ohledger-social</td>
 <td><code>{address:..}</code></td>
 </tr>
 <tr>
@@ -2500,6 +2517,10 @@ as the <em>to</em> address, not the specified <em>to</em> address.</p>
 </tr>
 <tr>
 <td>ohledger-web3</td>
+<td>{message:.., signature:..}</td>
+</tr>
+<tr>
+<td>ohledger-social</td>
 <td>{message:.., signature:..}</td>
 </tr>
 <tr>
