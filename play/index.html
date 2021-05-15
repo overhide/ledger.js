@@ -49,7 +49,7 @@
             <p>Invalid <em>imparterTag</em>.</p>
           </div>
           <div id="ohledgernote" class="w3-panel w3-yellow">
-            <p>For <em>ohledger</em> and <em>ohledger-web3</em> imparters please first <a href="https://test.ledger.overhide.io/onboard" target="_blank">register a provider address</a> with the <em>overhide-ledger</em> test network.</p>
+            <p>For <em>ohledger</em>, <em>ohledger-web3</em>, and <em>ohledger-social</em> imparters please first <a href="https://test.ledger.overhide.io/onboard" target="_blank">register a provider address</a> with the <em>overhide-ledger</em> test network.</p>
           </div>
           <div id="ethnote" class="w3-panel w3-yellow">
             <p>For the <em>eth-web3</em> imparter please use addresses from the <em>Rinkeby</em> testnet.</p>
@@ -267,9 +267,9 @@
      $("#invalidnote").hide();
     $("[name='imparterTag']").change(() => {
       data.imparterTag = data.imparterTag.trim();
-      /^ohledger(-web3)?$/.test(data.imparterTag) ? $("#ohledgernote").show() : $("#ohledgernote").hide();
+      /^ohledger(-web3|-social)?$/.test(data.imparterTag) ? $("#ohledgernote").show() : $("#ohledgernote").hide();
       /^eth-web3$/.test(data.imparterTag) ? $("#ethnote").show() : $("#ethnote").hide();
-      /^(ohledger(-web3)?|eth-web3|btc-manual)?$/.test(data.imparterTag) ? $("#invalidnote").hide() : $("#invalidnote").show();
+      /^(ohledger(-web3|-social)?|eth-web3|btc-manual)?$/.test(data.imparterTag) ? $("#invalidnote").hide() : $("#invalidnote").show();
     })
   
     /* =========================================================================
@@ -283,6 +283,7 @@
         el.append(new Option('btc-manual','btc-manual'));
         el.append(new Option('ohledger-web3','ohledger-web3'));
         el.append(new Option('ohledger','ohledger'));
+        el.append(new Option('ohledger-social','ohledger-social'));
       }
     }
 

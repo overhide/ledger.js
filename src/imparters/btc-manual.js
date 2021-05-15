@@ -8,7 +8,7 @@ class btc_manual {
     'test':'https://test.bitcoin.overhide.io'
   };
 
-  url = 'http://localhost:8080/src/frames';
+  url = 'https://overhide.github.io/ledgers.js/src/frames';
   address = null;
   mode = 'test';
 
@@ -18,11 +18,17 @@ class btc_manual {
     this.__fetch = __fetch;
     this.fire = fire;
 
-    window.document.addEventListener('oh$-popup-signature', (e) => {
-      if ('detail' in e && e.detail && 'signature' in e.detail) {
-        this.domFns.makePopupHidden(e.detail.signature, false);
+    window.addEventListener('message', (e) => {
+      if (!e.data || !e.data.event) return;
+      switch(e.data.event) {
+        case 'oh$-popup-signature':
+          if ('detail' in e.data && e.data.detail && 'signature' in e.data.detail) {
+            this.domFns.makePopupHidden(e.data.detail.signature, false);
+          } else {
+            this.domFns.makePopupHidden(`no signature`, true);      
+          }          
+          break;
       }
-      this.domFns.makePopupHidden(`no signature`, true);      
     });    
   }
 

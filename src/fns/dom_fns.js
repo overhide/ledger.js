@@ -4,8 +4,13 @@ class dom_fns {
   reject = null;
 
   constructor() {
-    window.document.addEventListener('oh$-popup-close', (e) => {
-      this.makePopupHidden('user close', true);
+    window.addEventListener('message', (e) => {
+      if (!e.data || !e.data.event) return;
+      switch(e.data.event) {
+        case 'oh$-popup-close':
+          this.makePopupHidden('user close', true);
+          break;
+      }
     });    
   }
 
@@ -19,11 +24,11 @@ class dom_fns {
   // @param {string} triggerFor 
   // @param {Object} data - to stringify and sent as event.details.
   raiseEventClick(imparterTag, triggerFor) {
-    window.parent.document.dispatchEvent(new CustomEvent('oh$-event', {detail: JSON.stringify({
+    window.parent.postMessage({event: 'oh$-event', detail: JSON.stringify({
       imparterTag: imparterTag,
       triggerFor: triggerFor,
       click: true
-    })}));
+    })});
   }
 
   // raise oh$-event
@@ -31,11 +36,11 @@ class dom_fns {
   // @param {string} triggerFor 
   // @param {Object} data - to stringify and sent as event.details.
   raiseEvent(imparterTag, triggerFor, data) {
-    window.parent.document.dispatchEvent(new CustomEvent('oh$-event', {detail: JSON.stringify({
+    window.parent.postMessage({event: 'oh$-event', detail: JSON.stringify({
       ...data,
       imparterTag: imparterTag,
       triggerFor: triggerFor
-    })}));    
+    })});    
   }
 
   // promise used for popups and resolutions via oh-ledger-* messages.
@@ -85,7 +90,7 @@ class dom_fns {
     popup.style.display='none';
     popup.innerHTML = `
       <div id="oh-popup-container-div">
-        <a href="#" title="Close" id="oh-popup-close" onclick="window.parent.document.dispatchEvent(new CustomEvent('oh$-popup-close',{})); return false;">X</a>
+        <a href="#" title="Close" id="oh-popup-close" onclick="window.parent.postMessage({event: 'oh$-popup-close'}); return false;">X</a>
         <iframe id="oh-ledger-iframe"></iframe>
       </div>
     `;
