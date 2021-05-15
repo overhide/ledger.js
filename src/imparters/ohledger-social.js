@@ -120,15 +120,15 @@ class ohledger_social {
       const res = this.eth_accounts.create();
       const karnet = res.privateKey;
       this.domFns.hideAllPopupContents();
-      this.domFns.setFrame(`http://localhost:8120/pending`, 30, 10);
+      this.domFns.setFrame(`https://social.overhide.io/pending`, 30, 10);
       const popupPromise = this.domFns.makePopupVisible();     
       window.open(
-        `https://overhide.b2clogin.com/overhide.onmicrosoft.com/B2C_1_${this.social}/oauth2/v2.0/authorize?client_id=aa71ffc7-2884-4045-898f-7db3a177c1a1&response_type=code&redirect_uri=http%3A%2F%2Flocalhost:8120%2Fredirect/${this.social}&response_mode=query&scope=aa71ffc7-2884-4045-898f-7db3a177c1a1&state=${karnet}`,
+        `https://overhide.b2clogin.com/overhide.onmicrosoft.com/B2C_1_${this.social}/oauth2/v2.0/authorize?client_id=aa71ffc7-2884-4045-898f-7db3a177c1a1&response_type=code&redirect_uri=https%3A%2F%2Fsocial.overhide.io%2Fredirect/${this.social}&response_mode=query&scope=aa71ffc7-2884-4045-898f-7db3a177c1a1&state=${karnet}`,
         '_blank',
         {height: 300, width: 300}
       );
       await popupPromise;
-      return await this.__fetch(`http://localhost:8120/sign?karnet=${karnet}&message=${btoa(message)}`, {
+      return await this.__fetch(`https://social.overhide.io/sign?karnet=${karnet}&message=${btoa(message)}`, {
         method: "GET",
         headers: { 
           'Content-Type': 'application/json; charset=utf-8',
