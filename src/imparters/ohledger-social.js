@@ -16,14 +16,19 @@ class ohledger_social {
     this.__fetch = __fetch;
     this.fire = fire;
 
-    window.document.addEventListener('oh$-login-success', (e) => {
-      this.domFns.makePopupHidden('login success', true);
-    });    
-    window.document.addEventListener('oh$-login-failed', (e) => {
-      this.domFns.makePopupHidden('login failure', true);
-    });    
-    window.document.addEventListener('oh$-logout-success', (e) => {
-      this.domFns.makePopupHidden('logout', true);
+    window.addEventListener('message', (e) => {
+      if (!e.data || !e.data.event) return;
+      switch(e.data.event) {
+        case 'oh$-login-success':
+          this.domFns.makePopupHidden('login success', false);          
+          break;
+        case 'oh$-login-failed':
+          this.domFns.makePopupHidden('login failure', true);
+          break;
+        case 'oh$-logout-success':
+          this.domFns.makePopupHidden('logout', false);
+          break;
+      }
     });    
   }
 
@@ -43,10 +48,11 @@ class ohledger_social {
     if (!credentials) {
       if (!this.social) throw new Error("Not logged in");    
       this.domFns.hideAllPopupContents();
-      this.domFns.setFrame(`https://overhide.b2clogin.com/overhide.onmicrosoft.com/B2C_1_${this.social}/oauth2/v2.0/logout?redirect_uri=https%3A%2F%2Fsocial.overhide.io%2Flogout`);
+      this.domFns.setFrame(`https://overhide.b2clogin.com/overhide.onmicrosoft.com/B2C_1_${this.social}/oauth2/v2.0/logout?redirect_uri=http%3A%2F%2Fsocial.overhide.io%2Flogout`);
       await this.domFns.makePopupVisible();  
       this.address = null;
     } else if ('provider' in credentials) {
+      this.social = credentials.provider;
       await this.sign(`setting credentials on ${new Date()}`);      
     } else {
       throw new Error("Incorrect credentials options.");
@@ -110,30 +116,36 @@ class ohledger_social {
   }
 
   async sign(message) {
-    const res = this.eth_accounts.create();
-    const karnet = res.privateKey;
-    this.domFns.hideAllPopupContents();
-    this.domFns.setFrame(`https://overhide.b2clogin.com/overhide.onmicrosoft.com/B2C_1_${this.social}/oauth2/v2.0/authorize?client_id=aa71ffc7-2884-4045-898f-7db3a177c1a1&response_type=code&redirect_uri=https%3A%2F%2Fsocial.overhide.io%2Fredirect/${this.social}&response_mode=query&scope=aa71ffc7-2884-4045-898f-7db3a177c1a1&state=${karnet}`);
-    await this.domFns.makePopupVisible();     
-    return await __fetch(`https://social.overhide.io/sign?karnet=${karnet}&message=${btoa(message)}`, {
-      method: "GET",
-      headers: { 
-        'Content-Type': 'application/json; charset=utf-8',
-        'Authorization': `Bearer ${this.getToken()}`
-      }})
-    .then(async (result) => {
-      if (result.status == 200) {
-        const resultValue = await result.json();
-        this.address = resultValue.address;
-        return atob(resultValue.signature);
-      } else {
-        throw new Error(await result.text());
-      }
-    })
-    .catch(e => {
+    try {
+      const res = this.eth_accounts.create();
+      const karnet = res.privateKey;
+      this.domFns.hideAllPopupContents();
+      this.domFns.setFrame(`http://localhost:8120/pending`, 30, 10);
+      const popupPromise = this.domFns.makePopupVisible();     
+      window.open(
+        `https://overhide.b2clogin.com/overhide.onmicrosoft.com/B2C_1_${this.social}/oauth2/v2.0/authorize?client_id=aa71ffc7-2884-4045-898f-7db3a177c1a1&response_type=code&redirect_uri=http%3A%2F%2Flocalhost:8120%2Fredirect/${this.social}&response_mode=query&scope=aa71ffc7-2884-4045-898f-7db3a177c1a1&state=${karnet}`,
+        '_blank',
+        {height: 300, width: 300}
+      );
+      await popupPromise;
+      return await this.__fetch(`http://localhost:8120/sign?karnet=${karnet}&message=${btoa(message)}`, {
+        method: "GET",
+        headers: { 
+          'Content-Type': 'application/json; charset=utf-8',
+          'Authorization': `Bearer ${this.getToken()}`
+        }})
+      .then(async (result) => {
+        if (result.status == 200) {
+          const resultValue = await result.json();
+          this.address = resultValue.address;
+          return atob(resultValue.signature);
+        } else {
+          throw new Error(await result.text());
+        }
+      });
+    } catch(e) {
       throw String(e)
-    });
-  
+    }  
   }
 
   async createTransaction(amount, to, options) {

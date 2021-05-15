@@ -51,6 +51,6 @@
     "pack-prod": "webpack --mode=production",
     "all": "npm run docs & npm run pack-prod",
     "watch": "watch \"npm run pack-dev\" ./src",
-    "play": "http-server ./"
+    "play": "http-server -c-1 ./"
   }
 }

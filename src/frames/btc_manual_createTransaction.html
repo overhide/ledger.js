@@ -158,7 +158,7 @@
     } 
 
     function ok() {
-      window.parent.document.dispatchEvent(new CustomEvent('oh$-popup-close',{detail:'ok'}));
+      window.parent.postMessage({event: 'oh$-popup-close'}, '*');
     }
   </script>
 </html>

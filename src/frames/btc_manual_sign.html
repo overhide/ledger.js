@@ -155,7 +155,7 @@
 
 
     function cancel() {
-      window.parent.document.dispatchEvent(new CustomEvent('oh$-popup-close',{detail:'cancel'}));
+      window.parent.postMessage({event: 'oh$-popup-close'}, '*');
     }
 
     function submit() {
@@ -177,7 +177,7 @@
         })
       }).then((result) => {
         if (result.status == 200) {
-          window.parent.document.dispatchEvent(new CustomEvent('oh$-popup-signature',{detail: {signature:btoa(data.signature)}}));
+          window.parent.postMessage({event: 'oh$-popup-signature', detail: {signature:btoa(data.signature)}}, '*');
         } else {
           data.toast = "Invalid signature.";
           fillValues();
