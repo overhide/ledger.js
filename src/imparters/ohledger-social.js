@@ -48,7 +48,7 @@ class ohledger_social {
     if (!credentials) {
       if (!this.social) throw new Error("Not logged in");    
       this.domFns.hideAllPopupContents();
-      this.domFns.setFrame(`https://overhide.b2clogin.com/overhide.onmicrosoft.com/B2C_1_${this.social}/oauth2/v2.0/logout?redirect_uri=http%3A%2F%2Fsocial.overhide.io%2Flogout`);
+      this.domFns.setFrame(`https://overhide.b2clogin.com/overhide.onmicrosoft.com/B2C_1_${this.social}/oauth2/v2.0/logout?redirect_uri=https%3A%2F%2Fsocial.overhide.io%2Flogout`);
       await this.domFns.makePopupVisible();  
       this.address = null;
     } else if ('provider' in credentials) {
