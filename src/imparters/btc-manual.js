@@ -135,7 +135,7 @@ class btc_manual {
 
     this.domFns.hideAllPopupContents();
     const base64Message = btoa(message);
-    this.domFns.setFrame(`${this.url}/btc_manual_sign.html?address=${this.address}&message=${base64Message}&token=${this.getToken()}&isTest=${this.mode == 'test'}`);
+    this.domFns.setFrame(`${this.url}/btc_manual_sign.html?address=${this.address}&message=${base64Message}&token=${this.getToken()}&isTest=${this.mode == 'test'}`, 70, 40);
     return atob(await this.domFns.makePopupVisible());
   }
 
@@ -145,7 +145,7 @@ class btc_manual {
     const from = this.address;
 
     this.domFns.hideAllPopupContents();
-    this.domFns.setFrame(`${this.url}/btc_manual_createTransaction.html?from=${this.address}&to=${to}&value=${amount}&isTest=${this.mode == 'test'}`);
+    this.domFns.setFrame(`${this.url}/btc_manual_createTransaction.html?from=${this.address}&to=${to}&value=${amount}&isTest=${this.mode == 'test'}`, 70, 45);
     await this.domFns.makePopupVisible();
 
     return true;
