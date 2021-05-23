@@ -18,14 +18,6 @@ module.exports = {
   plugins: [
     new HardSourceWebpackPlugin()
   ],   
-  externals: {
-    "web3": {
-      commonjs: "web3",
-      commonjs2: "web3",
-      amd: "web3",
-      root: "Web3"
-    }
-  },
   module: {
     rules: [
       {

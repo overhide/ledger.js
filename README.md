@@ -72,6 +72,14 @@ This *ledgers.js* library is client-side and abstracts ledgers (see figure above
 
 ### Distributable
 
+> **⚠ Why is it so big?** 
+>
+> We depend on [web3.js](https://github.com/ethereum/web3.js/) which has bloat issues:
+>
+> https://github.com/ChainSafe/web3.js/issues/1178
+>
+> As soon as that gets resolved, this distro will be smaller.
+
 The *ledgers.js* library ['dist' folder](https://github.com/overhide/ledgers.js/blob/master/dist) contains the distributable artifact.
 
 You'll likely want to [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) the library along with its dependencies ([web3.js](https://github.com/ethereum/web3.js/)).
@@ -105,13 +113,9 @@ You can include *ledgers.js* via CDN:
 
 For a specific version, e.g. version *2.1.4*: `https://cdn.jsdelivr.net/npm/ledgers.js@2.1.4/dist/ledgers.min.js`
 
-> The library depends on [web3.js](https://github.com/ethereum/web3.js/), as such you must include the dependency (see first line in example below).
-
 The library can be loaded straight into your HTML and accessed by its `oh$` property in the globals:
 
 ```
-<script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.4/web3.min.js" integrity="sha512-TTGImODeszogiro9DUvleC9NJVnxO6M0+69nbM3YE9SYcVe4wZp2XYpELtcikuFZO9vjXNPyeoHAhS5DHzX1ZQ==" crossorigin="anonymous"></script>
-
 <script src="`https://cdn.jsdelivr.net/npm/ledgers.js/dist/ledgers.min.js`"></script>
 
 <script>
