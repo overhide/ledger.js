@@ -93,7 +93,7 @@ class eth_web3 {
     if (!this.web3_wallet.walletAddress) throw new Error("from 'walletAddress' not set: use wallet");
     const from = this.web3_wallet.walletAddress;
     if (!uri) throw new Error('no uri for request, unsupported network selected in wallet?');
-    const message = 'verify ownership of address by signing';
+    const message = `verify ownership of address by signing on ${new Date().toLocaleString()}`;
     const signature = await this.sign(message);
 
     return await imparter_fns.isSignatureValid_call(uri, signature, message, from, this.getToken(), this.__fetch);

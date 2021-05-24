@@ -109,7 +109,7 @@ class ohledger_social {
     if (!this.address) throw new Error("from 'address' not set: use setCredentials");
     const from = this.address;
     if (!uri) throw new Error('no uri for request, unsupported network selected in wallet?');
-    const message = 'verify ownership of address by signing';
+    const message = `verify ownership of address by signing on ${new Date().toLocaleString()}`;
     const signature = await this.sign(message);
 
     return await imparter_fns.isSignatureValid_call(uri, signature, message, from, this.getToken(), this.__fetch);
