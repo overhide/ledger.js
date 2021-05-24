@@ -47,13 +47,13 @@ class btc_manual {
   setCredentials(credentials) {
     if (!('address' in credentials)) throw new Error("'address' must be passed in");
     switch(this.mode) {
-      case 'bitcoin_testnet':
-        if (!/(tb(0([ac-hj-np-z02-9]{39}|[ac-hj-np-z02-9]{59})|1[ac-hj-np-z02-9]{8,87})|[mn2][a-km-zA-HJ-NP-Z1-9]{25,39})/.test(credentials.address)) {
+      case 'test':
+        if (!/^(tb(0([ac-hj-np-z02-9]{39}|[ac-hj-np-z02-9]{59})|1[ac-hj-np-z02-9]{8,87})|[mn2][a-km-zA-HJ-NP-Z1-9]{25,39})$/.test(credentials.address)) {
           throw new Error(`invalid bitcoin_testnet address: ${credentials.address}`);
         }
         break;
-      case 'bitcoin':
-        if (!/(bc(0([ac-hj-np-z02-9]{39}|[ac-hj-np-z02-9]{59})|1[ac-hj-np-z02-9]{8,87})|[13][a-km-zA-HJ-NP-Z1-9]{25,35})/.test(credentials.address)) {
+      case 'prod':
+        if (!/^(bc(0([ac-hj-np-z02-9]{39}|[ac-hj-np-z02-9]{59})|1[ac-hj-np-z02-9]{8,87})|[13][a-km-zA-HJ-NP-Z1-9]{25,35})$/.test(credentials.address)) {
           throw new Error(`invalid bitcoin address: ${credentials.address}`);
         }
         break;
