@@ -194,6 +194,7 @@
           </p>
           <form id="isOnLedger"><p>
             <p><select name="imparterTag" class="w3-select w3-border" onchange="scrubForm(event); refreshCreds()"></select><label class="w3-text-blue">imparterTag</label></p>
+            <p><textarea name="isOnLedgeOptionsJSON" class="w3-input w3-border" rows="2" required onchange="scrubForm(event)"></textarea><label class="w3-text-blue">options JSON (<a href='../docs/ledgers.js-rendered-docs/index.html#isonledger' target='_blank'>see docs</a>)</label></p>
           </p></form>
           <p><button class="w3-btn w3-blue w3-left-align w3-block" onclick="isOnLedger()">run isOnLedger()</button></p>
         </div>
@@ -250,6 +251,7 @@
       credentialsOptionsJSON: '{"address":"","secret":""}',
       networkDetailsJSON:'{"currency":"", "mode":""}',
       recipientJSON:'{"address":""}',
+      isOnLedgeOptionsJSON:'{"message":"", "signature":""}',
       transactionOptionsJSON:'{"message":"", "signature":""}',
       since: '2019-01-01T00:00'
     };
@@ -497,9 +499,10 @@
     }
 
     async function isOnLedger() {
+      var json = data.isOnLedgeOptionsJSON ? JSON.parse(data.isOnLedgeOptionsJSON) : null;
       log('isOnLedger :: start', {imparterTag: data.imparterTag});
       try {
-        let result = await oh$.isOnLedger(data.imparterTag);
+        let result = await oh$.isOnLedger(data.imparterTag, json);
         log('isOnLedger :: result', { result: result });        
       } catch (e) {
         log('isOnLedger :: error', { error: new String(e) });

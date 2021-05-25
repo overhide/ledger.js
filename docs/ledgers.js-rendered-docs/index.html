@@ -2293,7 +2293,7 @@ whereby 'transactions' is the list of transactions and 'as-of' is the timestamp 
 <p>  Intent is to validate beyond just a valid address.  To validate the address has been used.</p>
 <p>  May fire <a href="#eventonwalletpopup">onWalletPopup</a> event against <code>oh$</code>.</p>
 
-    <div class='pre p1 fill-light mt0'>isOnLedger(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+    <div class='pre p1 fill-light mt0'>isOnLedger(imparterTag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
@@ -2312,6 +2312,49 @@ whereby 'transactions' is the list of transactions and 'as-of' is the timestamp 
           <div>
             <span class='code bold'>imparterTag</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
 	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    options for the specific imparter.
+<blockquote>
+<p>The options objects are as follows:</p>
+<table>
+<thead>
+<tr>
+<th>imparter tag</th>
+<th>credentials object</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>eth-web3</td>
+<td>{message:.., signature:..}</td>
+</tr>
+<tr>
+<td>ohledger</td>
+<td>{message:.., signature:..}</td>
+</tr>
+<tr>
+<td>ohledger-web3</td>
+<td>{message:.., signature:..}</td>
+</tr>
+<tr>
+<td>ohledger-social</td>
+<td>{message:.., signature:..}</td>
+</tr>
+<tr>
+<td>btc-manual</td>
+<td>{message:.., signature:..}</td>
+</tr>
+</tbody>
+</table>
+<p>If <em>message</em> and <em>signature</em> are provided they are used instead of oh$ asking for wallet to resign message.</p>
+</blockquote>
+
           </div>
           
         </div>

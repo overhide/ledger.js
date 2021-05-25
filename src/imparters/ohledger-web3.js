@@ -72,14 +72,20 @@ class ohledger_web3 {
     return await imparter_fns.getTxs_retrieve(uri, from, to, tallyOnly, tallyDollars, date, this.getToken(), this.__fetch);
   }  
 
-  async isOnLedger() {
+  async isOnLedger(options) {
     const uri = this.getOverhideRemunerationAPIUri();
     if (!this.mode) throw new Error("network 'mode' must be set, use setNetwork");
     if (!this.web3_wallet.walletAddress) throw new Error("from 'walletAddress' not set: use wallet");
     const from = this.web3_wallet.walletAddress;
     if (!uri) throw new Error('no uri for request, unsupported network selected in wallet?');
-    const message = `verify ownership of address by signing on ${new Date().toLocaleString()}`;
-    const signature = await this.sign(message);
+
+    if ('message' in options && options.message && 'signature' in options && options.signature) {
+      var message = options.message;
+      var signature = options.signature;
+    } else {
+      var message = `verify ownership of address by signing on ${new Date().toLocaleString()}`;
+      var signature = await this.sign(message);
+    }
 
     return await imparter_fns.isSignatureValid_call(uri, signature, message, from, this.getToken(), this.__fetch);
   }

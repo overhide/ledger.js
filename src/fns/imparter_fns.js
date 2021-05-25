@@ -37,16 +37,16 @@ class imparter_fns {
         address: from
       })
     })
-      .then((result) => {
-        if (result.status == 200) {
-          return true;
-        } else {
-          return false;
-        }
-      })
-      .catch(e => {
-        throw String(e)
-      });
+    .then((result) => {
+      if (result.status == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+    .catch(e => {
+      throw String(e)
+    });
   }
 }
 

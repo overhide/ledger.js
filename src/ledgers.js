@@ -568,6 +568,20 @@ const oh$ = (function() {
      * 
      *   May fire [onWalletPopup](#eventonwalletpopup) event against `oh$`.
      * @param {string} imparterTag
+     * @param {Object} options - options for the specific imparter.
+     * 
+     *  > The options objects are as follows:
+     *  > 
+     *  > | imparter tag | credentials object | 
+     *  > | --- | --- |
+     *  > | eth-web3 | {message:.., signature:..} |
+     *  > | ohledger | {message:.., signature:..} |
+     *  > | ohledger-web3 | {message:.., signature:..} |
+     *  > | ohledger-social | {message:.., signature:..} |
+     *  > | btc-manual | {message:.., signature:..} |
+     *  > 
+     *  > If *message* and *signature* are provided they are used instead of oh$ asking for wallet to resign message.
+     * 
      * @returns {Promise} with 'true' or 'false'; may fire [onWalletPopup](#eventonwalletpopup) event against `oh$`
      */
     isOnLedger = isOnLedger;
@@ -792,11 +806,12 @@ const oh$ = (function() {
     return await imparters[imparterTag].getTxs(recipient, date, tallyOnly, tallyDollars);
   }
 
-  async function isOnLedger(imparterTag) {
+  async function isOnLedger(imparterTag, options) {
     if (!imparterTag in imparters) throw new Error("invalid imparterTag");
     if (await isEnabled && !__fetch) throw new Error('did you forget to `oh$.enable(..)`?');
+    options = options || {};
 
-    return await imparters[imparterTag].isOnLedger();
+    return await imparters[imparterTag].isOnLedger(options);
   }
 
   async function sign(imparterTag, message) {
@@ -809,6 +824,7 @@ const oh$ = (function() {
   async function createTransaction(imparterTag, amount, to, options) {
     if (!imparterTag in imparters) throw new Error("invalid imparterTag");
     if (await isEnabled && !__fetch) throw new Error('did you forget to `oh$.enable(..)`?');
+    options = options || {};
 
     return await imparters[imparterTag].createTransaction(amount, to, options);
   }
