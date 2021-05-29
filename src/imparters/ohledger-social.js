@@ -53,7 +53,6 @@ class ohledger_social {
       this.address = null;
     } else if ('provider' in credentials) {
       this.social = credentials.provider;
-      await this.sign(`setting credentials on ${new Date()}`);      
     } else {
       throw new Error("Incorrect credentials options.");
     }
