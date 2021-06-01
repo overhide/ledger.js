@@ -1,6 +1,6 @@
 {
   "name": "ledgers.js",
-  "version": "4.5.4",
+  "version": "4.5.5",
   "description": "JavaScript library for ledger-based authorizations :: abstracting different ledgers to be used in an application's authentication and authorization workflows.",
   "engines": {
     "node": ">=10.13.0"
