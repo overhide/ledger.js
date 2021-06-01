@@ -401,7 +401,7 @@ const oh$ = (function() {
      *  > | eth-web3 | N/A | not suppoted |
      *  > | ohledger | `{address:..,secret:..}` | `address` is optional, if not set will be extracted from `secret` |
      *  > | ohledger-web3 | N/A | not supported |
-     *  > | ohledger-social | `{provider:..}` | `provider` is one of 'google' or 'microsoft'; if null, log-out |
+     *  > | ohledger-social | `{provider:..}` | `null` to log-out; `provider` is one of 'google' or 'microsoft' |
      *  > | btc-manual | `{address:..}` | |
      *
      * @returns {Promise} representing a 'true' if success else 'false'; also fires [onCredentialsUpdate](#eventoncredentialsupdate) event against `oh$`
