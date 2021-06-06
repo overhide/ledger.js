@@ -59,6 +59,9 @@ class ohledger_social {
       this.social = null;
     } else if ('provider' in credentials) {
       this.social = credentials.provider;
+      if ('address' in credentials) {
+        this.address = credentials.address;
+      }
     } else {
       throw new Error("Incorrect credentials options, 'provider' is mandatory.");
     }
