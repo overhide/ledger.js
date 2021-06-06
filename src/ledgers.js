@@ -319,6 +319,7 @@ const oh$ = (function() {
      *   Only the following imparter(s) will return 'true':
      * 
      *   - ohledger
+     *   - ohledger-social
      *   - btc-manual
      * 
      * @param {string} imparterTag

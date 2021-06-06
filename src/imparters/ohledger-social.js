@@ -59,8 +59,9 @@ class ohledger_social {
       this.social = null;
     } else if ('provider' in credentials) {
       this.social = credentials.provider;
+      await this.sign(`re-loging into ${this.social} provider`);
     } else {
-      throw new Error("Incorrect credentials options.");
+      throw new Error("Incorrect credentials options, 'provider' is mandatory.");
     }
     this.fire('onCredentialsUpdate', { imparterTag: ohledger_social.tag, address: this.address });
     return true;
