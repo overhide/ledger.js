@@ -289,7 +289,7 @@ const oh$ = (function() {
      * @namespace oh$
      * @function enable
      * @description
-     *   Enable `oh$` by instrumenting with token for ledger access.
+     *   Enable (initialize) `oh$` by instrumenting with token for ledger access.
      * 
      *   `oh$` calls may stall while waiting for this call to complete successfully.
      * 
