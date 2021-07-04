@@ -164,7 +164,7 @@
     }
 
     function checkSignatureValid() {
-      const url = `${data.remuneration_uri[data.isTest]}/is-signature-valid`;
+      const url = `${data.remuneration_uri[data.isTest]}/is-signature-valid?skip-ledger=true`;
       fetch(url, {
         method: "POST",
         headers: { 

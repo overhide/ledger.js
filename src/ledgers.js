@@ -354,6 +354,7 @@ const oh$ = (function() {
      *
      *   - ohledger
      *   - ohledger-web3
+     *   - ohledger-social
      *   - btc-manual
      *
      * @param {string} imparterTag
@@ -378,6 +379,7 @@ const oh$ = (function() {
      *  > | eth-web3 | N/A | not supported |
      *  > | ohledger | null | |
      *  > | ohledger-web3 | N/A | not supported |
+     *  > | ohledger-social | N/A | not supported |
      *  > | btc-manual | N/A | not supported |
      *
      * @returns {Promise} representing a 'true' if success else 'false'; also fires [onCredentialsUpdate](#eventoncredentialsupdate) event against `oh$`
@@ -426,6 +428,7 @@ const oh$ = (function() {
      *  > | eth-web3 | N/A | not supported, change in wallet |
      *  > | ohledger | `{currency:'USD', mode:'prod'|'test'}` | |
      *  > | ohledger-web3 | `{currency:'USD', mode:'prod'|'test'}` | |
+     *  > | ohledger-social | `{currency:'USD', mode:'prod'|'test'}` | |
      *  > | btc-manual | `{mode:'prod'|'test'}` | |
      *
      * @returns {Promise} representing a 'true' if success else 'false'; also fires [onNetworkChange](#eventonnetworkchange) event against `oh$`
@@ -473,6 +476,7 @@ const oh$ = (function() {
      *  > | eth-web3 | `{name:('main'|'rinkeby'|'kovan').., mode:('prod'|'test'), uri:..}` |
      *  > | ohledger | `{currency:'USD',mode:('prod'|'test'), uri:..}` |
      *  > | ohledger-web3 | `{currency:'USD',mode:('prod'|'test'), uri:..}` |
+     *  > | ohledger-social | `{currency:'USD',mode:('prod'|'test'), uri:..}` |
      *  > | btc-manual | `{mode:('prod'|'test'), uri:..}` |
      */
     getNetwork = getNetwork;
@@ -503,6 +507,7 @@ const oh$ = (function() {
      *  > | eth-web3 | `{address:..}` |
      *  > | ohledger | `{address:..}` |
      *  > | ohledger-web3 | `{address:..}` |
+     *  > | ohledger-social | `{address:..}` |
      *  > | btc-manual | `{address:..}` |
      *
      * @param {Date} since - date to start tally since: date of oldest transaction to include.  No restriction if 'null'.
@@ -527,6 +532,7 @@ const oh$ = (function() {
      *  > | eth-web3 | `{address:..}` |
      *  > | ohledger | `{address:..}` |
      *  > | ohledger-web3 | `{address:..}` |
+     *  > | ohledger-social | `{address:..}` |
      *  > | btc-manual | `{address:..}` |
      *
      * @param {Date} since - date to start tally since: date of oldest transaction to include.  No restriction if 'null'.
@@ -552,6 +558,7 @@ const oh$ = (function() {
      *  > | eth-web3 | `{address:..}` |
      *  > | ohledger | `{address:..}` |
      *  > | ohledger-web3 | `{address:..}` |
+     *  > | ohledger-social | `{address:..}` |
      *  > | btc-manual | `{address:..}` |
      *
      * @returns {Promise} with the `{'transactions': [{"transaction-value":..,"transaction-date":..},..], 'as-of':..}` object, 
